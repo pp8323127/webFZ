@@ -1,0 +1,25 @@
+<html>
+<head>
+<title>File Upload</title>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<link href="menu.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<p align="center" class="txttitletop">檔案上傳</p>
+
+<form name="Form1" enctype="multipart/form-data" method="post" action="uploadfile.jsp"> 
+<p align="center" class="txtblue">上傳檔案 ： 
+    <input name="File1" type="file" class="btm" size="20" maxlength="20"> 
+    <br>
+    (<span class="txtxred">*檔名請勿使用中文檔名，以免無法於網頁上開啟. </span>)</p>
+<p align="center" class="txtblue"><span class="txtblue">  檔案敘述： 
+    <input type="text" name="File1" size="30" maxlength="50" value="組員選班資訊">
+    <span class="txtxred">  <br>
+  <br>
+    </span></span>  <input type="submit" class="btm"value="上傳">
+  &nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="reset" class="btm" value="清除"> 
+  </p>
+</form>
+</body>
+</html>

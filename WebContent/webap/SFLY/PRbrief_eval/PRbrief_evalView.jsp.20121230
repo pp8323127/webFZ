@@ -1,0 +1,305 @@
+<%@ page contentType="text/html; charset=big5" language="java"  %>
+<%@ page import="java.util.*,eg.prfe.*" %>
+<%
+String userid = (String) session.getAttribute("userid") ; //get user id if already login
+
+if (userid == null) {		
+	response.sendRedirect("../logout.jsp");
+}
+else
+{
+
+String empno	= (String)request.getParameter("empno");
+String base		= (String)request.getParameter("base");
+String sdate	= (String)request.getParameter("sdate");
+String edate	= (String)request.getParameter("edate");
+String flag		= (String)request.getParameter("flag");
+
+StringBuffer sb = new StringBuffer();
+//被查核人
+empno = eg.GetEmpno.getEmpno(empno);
+eg.EGInfo egi = new eg.EGInfo(empno);
+eg.EgInfoObj purobj = egi.getEGInfoObj(empno); 
+if(purobj !=null)
+{
+	empno   = purobj.getEmpn();
+}
+%> 
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>座艙長任務簡報表現</title>
+<style type="text/css">
+<!--
+.txtblue {
+	font-size: 12px;
+	line-height: 13.5pt;
+	color: #464883;
+	font-family:  "Verdana";
+}
+.fortable{
+	border: 1pt solid;
+ }
+.tablehead3 {
+	font-family: "Arial", "Helvetica", "sans-serif";
+	background-color: #006699;
+	font-size: 10pt;
+	text-align: center;
+	font-style: normal;
+	font-weight: normal;
+	color: #FFFFFF;	
+}
+-->
+</style>
+<script LANGUAGE="JavaScript">
+function subwinXY(w,wname,wx,wy){	//設定開始視窗的長寬，開啟位置在螢幕中央，自訂開啟大小
+//	wx = 750,wy=210;	
+	x =(screen.width - wx) /2;
+	y = (screen.height - wy) /2;
+	window.open(w,wname,"left="+x+",top="+y+",width="+wx+",height="+wy+",resizable=yes,scrollbars=yes");
+}
+</script>
+</head>
+
+<%
+sb.append("<html>"+"\r\n");	
+sb.append("<head>"+"\r\n");	
+sb.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=big5\">"+"\r\n");	
+sb.append("<title>座艙長任務簡報表現</title>"+"\r\n");	
+sb.append("<style type=\"text/css\">"+"\r\n");	
+sb.append("<!--"+"\r\n");	
+sb.append(".txtblue {"+"\r\n");	
+sb.append("	font-size: 12px;"+"\r\n");	
+sb.append("	line-height: 13.5pt;"+"\r\n");	
+sb.append("	color: #464883;"+"\r\n");	
+sb.append("	font-family:  \"Verdana\";"+"\r\n");	
+sb.append("}"+"\r\n");	
+sb.append(".fortable{"+"\r\n");	
+sb.append("	border: 1pt solid;"+"\r\n");	
+sb.append(" }"+"\r\n");	
+sb.append(".tablehead3 {"+"\r\n");	
+sb.append("	font-family: \"Arial\", \"Helvetica\", \"sans-serif\";"+"\r\n");	
+sb.append("background-color: #006699;"+"\r\n");	
+sb.append("font-size: 10pt;"+"\r\n");	
+sb.append("text-align: center;"+"\r\n");	
+sb.append("font-style: normal;"+"\r\n");	
+sb.append("font-weight: normal;"+"\r\n");	
+sb.append("color: #FFFFFF;	"+"\r\n");	
+sb.append("}"+"\r\n");	
+sb.append("-->"+"\r\n");	
+sb.append("</style>"+"\r\n");	
+sb.append("</head>"+"\r\n");	
+%>
+
+<body>
+<table width="95%"  border="0" align="center" cellpadding="2" cellspacing="0">
+  <tr>
+    <td width="60%">
+      <div align="right"><span class="txttitletop">座艙長任務簡報適職性評量 </span></div>
+    </td>
+	<td><div align="right"><a href="javascript:window.print()"><img src="../images/print.gif" width="17" height="15" border="0" alt="列印"></a>&nbsp;&nbsp;<input type="button" name="rep" id="rep" value="Download File" onClick="downreport();"></div></td>
+  </tr>
+</table>
+<table width="95%"  border="1" align="center" cellpadding="1" cellspacing="1" class="fortable"> 
+	<tr class="txtblue">
+	  	<td align="center" class="tablehead3"><strong>簡報日期</strong></div></td>
+		<td align="center" class="tablehead3"><strong>簡報時間</strong></div></td>
+    	<td align="center" class="tablehead3"><strong>班次</strong></div></td>
+    	<td align="center" class="tablehead3"><strong>座艙長</strong></div></td>
+<%
+Calendar gc = new GregorianCalendar();  
+//2011/05/01使用新題庫
+gc.set(2011,4,1);
+
+Calendar gc2 = new GregorianCalendar();  
+//2012/12/01又更新題庫
+gc2.set(2012,11,01);
+        
+Calendar bfdt = new GregorianCalendar();//簡報日期
+bfdt.set(Integer.parseInt(sdate.substring(0,4)),Integer.parseInt(sdate.substring(5,7))-1,Integer.parseInt(sdate.substring(8,10)));
+
+if(gc.after(bfdt))
+//2011/05/01 使用新題庫
+{//舊題庫
+%>
+	<td align="center" class="tablehead3"><strong>現場環境掌控能力(20%)</strong></div></td>
+	<td align="center" class="tablehead3"><strong>專業知識運用能力(20%)</strong></div></td>
+	<td align="center" class="tablehead3"><strong>人際關係認知能力(20%)</strong></div></td>
+	<td align="center" class="tablehead3"><strong>口語表達溝通能力(20%)</strong></div></td>
+	<td align="center" class="tablehead3"><strong>任務簡報管理能力(20%)</strong></div></td>
+<%
+}
+//else if(gc.after(bfdt))
+else if((gc.before(bfdt) | gc.equals(bfdt)) && gc2.after(bfdt))
+{//2012/12/01 更改題庫
+	flag ="A";
+%>
+	  	<td align="center" class="tablehead3"><strong>General-Check & Info(10%)</strong></div></td>
+		<td align="center" class="tablehead3"><strong>A/C General(35%)</strong></div></td>
+    	<td align="center" class="tablehead3"><strong>Safety & Security(35%)</strong></div></td>
+    	<td align="center" class="tablehead3"><strong>服務宣達(10%)</strong></div></td>
+    	<td align="center" class="tablehead3"><strong>預期效果(10%)</strong></div></td>
+<%
+}	
+else
+{
+		flag ="B";
+%>
+	  	<td align="center" class="tablehead3"><strong>General-Check & Info(0%)</strong></div></td>
+		<td align="center" class="tablehead3"><strong>A/C General(0%)</strong></div></td>
+    	<td align="center" class="tablehead3"><strong>Emergency Procedure(0%)</strong></div></td>
+    	<td align="center" class="tablehead3"><strong>Safety/Security(0%)</strong></div></td>
+    	<td align="center" class="tablehead3"><strong>Briefing Skill(100%)</strong></div></td>
+<%
+}
+%>
+		<td align="center" class="tablehead3"><strong>Total<br>Score</strong></div></td>
+    	<td align="center" class="tablehead3"><strong>General Comment</strong></div></td>
+    	<td align="center" class="tablehead3"><strong>查核人</strong></div></td>
+  	</tr> 
+
+<%
+sb.append("<body>"+"\r\n");	
+sb.append("<table width=\"95%\"  border=\"0\" align=\"center\" cellpadding=\"2\" cellspacing=\"0\">"+"\r\n");	
+sb.append("<tr>"+"\r\n");	
+sb.append("<td>"+"\r\n");	
+sb.append("<div align=\"center\"><span class=\"txttitletop\">座艙長任務簡報適職性評量 </span></div>"+"\r\n");	
+sb.append("</td>"+"\r\n");	
+sb.append("</tr>"+"\r\n");	
+sb.append("</table>"+"\r\n");	
+sb.append("<table width=\"95%\"  border=\"1\" align=\"center\" cellpadding=\"1\" cellspacing=\"1\" class=\"fortable\"> "+"\r\n");	
+sb.append("<tr class=\"txtblue\">"+"\r\n");	
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>簡報日期</strong></div></td>"+"\r\n");	
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>時間</strong></div></td>"+"\r\n");	
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>班次</strong></div></td>"+"\r\n");	
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>座艙長</strong></div></td>"+"\r\n");	
+
+if(gc.after(bfdt))
+{//舊題庫
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>現場環境掌控能力(20%)</strong></div></td>"+"\r\n");	
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>專業知識運用能力(20%)</strong></div></td>"+"\r\n");	
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>人際關係認知能力(20%)</strong></div></td>"+"\r\n");	
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>口語表達溝通能力(20%)</strong></div></td>"+"\r\n");	
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>任務簡報管理能力(20%)</strong></div></td>"+"\r\n");	
+}
+else if((gc.before(bfdt) | gc.equals(bfdt)) && gc2.after(bfdt))
+{
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>General-Check & Info(10%)</strong></div></td>"+"\r\n");	
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>A/C General(35%)</strong></div></td>"+"\r\n");	
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>Safety & Security(35%)</strong></div></td>"+"\r\n");	
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>服務宣達(10%)</strong></div></td>"+"\r\n");	
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>預期效果(10%)</strong></div></td>"+"\r\n");	
+}
+else //2012/12/01 更改題庫
+{
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>General-Check & Info(0%)</strong></div></td>"+"\r\n");	
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>A/C General(0%)</strong></div></td>"+"\r\n");	
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>Emergency Procedure(0%)</strong></div></td>"+"\r\n");	
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>Safety/Security(0%)</strong></div></td>"+"\r\n");	
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>Briefing Skill(100%)</strong></div></td>"+"\r\n");	
+}
+
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>Total<br>Score</strong></div></td>"+"\r\n");	
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>General Comment</strong></div></td>"+"\r\n");	
+sb.append("<td align=\"center\" class=\"tablehead3\"><strong>查核人</strong></div></td>"+"\r\n");	
+sb.append("</tr> "+"\r\n");	
+%>
+<%
+PRBriefEval prbe = new PRBriefEval();
+prbe.setFlag(flag);//2012/12/01 更改題庫
+prbe.getPRBriefEval(sdate,edate,empno,base);
+ArrayList objAL = new ArrayList();
+objAL = prbe.getObjAL();
+if(objAL.size()>0)
+{
+	for(int i=0; i<objAL.size(); i++)
+	{
+		PRBriefEvalObj obj = (PRBriefEvalObj) objAL.get(i);  
+%>
+	<tr class="txtblue">
+	  	<td  align="center"><%=obj.getBrief_dt()%></td>
+	  	<td  align="center"><%=obj.getBrief_time()%></td>
+	  	<td  align="center" ><%=obj.getFltno()%></td>
+		<td  align="center" ><%=obj.getPurname()%></td>
+		<td  align="center"><%=obj.getChk1_score()%></td>
+		<td  align="center"><%=obj.getChk2_score()%></td>
+	  	<td  align="center"><%=obj.getChk3_score()%></td>
+		<td  align="center"><%=obj.getChk4_score()%></td>
+	  	<td  align="center"><%=obj.getChk5_score()%></td>
+<%
+if(obj.getComm()==null)
+{
+	obj.setComm(" ");
+}
+
+bfdt.set(Integer.parseInt(obj.getBrief_dt().substring(0,4)),Integer.parseInt(obj.getBrief_dt().substring(5,7))-1,Integer.parseInt(obj.getBrief_dt().substring(8,10)));
+
+if(gc.after(bfdt))
+{//舊題庫
+%>
+		<td  align="center"><%=obj.getTtlscore()%></td>
+<%
+}
+else if((gc.before(bfdt) | gc.equals(bfdt)) && gc2.after(bfdt)) //2012/12/01 更改題庫
+{
+%>
+		<td  align="center"><a href="#" onClick="subwinXY('PRbrief_evalViewDetail.jsp?brief_dt=<%=obj.getBrief_dt()%>&purserEmpno=<%=obj.getPurempno()%>&flag=A','','700','350')"><u><%=obj.getTtlscore()%></u></a>
+		</td>
+<%
+}
+else //if(sdate<"2012/10/25") //2012/12/01 更改題庫
+{
+%>
+		<td  align="center"><a href="#" onClick="subwinXY('PRbrief_evalViewDetail2.jsp?brief_dt=<%=obj.getBrief_dt()%>&purserEmpno=<%=obj.getPurempno()%>&flag=B','','700','350')"><u><%=obj.getTtlscore()%></u></a>
+		</td>
+<%
+}
+%>
+		<td  align="left"><%=obj.getComm()%></td>
+		<td  align="center"><%=obj.getNewname()%></td>
+  	</tr> 
+<%
+sb.append("<tr class=\"txtblue\">"+"\r\n");	
+sb.append("<td  align=\"center\">"+obj.getBrief_dt()+"</td>"+"\r\n");	
+sb.append("<td  align=\"center\">"+obj.getBrief_time()+"</td>"+"\r\n");	
+sb.append("<td  align=\"center\" >"+obj.getFltno()+"</td>"+"\r\n");	
+sb.append("<td  align=\"center\" >"+obj.getPurname()+"</td>"+"\r\n");	
+sb.append("<td  align=\"center\">"+obj.getChk1_score()+"</td>"+"\r\n");	
+sb.append("<td  align=\"center\">"+obj.getChk2_score()+"</td>"+"\r\n");	
+sb.append("<td  align=\"center\">"+obj.getChk3_score()+"</td>"+"\r\n");	
+sb.append("<td  align=\"center\">"+obj.getChk4_score()+"</td>"+"\r\n");	
+sb.append("<td  align=\"center\">"+obj.getChk5_score()+"</td>"+"\r\n");	
+sb.append("<td  align=\"center\">"+obj.getTtlscore()+"</td>"+"\r\n");	
+sb.append("<td  align=\"left\">"+obj.getComm()+"</td>"+"\r\n");	
+sb.append("<td  align=\"center\">"+obj.getNewname()+"</td>"+"\r\n");	
+sb.append("</tr> "+"\r\n");	
+%>
+<%
+	}
+}
+else
+{
+%>
+	<tr class="txtblue">
+	  	<td  align="center" colspan="12">NO DATA FOUND!!</td>
+	</tr>
+<%
+}
+%>
+</table>
+</body>
+</html>
+<script language="javascript" type="text/javascript">
+function downreport()
+{
+	location.replace("viewPRBE_download.jsp");
+}
+</script>
+<%
+sb.append("</table>"+"\r\n");
+sb.append("</body>"+"\r\n");
+sb.append("</html>"+"\r\n");
+session.setAttribute("sb",sb);
+}
+%>
+

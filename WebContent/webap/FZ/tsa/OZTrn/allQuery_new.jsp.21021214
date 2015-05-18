@@ -1,0 +1,197 @@
+<%@ page contentType="text/html; charset=big5" language="java" %>
+<%@ page import="java.sql.*,ci.db.*,java.util.*" %>
+<%
+Connection conn = null;
+
+Statement stmt = null;
+ResultSet rs = null;
+String sql = null;
+ConnDB cn = new ConnDB();
+ArrayList typeAL = new ArrayList();
+try{
+
+//直接連線 ORP3FZAP
+cn.setORP3FZAP();
+java.lang.Class.forName(cn.getDriver());
+conn = DriverManager.getConnection(cn.getConnURL(), cn.getConnID(),
+	cn.getConnPW());
+stmt = conn.createStatement();
+
+sql = "SELECT DISTINCT ac_type FROM fztckpl where ac_type NOT IN  ('Y','X') order by ac_type";
+rs = stmt.executeQuery(sql);
+while(rs.next()){
+	typeAL.add(rs.getString("ac_type"));
+}
+
+}
+catch (Exception e)
+{
+	  out.print(e.toString());
+}
+finally
+{
+	if (stmt != null)
+		stmt.close();
+	if (conn != null)
+		conn.close();
+}
+
+
+%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<link href="style.css" rel="stylesheet" type="text/css">
+<script language="javascript" type="text/javascript">
+function peak(){
+	var d = new Date();
+	var m = d.getMonth()+1;
+	//預設尖峰月份為2.7.8.12
+	if(m=="2" || m=="7" || m=="8" || m=="12"){
+		document.form1.peak.value="on";
+	}else{
+		document.form1.peak.value="off";
+	}
+}
+//控制action Page
+function goAction(){
+	var d = document.form1.checkType.value;
+	if(  "PT" == d){
+		document.form1.action = "pc_new2.jsp"; /*all_new.jsp*/
+		document.form1.submit();
+		return true;
+	}else if("PC" == d){
+		document.form1.action = "pc_new2.jsp"; /*pc.jsp*/
+		document.form1.submit();
+		return true;
+	}else if("RC" == d){
+		document.form1.action = "pc_new2.jsp"; /*rc.jsp*/
+		document.form1.submit();
+		return true;
+	}else if("CRM" == d){
+		document.form1.action = "pc_new2.jsp";  /*CRMSSFM.jsp*/
+		document.form1.submit();
+		return true;
+	}else if("SS" == d){
+		document.form1.action = "pc_new2.jsp";  /*CRMSSFM.jsp*/
+		document.form1.submit();
+		return true;
+	}else if("ET" == d){
+		document.form1.action = "pc_new2.jsp";  /*CRMSSFM.jsp*/
+		document.form1.submit();
+		return true;
+	}else if("DG" == d){
+		document.form1.action = "pc_new2.jsp";  /*CRMSSFM.jsp*/
+		document.form1.submit();
+		return true;						
+	}else /*if("CRM" == d || "FM" == d || "SS" == d || "ES" == d )*/{
+		document.form1.action = "CRMSSFM.jsp";
+		document.form1.submit();
+		return true;
+	
+	}
+}
+</script>
+<title>query PT/PC</title>
+</head>
+
+<body onLoad="peak()">
+
+<form name="form1"  method="post" target="mainFrame" onsubmit="return goAction()">
+  <font color="#009999"></font> 
+  <!--
+  <select name="peak">
+    <option value="on" class="txtred">旺季</option>
+    <option value="off" >淡季</option>
+  </select>
+  -->
+  <input type="hidden" name="peak" value="on">
+<span class="txtblue">Fleet:</span>
+<select name="fleet">
+<%
+for(int i=0;i<typeAL.size();i++){
+	out.print("<option value=\""+(String)typeAL.get(i)+"\">"+(String)typeAL.get(i)+"</option>");
+}
+%>
+<option value="ALL">ALL</option>
+</select>
+<span class="txtblue">Rank:</span>
+<select name="rank">
+<option value="CA">CA</option>
+<option value="RP">RP</option>
+<option value="FO">FO</option>
+<option value="ALL">ALL</option>
+</select>
+<span class="txtred">CheckType</span>
+<select name="checkType">
+	<option value="PC">PC</option>
+	<option value="PT">PT</option>
+	<option value="RC">RC</option>
+	<option value="CRM">CRM</option>
+	<option value="SS">SS</option>
+	<option value="ET">ET</option>
+	<option value="DG">DG</option>		
+	<!-- 
+	<option value="SS">SS</option>
+	<option value="FM">FM</option>	
+	<option value="ES">ES</option>							
+    -->
+</select>
+  <span class="txtblue">預排區間</span> 
+  <select name="sel_year1">
+  <option value="不限">不限</option>
+  <%
+  java.util.Date now1 = new java.util.Date();
+  int syear1	=	now1.getYear() + 1900;
+  for (int i=2011; i<syear1 + 2; i++) { 
+        %><option value="<%=i%>" <% if (i==syear1) out.print("selected"); %> >
+		<%=i%>
+		</option><%
+  }//for
+  %></select>
+  <select name="sel_mon1"><%
+  int smon1	=	now1.getMonth() + 1;
+  for (int j=1; j<13; j++) {    
+	 if (j<10 ){ %>
+		<option value="0<%=j%>" <% if (j==smon1) out.print("selected"); %> >
+		0<%=j%>
+		</option><%
+	 }else{ %>
+	 	<option value="<%=j%>"  <% if (j==smon1) out.print("selected"); %> >
+		<%=j%>
+		</option><%
+	 }//if
+  }//for
+  %></select> ~
+  <select name="sel_year2"><%
+  java.util.Date now2 = new java.util.Date();
+  int syear2	=	now2.getYear() + 1900;
+  for (int i=2011; i<syear2 + 2; i++) {    
+         %><option value="<%=i%>" <% if (i==syear2) out.print("selected"); %> >
+		 <%=i%>
+		 </option><%
+  }//for
+  %></select>
+  <select name="sel_mon2"><%
+  int smon2	=	now2.getMonth() + 1;
+  for (int j=1; j<13; j++) {    
+	     if (j<10 ){ %><option value="0<%=j%>" <% if (j==smon2) out.print("selected"); %> >
+		 	0<%=j%> 
+			</option><%
+		 }else{ %><option value="<%=j%>" <% if (j==smon2) out.print("selected"); %> >
+		 	<%=j%>
+			</option><%
+		 }//if
+  }//for
+  %></select>
+  &nbsp;<span class="txtblue">排序</span> 
+  <select name="ob">
+  <option value="1" selected>Last Date</option>
+  <option value="2">Empno</option>
+  </select>
+   
+  <input type="submit" class="button5" value="Query" >
+</form>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+
+<head>
+
+<title>User's Guide</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+
+<link href="menu.css" rel="stylesheet" type="text/css">
+
+<style type="text/css">
+
+body{
+
+margin:1;
+
+}
+/*
+a:hover {  color: yellow; font-size: 10pt; text-decoration: underline}
+
+a:link {  text-decoration: none;font-size: 10pt;color:#00FFFF }
+
+a:active {  text-decoration: none;font-size: 10pt;color: yellow}
+
+a:visited {  text-decoration: none;font-size: 10pt;color:#00FFFF}
+*/
+</style>
+
+<script>
+
+function change(id,pi){  //階層式架構
+		 if (document.all[id].style.display=="none") { //若為隱藏	  
+			document.all[id].style.display=""  //則將其顯示
+			document.all[pi].src="images/open.gif"    //出現open圖案
+		  }
+		 else	  {
+			document.all[id].style.display="none"  //顯示
+			document.all[pi].src="images/close.gif"		//出現close圖案
+		  } 
+			
+	}
+
+</script>
+
+</head>
+
+
+
+<body >
+<div align="center">
+  <p><span class="txttitletop"><a name="thistop">使用說明 
+User's Guide</a></span><br>
+  </p>
+  <table width="91%" border="0" align="center" cellpadding="1" cellspacing="1"  >
+    <tr>
+      <td height="15" colspan="5" >
+        <hr size="1" class="txtgray2">
+      </td>
+    </tr>
+    <tr>
+      <td width="20%" height="32" ><span align="center" class="txtxred">快速連結說明(Link)：</span>&nbsp;|           </td>
+      <td width="20%"  ><a href="#query">查詢班表（Query）</a>&nbsp;&nbsp;|</td>
+      <td width="20%"  ><a href="#transfer">換班專區（Transfer）</a>&nbsp;|</td>
+      <td width="20%"  ><a href="#personal">個人資料（Personal）</a>&nbsp;|</td>
+      <td width="20%"  ><a href="#others">其他功能（Others）</a>&nbsp;|</td>
+    </tr>
+    <tr>
+      <td height="15" colspan="5" >
+        <hr size="1" class="txtgray2">
+      </td>
+    </tr>
+  </table>
+
+  <table width="91%" border="1" align="center" cellpadding="1" cellspacing="1" class="fortable" >
+    <tr>
+      <td height="32" colspan="2" class="tablehead3">
+        <div align="center"><font size="2"><img src="images/close.gif" width="15" height="15"><a name="Query">查詢班表(Query)</a> </font></div>        
+      </td>
+    </tr>
+    <tr>
+      <td width="22%" height="49" class="tablehead2"><font size="2"><img src="images/p3.gif" width="21" height="21">Schedule Qeury<br>
+          <span class="txtblue" style="font-family: "Verdana"; font-size: 12px;" #invalid_attr_id="13.5pt">班表查詢 </span></font></td>
+      <td width="78%" height="49" class="tablebody">
+        <div align="left"><font size="2">‧點選此功能，系統預設會顯示自己的最新班表，若欲查詢他人班表，可選擇年月及員工號查詢</font><br>
+            <font size="2">‧不輸入員工號，僅選擇月份，則可查詢自己該月份的班表<br>
+            ‧班表顯示兩種格式：Landscape（橫式月曆樣式）或Portrait（直式）<br>
+    ‧直式班表中的<font color="#000099">Crew</font>一欄，點選<img src="images/search.gif" width="15" height="15" align="absbottom">可看同<font color="#000099">Flight</font>的其他組員名單，並可寄送EMail<br>
+    ‧系統僅提供查詢當月及下月班表 </font></div></td>
+    </tr>
+    <tr>
+      <td height="49" class="tablehead2"><font size="2"><img src="images/compare.gif" width="22" height="22">Schedule Compare </font><font size="2"><br>
+          <span class="txtblue">比對班表</span></span> </font></td>
+      <td height="49" class="tablebody"><div align="left"><font size="2">‧輸入年月及被比對者的員工號，可比對自己與他人之班表</font></div></td>
+    </tr>
+    <tr>
+      <td height="82" class="tablehead2"><font size="2"><font size="2"><img src="images/da.gif"></font>Flight Query<br>
+          <span class="txtblue">航班查詢</span></font></td>
+      <td height="82" class="tablebody"><div align="left"><font size="2">‧以年月日查詢，若不輸入航班編號<font color="#000099">Flight
+            Number</font>，可查詢該日期所有航班組員資訊<br>
+‧以年月日查詢，輸入航班編號（<font color="#000099">Flight Numbe</font>），可查詢航班所有組員資訊<br> 
+‧若輸入航班完整資料（包含年月日及Flight Number與DPT），則直接顯示該航班之組員資訊<br>
+‧日期預設為不選擇（下拉選單顯示為<font color="#000099"> N</font>），可查詢該月份所有航班組員資訊</font><br>
+‧<font size="2">點選查詢結果中<font color="#000099">Email</font>欄位的<img src="images/mail.gif" width="15" height="15" align="absbottom">圖示，可線上寄送EMail給該組員<br>
+‧系統僅提供查詢當月及次月的航班</font></div></td>
+    </tr>
+    <tr>
+      <td height="47" class="tablehead2"><img src="images/cr.gif" width="22" height="22"><font size="2">Flying Time </font>Query<br>
+        <span class="txtblue">飛時查詢</span><br></td>
+      <td height="47" class="tablebody"><div align="left"><font size="2">‧以年月日查詢該日期所有航班之飛時，或者加上<font color="#000099">Flight Number</font>，查詢該班次飛時</font></div></td>
+    </tr>
+    <tr>
+      <td height="49" class="tablehead2"><img src="images/offcrew.gif" width="22" height="22"><font size="2">Off Crew </font>Query<br>
+        <span class="txtblue">Off 組員查詢</span></td>
+      <td height="49" class="tablebody"><div align="left"><font size="2">‧以年月日及職務類別(occu)查詢該日Day Off組員<br>
+      </font></div><div align="right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#thistop">↑Back  To Quick Link</a></div>
+      </td>
+    </tr>
+  </table>
+  <p><br>
+  </p>
+  <table width="91%" border="1" align="center" cellpadding="1" cellspacing="1" class="fortable">
+    <tr>
+      <td height="32" colspan="2" class="tablehead3">
+        <div align="center"><font size="2"><a name="transfer"><img src="images/close.gif" width="15" height="15">換班專區(Transfer)</a></font></div>
+      </td>
+    </tr>
+    <tr>
+      <td width="22%" height="108" class="tablehead2"><img src="images/p2.gif" width="21" height="21" border="0"><font size="2">Put Schedule<br>
+      <span class="txtblue" style="font-family: "Verdana"; font-size: 12px;" #invalid_attr_id="13.5pt">欲換班表 </span></font></td>
+      <td width="78%" height="108" class="tablebody"><div align="left">
+        <p><font size="2">‧選定年月，查詢自己的班表，結果以<font color="#000099">Trip
+                number</font>顯示<br>
+  ‧點選<font color="#000099">Detail</font>欄位的<img src="images/red.gif" width="15" height="15" align="absbottom"> 圖示，可顯示此<font color="#000099">Trip</font>詳細的<font color="#000099">Flight
+  Schedule</font><br>
+  ‧若要丟出該筆班表，勾選<font color="#000099">Put</font>欄位</font>
+            <input type="checkbox" name="checkbox22" value="checkbox" class="tablebody" checked>
+            <font size="2">及</font>
+            <input type="button" name="Button22" value="Put the Schedule" class="btm">
+            <font size="2">，可丟出班表至「欲換班表」<br>
+            ‧此功能設定之功用，在提供</font><font size="2">他人<span class="txtxred">查詢</span>自己欲換之班表（即在『查詢可換班表』中，可查詢他人在『欲換班表』中所丟出的航班，以作為換班之參考）<br>
+            ‧欲取消所丟出之班表，請至「我的丟班資訊」中設定</font></p>
+      </div></td>
+    </tr>
+    <tr>
+      <td height="73" class="tablehead2"><img src="images/search3.gif" width="22" height="22" border="0"><font size="2"><span class="tablebody"></span>Put Schedule Query<br>
+      <span class="txtblue">查詢可換班表</span></font></td>
+      <td height="73" class="tablebody"><div align="left"><font size="2">‧以年月查詢所有組員所丟出之班表，查詢結果以<font color="#000099">Trip
+              Number</font>顯示<br>
+  ‧點選<font color="#000099">Schedule Detail</font>圖示<img src="images/red.gif" width="15" height="15" align="bottom">，可顯示此<font color="#000099">Trip</font>詳細的<font color="#000099">Flight
+  Schedule</font> <br>
+  ‧此功能所顯示之班表，即為其他組員在「欲換班表」中所設定丟出之班表<br>
+  ‧查詢結果中，點選姓名欄位可查詢該組員之個人資料</font></div></td>
+    </tr>
+    <tr>
+      <td height="44" class="tablehead2"><img src="images/i.gif" width="21" height="21" border="0">Transfer Record<br> 
+      <span class="txtblue">我的丟班資訊</span></td>
+      <td height="44" class="tablebody"><div align="left"><font size="2">‧可查詢或取消自己在「欲換班表」中丟出的班表紀錄<br>
+        ‧丟班記錄中，點選<font color="#000099">Fltno</font>，可查詢喜好此航班者的資料<br>
+        ‧點選<font color="#000099">Empno</font>，可與該組員比對班表</font></div></td>
+    </tr>
+    <tr>
+      <td height="44" class="tablehead2"><img src="images/favrquery.gif" width="21" height="21" border="0">Favorite  Flight Query<br>
+          <span class="txtblue">喜好航班查詢</span></td>
+      <td height="44" class="tablebody"><div align="left"><font size="2">‧可查詢航班的喜好者統計<br>
+      ‧點選<font color="#000099">Fltno</font>，可查詢喜好該航班者之資料</font></div></td>
+    </tr>
+    <tr>
+      <td height="31" class="tablehead2"><div align="center"><img src="images/list.gif" width="22" height="22"><span class="tablehead2">Make
+              Application<br>
+        </span><span class="txtblue">填申請單</span></div></td>
+    <td class="tablebody"><div align="left"><font size="2" >‧選定年月及被換者員工號，填寫換班申請單<br>
+      ‧勾選欲換的航班，或選擇兩人全月互換，由系統計算飛時等數字並驗證。</font></div></td>
+  
+    </tr>
+    <tr>
+      <td height="49" class="tablehead2"><div align="center"><img src="images/p.gif" width="22" height="22"><span class="tablehead2">CheckApplication<br>
+      </span><span class="txtblue">申請單記錄</span></div></td>
+      <td height="49" class="tablebody"><div align="left">‧可依申請年月查詢自己申請，或他人申請而自己為被換者之申請單記錄<br>
+        </div></td>
+    </tr>
+    <tr>
+      <td height="49" class="tablehead2"><img src="images/d2.gif" width="22" height="22">Download File<br>
+	  <span class="txtblue">下載選班資訊</span></td>
+      <td height="49" class="tablebody"> 
+        <div align="left">‧可依選擇年月，下載申換班限額表 <br>
+<div align="right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#thistop">↑Back  To Quick Link</a></div>		
+</div>
+      </td>
+    </tr>
+  </table>
+  <p>&nbsp;  </p>
+  <table width="91%" border="1" align="center" cellpadding="1" cellspacing="1" class="fortable">
+    <tr>
+      <td height="32" colspan="2" class="tablehead3">
+        <div align="center"><font size="2"><img src="images/close.gif" width="15" height="15"><a name="personal">個人資料(Personal)</a></font></div>
+      </td>
+    </tr>
+    <tr>
+      <td width="22%" height="49" class="tablehead2"><font size="2"><img src="images/edit.gif" width="20" height="20">Crew
+          Informatiion</font><font size="2"><br>
+          <span class="txtblue">組員個人資料</span> </font></td>
+      <td width="78%" height="49" class="tablebody"><div align="left"><font size="2">‧可查閱個人基本資料，以<font color="#FF0000">＊</font>標註的欄位（如行動電話、住家電話、即時通訊）可以更改</font></div></td>
+    </tr>
+    <tr>
+      <td height="49" class="tablehead2"> <img src="images/ed3.gif" width="22" height="22">Change Password <br>
+          <span class="txtblue">變更系統密碼</span></td>
+      <td height="49" class="tablebody">
+        <div align="left"><font size="2">‧可變更密碼<br>
+      ‧密碼最少需六位數英.數字</font></div>
+      </td>
+    </tr>
+    <tr>
+      <td height="49" class="tablehead2"> <img src="images/fa.gif" width="22" height="22">Favorite  Flight<br>
+      <span class="txtblue">自訂最愛航班</span></td>
+      <td height="49" class="tablebody"><div align="left"><font size="2">‧可設定個人最愛航班<br>
+      ‧他人丟出班表後，在丟班記錄中，點選該筆資料的<font color="#000099">Fltno</font>，可查詢喜好此航班者</font></div></td>
+    </tr>
+    <tr>
+      <td height="44" class="tablehead2"><img src="images/friend.gif" width="22" height="22">Friend List<br>
+          <span class="txtblue">自訂好友名單</span></td>
+      <td height="44" class="tablebody"><div align="left"><font size="2">‧可輸入員工號，自訂好友名單，並可直接查詢好友的班表、個人資料、及寄送Email<br>
+        ‧可查詢將自己設為好友之使用者資料，亦可寄送Email<br>
+        ‧設為好友或被設為好友者，若選擇不開放班表，則僅會顯示其姓名員工號，但仍不可查詢其詳細個人資料及班表</font></div></td>
+    </tr>
+    <tr>
+      <td height="44" class="tablehead2"><img src="images/h1.gif" width="22" height="22">AL Offsheet<br> <span class="txtblue">年假輸入/查詢</span></td>
+      <td height="44" class="tablebody"><div align="left"><font size="2">‧可查詢個人年假Quota、請休假資料查詢、特休假申請</font></div></td>
+    </tr>
+    <tr>
+      <td height="31" class="tablehead2"><img src="images/flypay.gif" width="22" height="22">Flypay List<br>
+      <span class="txtblue">飛加清單</span></td>
+      <td height="31" class="tablebody">
+        <div align="left"><font size="2">‧可選擇年月，系統會自動寄送本人的飛加清單至其全員信箱。</font></div>
+      </td>
+    </tr>
+    <tr>
+      <td height="31" class="tablehead2"><img src="images/loglist.gif" width="22" height="22">Crew Log List<br>
+	  <span class="txtblue">飛航記錄</span></td>
+      <td height="31" class="tablebody">
+        <div align="left"><font size="2">‧可選擇年月，系統會自動寄送本人的飛航記錄至其全員信箱。</font></div>
+      </td>
+    </tr>
+    <tr>
+      <td height="31" class="tablehead2"><img src="images/lock.gif" width="22" height="22">Set Schedule Status<br>
+      <span class="txtblue">鎖定/開放班表</span></td>
+  
+      <td height="31" class="tablebody"><div align="left"><font size="2">‧可自行設定是否鎖定或開放班表<br>
+          </font><span class="txtxred">‧欲使用查詢他人班表或換班等進階功能，需選擇開放個人班表</span></div><br>
+		  <div align="right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#thistop">↑Back To  Quick Link</a></div>
+      </td>
+    </tr>
+  </table>
+  <p>&nbsp;</p>
+  <table width="91%" border="1" align="center" cellpadding="1" cellspacing="1" class="fortable">
+    <tr>
+      <td height="32" colspan="2" class="tablehead3">
+        <div align="center"><font size="2"><img src="images/close.gif" width="15" height="15"><a name="others">其他功能(Others)</a></font>&nbsp;</div>
+      </td>
+    </tr>
+    <tr>
+      <td width="22%" height="49" class="tablehead2"><font size="2"><img src="images/search2.gif" width="21" height="21">Query  Crew</font><font size="2"> &amp; mail Schedule <br>
+      <span class="txtblue">查詢組員</span><span style="color: #464883; font-family: "Verdana";" #invalid_attr_id="13.5pt">及寄送班表</span> </font></td>
+      <td width="78%" height="49" class="tablebody"><div align="left"><font size="2">‧以期別或員工號、序號、或姓名為條件查詢其他組員資料<br>
+‧系統查詢優先順序為姓名、員工號或序號、及期別查詢<br>
+‧期別請由小至大輸入<br>
+‧若需查詢單一期別，僅輸入第一欄位即可<br>
+‧於查詢結果的畫面中，點選<font color="#000099">Email</font>欄位的<img src="images/mail.gif" width="15" height="15" align="absbottom">圖示，可線上寄送EMail給該組員<br>
+‧點選最新班表的<img src="images/search.gif" width="15" height="15" align="absbottom">圖示，可查詢該組員最新班表<br>
+‧勾選Mail Sche及<input type="button" value="寄送班表 Mail Sche" class="btm"> ，可將自己的班表寄送至該組員的全員電子信箱<br>
+‧所寄送之班表為當時正確的班表，但班表有可能因為換班因素有所更動，欲查詢最新班表，請至查詢班表區查詢。</font></div>
+      </td>
+    </tr>
+    <tr>
+      <td height="49" class="tablehead2"> <img src="images/mail2.gif" width="20" height="20">Send Mail<br>
+          <span class="txtblue">發信給組員</span></td>
+      <td height="49" class="tablebody"><div align="left"><font size="2">‧可線上寄送EMAIL給其他組員
+      </font></div></td>
+    </tr>
+    <tr>
+      <td height="44" class="tablehead2"><img src="images/efmail.gif" width="22" height="22">Contact EF<br>
+          <span class="txtblue">意見信箱</span></td>
+      <td height="44" class="tablebody"><div align="left"><font size="2">‧對系統若有任何意見，可寄送意見至EF或各組<br>
+            <span class="txtxred">‧與本系統無關之事項，請勿使用此發信功能</span></font></div></td>
+    </tr>
+    <tr>
+      <td height="60" class="tablehead2"><img src="images/userlist.gif" width="21" height="21" border="0">Online User List<br>
+      <span class="txtblue">線上使用者</span></a></td>
+      <td height="60" class="tablebody">
+        <div align="left"><font size="2">‧可觀看系統目前線上使用者列表<br>
+      ‧點選<span class="txtblue">Empno</span>欄位，可觀看該使用者的個人資料，但<span class="t1">需該使用者設定狀態為「開放班表」，方可查詢。</span><span class="txtxred">（若使用者設定為「鎖定班表」，則他人無法查詢其資料。）</span></font></div>
+        <br>
+ 		  <div align="right">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#thistop">↑Back To Quick Link</a></div>
+      </td>
+    </tr>
+  </table>
+  <p class="txtblue">附註：以上功能的使用權限，可能因個人身份而有所不同</p>
+</div>
+
+
+
+</body>
+
+</html>
+

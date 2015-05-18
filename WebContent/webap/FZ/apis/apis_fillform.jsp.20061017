@@ -1,0 +1,592 @@
+<%@ page contentType="text/html; charset=big5" language="java" import="java.sql.*,ci.db.*,java.util.*,java.io.*,java.text.*,dz.*" %>
+<%
+String sGetUsr = (String) session.getAttribute("cs55.usr") ; //Check if logined
+//response.setHeader("Cache-Control","no-cache");
+//response.setDateHeader ("Expires", 0);
+if (session.isNew() || sGetUsr == null) {		//check user session start first
+    %> <jsp:forward page="../sendredirect.jsp" /> <%
+}//if
+String status= (String) session.getAttribute("seStatus"); 
+
+String empno   = request.getParameter("empno");
+String bodytag = "";
+String chgtype = request.getParameter("chgtype"); 
+if (chgtype.equals("modify")) bodytag = "<body onload='getValue();'>";
+else if (chgtype.equals("insert")) bodytag = "<body>";
+
+String lname  = "";
+String fname  = "";
+String cname  = "";
+String passno = "";
+String issuedate = "";
+String issueyyyy = "";
+String issuemm   = "";
+String issuedd   = "";
+String expdate = "";
+String expyyyy = "";
+String expmm   = "";
+String expdd   = "";
+String gender  = "";
+String occu    = "";
+String nation  = "";
+String doctype = "";
+String tvlstatus = "";
+String birthdate = "";
+String birthyyyy = "";
+String birthmm = "";
+String birthdd = "";
+String birthcity = "";
+String birthcountry = "";
+String resicountry  = "";
+String meal = "";
+
+Calendar cal = new GregorianCalendar();
+cal.setTime(new java.util.Date()); 
+String syear   = "" + cal.get(Calendar.YEAR);        int iyear = Integer.parseInt(syear);
+//String smonth  = "" + (cal.get(Calendar.MONTH)+1);   if (Integer.parseInt(smonth)  < 10) smonth  = "0" + smonth;
+//String sdate   = "" + cal.get(Calendar.DATE);        if (Integer.parseInt(sdate)   < 10) sdate   = "0" + cal.get(Calendar.DATE);
+//String shour   = "" + cal.get(Calendar.HOUR_OF_DAY); if (Integer.parseInt(shour)   < 10) shour   = "0" + cal.get(Calendar.HOUR_OF_DAY);
+//String sminute = "" + cal.get(Calendar.MINUTE);      if (Integer.parseInt(sminute) < 10) sminute = "0" + cal.get(Calendar.MINUTE);
+//String ssecond = "" + cal.get(Calendar.SECOND);      if (Integer.parseInt(ssecond) < 10) ssecond = "0" + cal.get(Calendar.MINUTE);
+
+String sql = null;
+ConnDB cn = new ConnDB();
+Connection conn = null;
+Statement stmt = null;
+ResultSet rs = null;
+Driver dbDriver = null;
+
+if (chgtype.equals("modify")){    
+    try{
+	    cn.setDFUserCP();
+	    dbDriver = (Driver) Class.forName(cn.getDriver()).newInstance();
+	    conn = dbDriver.connect(cn.getConnURL(), null);
+	    stmt = conn.createStatement();		
+	    sql = "select empno empno," +
+	             "passno passno," +
+				 "to_char(issuedate,'yyyy/mm/dd') issuedate," +
+				 "to_char(expdate,'yyyy/mm/dd') expdate," +
+	             "lname lname," +
+				 "fname fname," +
+				 "cname cname," +
+				 "gender gender," +
+				 "occu occu," +
+				 "nation nation," +
+				 "doctype doctype," +
+				 "tvlstatus tvlstatus," +
+				 "to_char(birthdate,'yyyy/mm/dd') birthdate," +
+		         "birthcity birthcity," +
+				 "birthcountry birthcountry," +
+				 "resicountry resicountry," +
+				 "meal meal " +
+			"from dftcrxx " +
+			"where empno = '" + empno + "'"; 		
+		
+	    rs=stmt.executeQuery(sql);
+	    if (rs.next()){			   
+	       empno  = rs.getString("empno"); 				   
+           passno = rs.getString("passno");
+           issuedate = rs.getString("issuedate");
+	       if (issuedate == null){
+	           issueyyyy = "";
+	           issuemm   = "";
+	           issuedd   = "";
+	       }else{	      
+	           issueyyyy = issuedate.substring(0,4);
+	           issuemm   = issuedate.substring(5,7);
+	           issuedd   = issuedate.substring(8,10);	   
+           }//if	   
+	   
+           expdate   = rs.getString("expdate");	 
+	       if (expdate == null){
+	           expyyyy = "";
+	           expmm   = "";
+	           expdd   = "";
+	       }else{	      
+	           expyyyy = expdate.substring(0,4);
+	           expmm   = expdate.substring(5,7);
+	           expdd   = expdate.substring(8,10);	   
+           }//if
+	   
+           birthdate = rs.getString("birthdate");
+	       if (birthdate == null){
+	           birthyyyy = "";
+	           birthmm   = "";
+	           birthdd   = "";
+	       }else{	      
+	           birthyyyy = birthdate.substring(0,4);
+	           birthmm   = birthdate.substring(5,7);
+	           birthdd   = birthdate.substring(8,10);	   
+           }//if	   
+	   
+	       lname   = rs.getString("lname"); if (lname == null) lname = "";
+           fname   = rs.getString("fname"); if (fname == null) fname = "";
+           cname   = rs.getString("cname"); if (cname == null) cname = "";
+           gender  = rs.getString("gender"); if (gender == null) gender = "";
+           occu    = rs.getString("occu"); if (occu == null) occu = "";	   
+           nation  = rs.getString("nation"); if (nation == null) nation = "";
+           doctype = rs.getString("doctype"); if (doctype == null) doctype = "";  
+           tvlstatus = rs.getString("tvlstatus"); if (tvlstatus == null) tvlstatus = "";  
+           birthcity = rs.getString("birthcity"); if (birthcity == null) birthcity = "";
+           birthcountry = rs.getString("birthcountry"); if (birthcountry == null) birthcountry = "";
+           resicountry  = rs.getString("resicountry"); if (resicountry == null) resicountry = "";	   
+           meal = rs.getString("meal");if (meal == null) meal = "";
+	    }//if
+    }catch(Exception e){
+	    out.print(e.toString());
+    }finally{
+	    try{if(rs != null) rs.close();}catch(SQLException e){}
+	    try{if(stmt != null) stmt.close();}catch(SQLException e){}
+	    try{if(conn != null) conn.close();}catch(SQLException e){}
+    }//try
+}else if (chgtype.equals("insert")){ 
+   // do nothing
+}//if
+%>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>OE and FE: Modify</title>
+<link href="../menu.css" rel="stylesheet" type="text/css">
+<script language=javascript>
+function getValue(){
+     document.form1.empno.value        = "<%=empno%>";	 
+	 document.form1.expyyyy.value      = "<%=expyyyy%>";
+	 document.form1.expmm.value        = "<%=expmm%>";
+	 document.form1.expdd.value        = "<%=expdd%>"; 	 
+	 document.form1.birthyyyy.value    = "<%=birthyyyy%>";
+	 document.form1.birthmm.value      = "<%=birthmm%>";
+	 document.form1.birthdd.value      = "<%=birthdd%>";    
+	 document.form1.issueyyyy.value    = "<%=issueyyyy%>";
+	 document.form1.issuemm.value      = "<%=issuemm%>";
+	 document.form1.issuedd.value      = "<%=issuedd%>";	 
+	 document.form1.birthcity.value    = "<%=birthcity%>";
+	 document.form1.lname.value        = "<%=lname%>";
+     document.form1.fname.value        = "<%=fname%>";
+     document.form1.cname.value        = "<%=cname%>";	   
+     document.form1.passno.value       = "<%=passno%>";	 
+	 document.form1.nation.value       = "<%=nation%>";	 	
+	 document.form1.occu.value         = "<%=occu%>"; 
+	 document.form1.meal.value         = "<%=meal%>";
+	 document.form1.gender.value       = "<%=gender%>";
+	 document.form1.doctype.value      = "<%=doctype%>";	 
+	 document.form1.tvlstatus.value    = "<%=tvlstatus%>";
+	 document.form1.birthcountry.value = "<%=birthcountry%>"; 
+	 document.form1.resicountry.value  = "<%=resicountry%>";
+} //function
+
+function cnl(){
+	   window.history.back();	   
+}//function
+
+function upd(){
+	if(document.form1.empno.value == ""){	
+	 	alert("Empno can not be empty!!");
+		eval("document.form1.empno.focus()");
+		return false;
+	}//empno
+
+	if(document.form1.passno.value == "") {
+	 	alert("Passport number can not be empty!!");
+		eval("document.form1.passno.focus()");
+		return false;
+	}//passno
+
+	if(document.form1.expyyyy.value == "") {
+	 	alert("Expiry year can not be empty!!");
+		eval("document.form1.expyyyy.focus()");
+		return false;
+	}//expyyyy
+	
+	if(document.form1.expmm.value == "") {
+	 	alert("Expiry month can not be empty!!");
+		eval("document.form1.expmm.focus()");
+		return false;
+	}//expmm	
+	
+	if(document.form1.expdd.value == "") {
+	 	alert("Expiry day can not be empty!!");
+		eval("document.form1.expdd.focus()");
+		return false;
+	}//expdd
+
+	if(document.form1.lname.value == "") {
+	 	alert("Last name can not be empty!!");
+		eval("document.form1.lname.focus()");
+		return false;
+	}//lname
+
+	if(document.form1.fname.value == "") {
+	 	alert("First name can not be empty!!");
+		eval("document.form1.fname.focus()");
+		return false;
+	}//fname
+
+	if(document.form1.gender.value == "") {
+	 	alert("Gender can not be empty!!");
+		eval("document.form1.gender.focus()");
+		return false;
+	}//gender
+
+	if(document.form1.occu.value == "") {
+	 	alert("Occupation can not be empty!!");
+		eval("document.form1.occu.focus()");
+		return false;
+	}//occu 
+
+	if(document.form1.nation.value == "") {
+	 	alert("Nation can not be empty!!");
+		eval("document.form1.nation.focus()");
+		return false;
+	}//nation
+
+	if(document.form1.birthyyyy.value == "") {
+	 	alert("Birth year can not be empty!!");
+		eval("document.form1.birthyyyy.focus()");
+		return false;
+	}//birthyyyy
+
+	if(document.form1.birthmm.value == "") {
+	 	alert("Birth month can not be empty!!");
+		eval("document.form1.birthmm.focus()");
+		return false;
+	}//birthmm
+
+	if(document.form1.birthdd.value == "") {
+	 	alert("Birth day can not be empty!!");
+		eval("document.form1.birthdd.focus()");
+		return false;
+	}//birthdd	
+ 
+	flag = confirm("Are you sure to save data?");
+	if (flag) {
+	    if(document.form1.chgtype.value == "modify"){
+           document.form1.action="crxx_update.jsp";
+        }else if(document.form1.chgtype.value == "insert"){
+           document.form1.action="crxx_insert.jsp";
+        }//if		
+		document.form1.submit();
+	}else{ 
+	    return false;
+	}//if
+}//function
+</script>
+</head>
+<%=bodytag %> 
+<form name="form1" method="post">
+<input name="chgtype" type="hidden" value=<%=chgtype%> >
+<table width="100%" border="0" cellspacing="1" cellpadding="1">  
+    <tr> 
+      <td align="right">Carrier</td>
+      <td align="left"><input name="carrier" type="text" size="2" maxlength="2" onkeyup="javascript:this.value=this.value.toUpperCase();"></td>
+    </tr>
+
+    <tr> 
+      <td align="right">Flight number</td>
+      <td align="left"><input name="fltno" type="text" size="5" maxlength="5" onkeyup="javascript:this.value=this.value.toUpperCase();"></td>
+    </tr>
+
+  <tr> 
+    <td align="right">Flight date </td>
+    <td align="left">
+		<select name="fltyyyy">
+	   <option value=""></option>
+       <%
+	   for (int i=iyear-15; i< iyear+1; i++) {    
+           %> <option value="<%=i%>"><%=i%></option> <%
+	   }//for
+       %>
+    </select>
+    / 
+    <select name="fltmm">
+	   <option value=""></option>
+       <%
+	   for (int j=1; j<13; j++) {    
+	       if (j<10 ){
+              %> <option value="0<%=j%>">0<%=j%></option> <%
+		   }else{
+              %> <option value="<%=j%>"><%=j%></option> <%
+		   }//if
+	   }//for
+       %>
+    </select>
+    / 
+    <select name="fltdd">
+	   <option value=""></option>
+       <%
+	   for (int j=1; j<32; j++) 	{    
+           if (j<10 ){
+              %><option value="0<%=j%>">0<%=j%></option><%
+	       }else{
+              %><option value="<%=j%>"><%=j%></option><%
+		   }//if
+       }//for
+       %>
+    </select>	
+	  </td>
+  </tr>
+
+
+  
+    <td width="16%" align="right">Empno</td>
+    <td width="84%" align="left">
+	<input name="empno" type="text" size="6" maxlength="6" 
+	<%if (chgtype.equals("modify")){
+	     %>readonly<%
+	  }//if
+	%>
+	>
+    </td>
+  </tr>
+  <tr> 
+    <td align="right">Last name </td>
+    <td align="left"><input name="lname" type="text" size="35" maxlength="35" onkeyup="javascript:this.value=this.value.toUpperCase();"></td>
+  </tr>
+  <tr> 
+    <td align="right">First name</td>
+    <td align="left"> <input name="fname" type="text" size="35" maxlength="35" onkeyup="javascript:this.value=this.value.toUpperCase();" > </td>
+  </tr>
+  <tr> 
+    <td align="right"> Nation </td>
+    <td align="left"> <select name="nation">        
+        <option value="TWN">TWN</option>     
+		<option value="USA">USA</option>
+		<option value="CAN">CAN</option>   
+		<option value=""></option>
+      </select> </td>
+  </tr>
+  
+      <tr> 
+    <td align="right">Birth date </td>
+    <td align="left">  
+	<select name="birthyyyy">
+	   <option value=""></option>
+       <%
+	   for (int i=iyear-65; i< iyear-15; i++) {    
+           %> <option value="<%=i%>"><%=i%></option> <%
+	   }//for
+       %>
+    </select>
+    / 
+    <select name="birthmm">
+	   <option value=""></option>
+       <%
+	   for (int j=1; j<13; j++) {    
+	       if (j<10 ){
+              %> <option value="0<%=j%>">0<%=j%></option> <%
+		   }else{
+              %> <option value="<%=j%>"><%=j%></option> <%
+		   }//if
+	   }//for
+       %>
+    </select>
+    / 
+    <select name="birthdd">
+	   <option value=""></option>
+       <%
+	   for (int j=1; j<32; j++) 	{    
+           if (j<10 ){
+              %><option value="0<%=j%>">0<%=j%></option><%
+	       }else{
+              %><option value="<%=j%>"><%=j%></option><%
+		   }//if
+       }//for
+       %>
+    </select>
+	
+	</td>
+  </tr>
+
+  <tr> 
+    <td align="right">Passport number </td>
+    <td align="left"> <input name="passno" type="text" size="20" maxlength="20" onkeyup="javascript:this.value=this.value.toUpperCase();"> 
+    </td>
+  </tr>
+
+
+  <tr> 
+    <td align="right" > Occupation</td>
+    <td align="left"> 
+	
+	<select name="occu">
+        <option value=""></option>
+		<option value="FE">FE</option>
+        <option value="OE">OE</option>        
+      </select> 
+
+	  </td>
+  </tr>
+  <tr> 
+    <td align="right">Gender</td>
+    <td align="left"><select name="gender">
+        <option value="M">M</option>
+        <option value="F">F</option>
+		<option value=""></option>
+      </select> </td>
+  </tr>
+  <tr> 
+      <td align="right">Passport document type </td>
+    <td align="left"> <select name="doctype">
+        <option value="P">P</option>
+        <option value=""></option>
+      </select> </td>
+  </tr>
+  <tr> 
+    <td align="right"> Travel status </td>
+    <td align="left"> <select name="tvlstatus">
+        <option value=""></option>
+        <option value="CR3">CR3</option>
+        <option value="CR4">CR4</option>
+        <option value="CR5">CR5</option>
+      </select> </td>
+  </tr>
+  <tr> 
+    <td align="right"> Meal </td>
+    <td align="left"> <select name="meal">
+        <option value=""></option>
+        <option value="AV">AV</option>
+        <option value="NB">NB</option>
+        <option value="NB">NP</option>
+      </select> </td>
+  </tr>  
+  <tr> 
+    <td align="right">DH</td>
+    <td align="left"><input name="dh" type="text" size="3" maxlength="3"> 
+    </td>
+  </tr>  
+  <tr> 
+    <td align="right">Meal</td>
+    <td align="left"><input name="meal" type="text" size="2" maxlength="2"> 
+    </td>
+  </tr>  
+  
+  
+  <tr> 
+    <td align="right">GD order</td>
+    <td align="left"><input name="gdorder" type="text" size="5" maxlength="5"> 
+    </td>
+  </tr>  
+  <tr> 
+    <td align="right">Departure station</td>
+    <td align="left"><input name="depart" type="text" size="3" maxlength="3" onkeyup="javascript:this.value=this.value.toUpperCase();"> 
+    </td>
+  </tr>  
+  <tr> 
+    <td align="right">Arrival station</td>
+    <td align="left"> <input name="dest" type="text" size="3" maxlength="3" onkeyup="javascript:this.value=this.value.toUpperCase();"> 
+    </td>
+  </tr>  
+  <tr> 
+    <td align="right">Issue date </td>
+    <td align="left">
+		<select name="issueyyyy">
+	   <option value=""></option>
+       <%
+	   for (int i=iyear-15; i< iyear+1; i++) {    
+           %> <option value="<%=i%>"><%=i%></option> <%
+	   }//for
+       %>
+    </select>
+    / 
+    <select name="issuemm">
+	   <option value=""></option>
+       <%
+	   for (int j=1; j<13; j++) {    
+	       if (j<10 ){
+              %> <option value="0<%=j%>">0<%=j%></option> <%
+		   }else{
+              %> <option value="<%=j%>"><%=j%></option> <%
+		   }//if
+	   }//for
+       %>
+    </select>
+    / 
+    <select name="issuedd">
+	   <option value=""></option>
+       <%
+	   for (int j=1; j<32; j++) 	{    
+           if (j<10 ){
+              %><option value="0<%=j%>">0<%=j%></option><%
+	       }else{
+              %><option value="<%=j%>"><%=j%></option><%
+		   }//if
+       }//for
+       %>
+    </select>	
+	  </td>
+  </tr>
+    <tr> 
+      <td align="right">Passport expiry date</td>
+	<td align="left">	
+	<select name="expyyyy">
+	   <option value=""></option>
+       <%
+	   for (int i=iyear; i< iyear+16; i++) {    
+           %> <option value="<%=i%>"><%=i%></option> <%
+	   }//for
+       %>
+    </select>
+    / 
+    <select name="expmm">
+	   <option value=""></option>
+       <%
+	   for (int j=1; j<13; j++) {    
+	       if (j<10 ){
+              %> <option value="0<%=j%>">0<%=j%></option> <%
+		   }else{
+              %> <option value="<%=j%>"><%=j%></option> <%
+		   }//if
+	   }//for
+       %>
+    </select>
+    / 
+    <select name="expdd">
+	   <option value=""></option>
+       <%
+	   for (int j=1; j<32; j++) 	{    
+           if (j<10 ){
+              %><option value="0<%=j%>">0<%=j%></option><%
+	       }else{
+              %><option value="<%=j%>"><%=j%></option><%
+		   }//if
+       }//for
+       %>
+    </select>	
+  </td>
+  </tr>
+
+    <tr> 
+    <td align="right">Birth country </td>
+    <td align="left">  
+	 <select name="birthcountry">
+        <option value=""></option>
+        <option value="TWN">TWN</option>     
+		<option value="USA">USA</option>
+		<option value="CAN">CAN</option>  
+		<option value="CAN">CHN</option> 
+      </select>
+	  </td>
+  </tr>
+    <tr> 
+    <td align="right">Resident country  </td>
+    <td align="left"> 
+		<select name="resicountry">
+        <option value=""></option>
+        <option value="TWN">TWN</option>     
+		<option value="USA">USA</option>
+		<option value="CAN">CAN</option>  
+      </select>
+	 </td>
+  </tr>
+  <tr> 
+    <td align="right" >&nbsp;</td>
+      <td align="left">   
+	    <input name="button" type="button" value="Save" onClick="upd()">  
+        &nbsp;&nbsp; 
+        <input name="button" type="button" value="Cancel" onClick="cnl()"> </td>
+  </tr>
+</table>
+</form>
+</body>
+</html>
+

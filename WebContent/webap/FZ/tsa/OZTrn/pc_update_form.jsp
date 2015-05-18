@@ -1,0 +1,50 @@
+<%@ page contentType="text/html; charset=big5" language="java" import="java.sql.*,javax.sql.DataSource,javax.naming.InitialContext,ci.db.*,java.util.*,java.io.*, java.text.*,java.math.*" %>
+<%
+String sGetUsr = (String) session.getAttribute("cs55.usr") ;
+if (session.isNew() || sGetUsr == null) {		//check user session start first
+    %> <jsp:forward page="../sendredirect.jsp" /> <%
+}//if
+String empno   = request.getParameter("curremp");
+String cname   = request.getParameter("currname");
+String chkType = request.getParameter("chktype");
+
+//out.print("~~~~"+empno+"~~~~"+cname+"~~~~"+adjckdt);
+%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=big5"><title></title>
+<link href="style.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" src="calendar2.js" ></script>
+<script language="JavaScript">
+function f_insert(){
+	eval("document.form1.curremp.value='<%=empno%>'");
+	eval("document.form1.currname.value='<%=cname%>'");
+	eval("document.form1.chktype.value='<%=chkType%>'");
+	eval("document.form1.target = '_self'");
+	eval("document.form1.action = 'pc_update.jsp'");
+	eval("document.form1.submit()");
+}//function
+</script>
+</head><body>
+<form name="form1" method="post">
+<table width="90%"  border="0" cellpadding="1" cellspacing="1" bordercolor="#CCCCCC" align="center">
+<tr><td>&nbsp;</td></tr>
+<tr class="txtblue"><td align="center">請點選日曆或輸入日期(YYYY/MM/DD)<p></p></td></tr>
+<tr><td><hr></td></tr>
+<tr class="txtblue"><td align="center"><%=empno%> <%=cname%><p></p></td></tr>
+<tr class="txtblue"><td align="center"><%=chkType%> 日期: 
+<input type="text" size="10" id="adjckdt" name="adjckdt">
+<img height="16" src="img/cal.gif" width="16" onClick="cal.popup();"><p></p></td></tr>
+<tr class="txtblue"><td align="center"><input type="button" name="insert" value="儲存"  onClick="f_insert()"></td></tr>
+</table>
+<input name="curremp"  type="hidden">
+<input name="currname" type="hidden">
+<input name="chktype" type="hidden">
+</form> 
+</body>
+</html>
+<script language="JavaScript">
+var cal = new calendar2(document.forms['form1'].elements['adjckdt']);
+cal.year_scroll = true;
+cal.time_comp = false;
+document.getElementById("adjckdt").value =cal.gen_date(new Date());
+</script>

@@ -1,0 +1,77 @@
+package ws.prac;
+
+public class PurInfoObj {
+	private String psrCName = null;
+	private String psrEname = null;
+	private String psrSern = null;
+	private String psrBase = null;
+	private String psrGrp  = null;
+	private String psrStatus = null;
+	
+	private String errorMsg = "";
+	private String resultMsg = "";
+
+	public String getPsrCName() {
+		return psrCName;
+	}
+
+	public void setPsrCName(String psrCName) {
+		this.psrCName = psrCName;
+	}
+
+	public String getPsrEname() {
+		return psrEname;
+	}
+
+	public void setPsrEname(String psrEname) {
+		this.psrEname = psrEname;
+	}
+
+	public String getPsrSern() {
+		return psrSern;
+	}
+
+	public void setPsrSern(String psrSern) {
+		this.psrSern = psrSern;
+	}
+
+	public String getPsrBase() {
+		return psrBase;
+	}
+
+	public void setPsrBase(String psrBase) {
+		this.psrBase = psrBase;
+	}
+
+	public String getPsrGrp() {
+		return psrGrp;
+	}
+
+	public void setPsrGrp(String psrGrp) {
+		this.psrGrp = psrGrp;
+	}
+
+	public String getPsrStatus() {
+		return psrStatus;
+	}
+
+	public void setPsrStatus(String psrStatus) {
+		this.psrStatus = psrStatus;
+	}
+
+	public String getErrorMsg() {
+		return this.errorMsg;
+	}
+
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg = errorMsg;
+	}
+
+	public String getResultMsg() {
+		return this.resultMsg;
+	}
+
+	public void setResultMsg(String resultMsg) {
+		this.resultMsg = resultMsg;
+	}
+}

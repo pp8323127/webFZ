@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>CII--Crew Integration Information</title>
+<script language=javascript>
+function f_onload() {
+    document.form1.userid.focus();
+
+	var sMyURL = document.URL ;
+	var sPort = location.port;
+	var sPath = location.pathname ;
+	var sCAL = ".china-airlines.com" ;
+	var iCAL = sMyURL.indexOf(sCAL) ;
+	var iPort = sMyURL.indexOf(sPort);
+	var iPath = sMyURL.indexOf(sPath);
+	var newUrl ;
+	if (substr(sMyURL,1,5)=='10.16') {}
+	else 
+	{
+	 if (iCAL==-1) { 
+		if (iPort==-1) { 
+			newUrl = sMyURL.slice(0,iPath)+sCAL+sPath  ;  //if no port
+		} else { 
+			newUrl = sMyURL.slice(0,iPort-1)+sCAL+":"+sPort+sPath ;
+		}
+	 }  /**/
+	 if (iCAL==-1) { 
+			//alert(navigator.appName);
+		if (navigator.appName=="Netscape") {
+		         	window.location.replace(newUrl);	//FireFox
+		} else { 	location.replace(newUrl);			//IE	
+		}
+		//alert(navigator.appName);
+	 } 
+	};
+}	
+
+function checkid(){
+	 if(document.form1.userid.value ==""){
+	 	alert("Please insert userid!!\n請輸入帳號!!");
+		document.form1.userid.focus();
+		return false;
+	 }
+	 else if(document.form1.password.value ==""){
+	 	alert("Please insert passsword!!\n請輸入密碼!!");
+	 	document.form1.password.focus();
+		return false;
+	 }
+	 else{
+	 	return true;
+	 }
+
+}
+</script>
+<link href="../menu.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="dailycrew/kbd.css">
+<style type="text/css">
+<!--
+body,form,input{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+}
+input{
+border:gray;}
+.style1 {font-size: 10pt;}
+-->
+</style>
+
+</head>
+
+<body onLoad="f_onload()">
+<form name="form1" method="post" action="checkTSAuser_eip.jsp" onSubmit="return checkid()">
+  <table width="90%" border="0" align="center" cellpadding="2" cellspacing="0">
+    <!--DWLayoutTable-->
+    <tr>
+      <td width="121" >&nbsp;</td>
+      <td width="68" valign="top" class="txttitletop"><!--DWLayoutEmptyCell-->&nbsp;</td>
+      <td colspan="2" valign="middle" >
+	<img src="tsaLogo.gif" width="400"><br>
+	<font size="-1">如無法登入請換用連結入口: </font> 
+        <a href="http://10.16.58.47:9901/webfz/FZ/tsa/index.htm">10.16.58.47</a> 
+        or <a href="http://hdqweb03:9901/webfz/FZ/tsa/index.htm">HDQWEB03</a> 
+        or <a href="http://tpeweb03:9901/webfz/FZ/tsa/index.htm">TPEWEB03</a> 
+		<br>
+        </td>
+      <td width="74">&nbsp;</td>
+    </tr>
+    <tr>
+      <td height="29">&nbsp;</td>
+      <td valign="top" class="txtblue"><!--DWLayoutEmptyCell-->&nbsp;</td>
+      <td valign="top" bgcolor="#CCCCCC" class="txtblue" style="padding-right:0.5em;text-align:right; ">UserID</td>
+      <td valign="top" bgcolor="#CCCCCC" class="txtblue" > 
+        <input type="text" name="userid"></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td height="20">&nbsp;</td>
+      <td valign="top" class="txtblue"><!--DWLayoutEmptyCell-->&nbsp;</td>
+      <td valign="top" bgcolor="#CCCCCC" class="txtblue" style="padding-right:0.5em;text-align:right; ">Password 
+      </td>
+      <td valign="top" bgcolor="#CCCCCC" class="txtblue"> 
+        <input type="password" name="password" AUTOCOMPLETE="off"/></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td height="49">&nbsp;</td>
+      <td valign="middle"><!--DWLayoutEmptyCell-->&nbsp;</td>
+      <td width="76" valign="middle"><!--DWLayoutEmptyCell-->&nbsp;</td>
+      <td width="508" valign="middle"><input name="Submit" type="submit" class="kbd2" value="Login" >
+      <input name="reset" class="kbd2" type="reset" id="reset" value="Reset"></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td height="78">&nbsp;</td>
+      <td colspan="3">
+        <div align="left"><strong><font color="#FF0000" size="2">‧UserID and Password 
+          與 <a href="http://webmail.cal.aero">EIP</a> 相同, 本系統不提供變更Password . </font></strong><font color="#FF0000" size="2"><strong><br>
+          忘記密碼請CALL4000重設 </strong></font><font color='#FF0000' size='5'><a href="http://webmail.cal.aero"><font size="2"><strong>EIP</strong></font></a></font><font color="#FF0000" size="2"> 
+          <strong>密碼。更改密碼請進入 </strong></font><font color='#FF0000' size='5'><a href="http://webmail.cal.aero"><font size="2"><strong>EIP</strong></font></a></font><br>
+          <span class="txtxred">‧UserID &amp; Password is the same with the <font color='#FF0000' size='5'><a href="http://webmail.cal.aero"><font size="2"><strong>EIP</strong></font></a></font> 
+          .You can't change password in this system.<br>
+          Please go to <font color='#FF0000' size='5'><a href="http://webmail.cal.aero"> 
+          EIP</a></font> to change your password. If you forget your password,call 
+          4000 to reset it.</span></div>
+      </td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td  colspan="5">        <div align="left">
+          <hr width="100%" size="1" noshade>
+      </div></td>
+    </tr>
+    <tr>
+      <td height="78">&nbsp;</td>
+      <td colspan="4"><div align="left">        <div align="center" class="style1">
+          <div align="left">本系統僅保證於Internet Explorer上正常瀏覽<br>
+            最佳瀏覽模式解析度 1024 x 768,使用 Internet Explorer 6.0 以上版本<br>
+    所有內容版權屬於中華航空股份有限公司所有 <br>
+    The website is for IE ONLY!
+	Best Resolution 1024 x 768 Pixels / IE6.0+<br>
+    Copyright &copy; 2004 China Airlines Inc. All rights reserved. </div>
+        </div>
+      </div></td>
+    </tr>
+    <tr>
+      <td height="78">&nbsp;</td>
+      <td colspan="3"><div align="right"> <a href="http://www.china-airlines.com" target="_blank"><img src="../images/logo.jpg" border="0"></a></div></td>
+	  <td>               </td>
+    </tr>
+    <tr>
+      <td height="80" colspan="5"><div align="right"></div>
+      </td>
+    </tr>
+  </table>
+</form>
+</body>
+</html>

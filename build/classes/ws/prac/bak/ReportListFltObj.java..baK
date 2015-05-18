@@ -1,0 +1,63 @@
+package ws.prac;
+
+import java.util.ArrayList;
+
+public class ReportListFltObj {
+	//取得當月班表 list.add
+	/*
+	private String matchStr = null;
+	private String ftime 	= null;
+	private String rj 		= null;
+	
+	private String updAL	= null;//儲存報告的狀態(Y: 可編輯，N: 不可編輯)
+	*/
+		
+	private String fdate	= null;
+	private String fltno	= null;
+	private String sect	= null;
+	private String duty = null;
+	private String qual = null;//acting_rank
+	private String special_indicator = null;
+	///////
+	
+	public String getFdate() {
+		return fdate;
+	}
+	public void setFdate(String fdate) {
+		this.fdate = fdate;
+	}
+	public String getFltno() {
+		return fltno;
+	}
+	public void setFltno(String fltno) {
+		this.fltno = fltno;
+	}
+	public String getSect() {
+		return sect;
+	}
+	public void setSect(String sect) {
+		this.sect = sect;
+	}
+	public String getDuty() {
+		return duty;
+	}
+	public void setDuty(String duty) {
+		this.duty = duty;
+	}
+	public String getQual() {
+		return qual;
+	}
+	public void setQual(String qual) {
+		this.qual = qual;
+	}
+	public String getSpecial_indicator() {
+		return special_indicator;
+	}
+	public void setSpecial_indicator(String special_indicator) {
+		this.special_indicator = special_indicator;
+	}
+	
+	////	
+	
+	
+}

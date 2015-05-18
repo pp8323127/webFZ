@@ -1,0 +1,95 @@
+<html>
+<head>
+<title>查飛時</title>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<script language="JavaScript" type="text/JavaScript">
+function check(){
+
+var y,m;
+var yy,mm;
+yy = parseInt(document.form1.yy.value);
+mm = parseInt(document.form1.mm.value);
+ nowdate = new Date();
+ y = nowdate.getFullYear();
+ m = nowdate.getMonth() + 1;
+ if(document.form1.empno.value != ""){
+ 	document.form1.action = "crewhrdetail.jsp";
+	document.form1.submit();
+ }else
+ {
+	if (yy >= y && mm > m+1){ 
+		alert("Select date error!!\n無法查詢未來資料!!");
+		location.reload();
+		return false;
+	}
+	/*else 	if (form1.sel_emp.value == ""){
+		alert("Employee number must be insert!!\n請輸入員工號")
+		document.form1.sel_emp.focus();
+		return false;
+	}*/
+	else	{
+		
+		return true;
+	}
+}
+	
+
+}
+function showdate(){
+
+now = new Date();
+var y,m,selm
+y = now.getFullYear();
+m = now.getMonth();
+
+
+
+	if(m < 10){
+		document.form1.mm.value="0"+m;
+	}
+	else	{
+		document.form1.mm.value=+m;
+	}
+document.form1.yy.value=y;
+
+}
+
+</script>
+
+<link href="../menu.css" rel="stylesheet" type="text/css">
+</head>
+
+<body onLoad="showdate()">
+
+<form name="form1" method="post" action="1000hrSave.jsp" class="txtblue" target="mainFrame">
+   <span class="txtxred">1000Hrs Save</span><span class="txtblue"> Year</span>  
+   <select name="yy">
+    <option value="2003">2003</option>
+	<option value="2004">2004</option>
+    <option value="2005">2005</option>
+	<option value="2006">2006</option>
+	<option value="2007">2007</option>
+	<option value="2008">2008</option>
+	<option value="2009">2009</option>
+  </select>
+  <span class="txtblue">Month</span>  
+  <select name="mm">
+    <option value="01">01</option>
+    <option value="02">02</option>
+    <option value="03">03</option>
+    <option value="04">04</option>
+    <option value="05">05</option>
+    <option value="06">06</option>
+    <option value="07">07</option>
+    <option value="08">08</option>
+    <option value="09">09</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+  </select>
+  <input name="Submit" type="submit" class="btm" value="Query">
+  <input name="Submit2" type="button" class="btm" value="Reset" onClick="javascript:location.reload()">
+
+</form>
+</body>
+</html>

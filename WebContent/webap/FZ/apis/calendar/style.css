@@ -1,0 +1,94 @@
+body{
+font-family:Verdana;
+font-size: 11px;
+color: #000000;
+/*font-weight: bold;*/
+
+}
+
+/*一般日期*/
+.DayN {
+	color: rgb(0,0,0);
+	text-align: center;
+	vertical-align: middle;
+	border: 1px solid #87cefa 
+}
+
+/*滑鼠移到日期欄位時*/
+.DayU {  /*color: rgb(255,255,255);*/
+	background-color:#ffb6c1;
+	text-align: center;
+	vertical-align: middle;
+	border: 1px outset rgb(255,255,255) 
+}
+
+/*已有選擇日期時*/
+.DayD{  
+	background-color:#336699 /*#ffb6c1*/;
+	color:#FFFFFF;
+/*
+	background-color:#dbeaf5 ;
+	color: rgb(0,0,0);
+	*/
+	text-align: center;
+	vertical-align: middle;
+	border: 1px inset rgb(255,255,255) 
+}
+/*星期一～四的表頭欄*/
+.WeekDay{ /*background-color: #FFFFFF;
+ color: #000000;*/
+	  text-align: center;
+	 vertical-align: middle;
+	 border-left: 1px solid rgb(255,255,255);
+	 border-right: 1px solid rgb(255,255,255);
+	 border-top: 1px solid rgb(255,255,255) 
+}
+
+/*星期六、日的表頭欄*/
+.WeekEnd{  /*background-color: rgb(255,0,0);
+color: rgb(255,255,255); */
+	color: #FF0000;
+	text-align: center;
+	vertical-align: middle;
+	border-left: 1px solid rgb(255,255,255);
+	border-right: 1px solid rgb(255,255,255);
+	border-top: 1px solid rgb(255,255,255) 
+}
+
+.ArrowN{   /*background-color: #4682B4rgb(128,128,128);
+ */
+	background-color: #4682B4;
+	color: rgb(255,255,255);
+	text-align: center;
+	vertical-align: middle;
+	border: 1px outset rgb(255,255,255) 
+}
+
+.ArrowU{   /*background-color: rgb(128,128,128);
+*/ 
+	color: rgb(255,255,255);
+	text-align: center;
+	vertical-align: middle;
+	border: 1px outset rgb(255,255,255) 
+}
+
+.ArrowD{   /*background-color: rgb(192,192,192);
+*/ 
+	color: rgb(255,255,255);
+	text-align: center;
+	vertical-align: middle;
+	border: 1px inset rgb(255,255,255) 
+}
+/*選擇年/月*/
+.DateSelect{ /* background-color: rgb(192,192,192);
+ */ 
+	background-color:#FFFFFF;
+	text-align: left ;
+	background-color: #4682B4;
+	color:#FFFFFF;
+	font-size: 10px;
+	/*font-size: 10px;*/
+	font-family:Verdana;
+
+}
+

@@ -1,0 +1,99 @@
+<%@ page contentType="text/html; charset=big5" language="java" import="fz.*"%>
+<%
+String sGetUsr = (String) session.getAttribute("userid") ; //Check if logined
+if ((sGetUsr == null) || (session.isNew()) )
+{		//check user session start first or not login
+	response.sendRedirect("sendredirect.jsp");
+} 
+//***********for test*******************
+//sGetUsr = "631848";
+//session.setAttribute("userid", sGetUsr) ;
+//**************************************
+chkUser cu = new chkUser();
+try{cu.findCrew(sGetUsr);}catch(Exception e){}
+%>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>Crew Reporting Check System</title>
+<link href="../menu.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" language="JavaScript">
+function load(w1,w2)
+{
+		/*top.topFrame.location.href=w1;
+		top.mainFrame.location.href=w2;*/
+		parent.topFrame.location.href=w1;
+		parent.mainFrame.location.href=w2;
+
+}
+function sub(formName, mytop, actionPage)
+{
+		parent.topFrame.location.href=mytop;
+		eval("document."+formName+".action='"+actionPage+"'");
+		eval("document."+formName+".submit()");
+}
+</script>
+<style type="text/css">
+<!--
+body {
+	background-color: #99ccff;
+}
+-->
+</style>
+</head>
+
+<body>
+<p><a href="http://www.china-airlines.com" target="_blank"><img src="../images/logo2.gif" border="0" alt="www.china-airlines.com" width="165" height="35"></a>
+<ul>
+    <li><a href="#" class="txtblue" onClick='javascript:load("CRCStop.jsp?msg=Flight Duty","CRCSmain.jsp")'>Flight Duty</a></li>
+	<p>
+	<li><a href="#" class="txtblue" onClick='javascript:load("CRCStop.jsp?msg=Licence","updlog.jsp?linkpage=http://tsaweb02:8099/LIC/crewlic.jsp?empno=<%=sGetUsr%>&sysname=licence")'>Licence check</a></li>
+	<P>
+	<li><a href="#" class="txtblue" onClick='javascript:load("CRCStop.jsp?msg=CATII/IIIa","updlog.jsp?linkpage=http://tsaweb02:8099/CATII/cat_report.jsp?empno=<%=sGetUsr%>&sysname=CATII/IIIa")'>CATII/IIIa check</a></li>
+	<P>
+	<li><a href="#" class="txtblue" onClick='javascript:load("CRCStop.jsp?msg=Personal Info","../tsa/crewquery.jsp?empno=<%=sGetUsr%>")'>Personal Info</a></li>
+	<P>
+	<li>
+	  <form name="form1" method="post" target="mainFrame" onSubmit="javascript:sub('form1', 'blank.htm', '../tsa/daily/landing90day.jsp')">
+	    <span class="txtblue">Landing Times</span><br>
+	    <select name="theday" id="theday">
+	      <option value="30">30</option>
+	      <option value="60">60</option>
+	      <option value="90">90</option>
+        </select>
+        <input type="submit" name="Submit" value="Check"> 
+        <input name="empno" type="hidden" id="empno" value="<%=sGetUsr%>">  
+		<input name="cname" type="hidden" id="cname" value="<%=cu.getName()%>">  
+	  </form>
+	</li>
+	<P>
+	<li>
+	  <form name="form2" method="post" target="mainFrame" onSubmit="javascript:sub('form2', 'blank.htm', '../../DF/accrec.jsp')">
+	    <span class="txtblue">Crew 100 Hours </span><br>
+	    <select name="year" id="year">
+	      <option value="2003">2003</option>
+		  <option value="2004">2004</option>
+        </select>
+		<select name="month" id="month">
+	      <option value="01">01</option>
+		  <option value="02">02</option>
+		  <option value="03">03</option>
+		  <option value="04">04</option>
+		  <option value="05">05</option>
+		  <option value="06">06</option>
+		  <option value="07">07</option>
+		  <option value="08">08</option>
+		  <option value="09">09</option>
+		  <option value="10">10</option>
+		  <option value="11">11</option>
+		  <option value="12">12</option>
+        </select>
+        <input type="submit" name="Submit" value="Check"> 
+        <input name="empno" type="hidden" id="empno" value="<%=sGetUsr%>">  
+	  </form>
+	</li>
+	<P>
+	<li><a href="sendredirect.jsp" class="txtblue">Log out</a></li>
+</ul>
+</body>
+</html>

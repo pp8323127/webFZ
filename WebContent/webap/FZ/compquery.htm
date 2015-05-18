@@ -1,0 +1,131 @@
+<html>
+<head>
+<title>Crew Qeury</title>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<link href="menu.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/JavaScript" >
+ nowdate = new Date();
+ var y,m,d;
+	y = nowdate.getFullYear() ;
+	m = nowdate.getMonth()+1;
+	d =nowdate.getDate();
+
+/*	
+ function shownow(){	//抓時間顯示預設下拉欄位
+	form1.fyy.value = y;
+	if (m < 10) {
+		form1.fmm.value = "0"+m;
+	}
+	else{
+	form1.fmm.value = m;
+	} 
+	
+	
+
+ }*/
+  function shownow(){
+	
+	if (d >=25){  //超過25日，抓下一月
+		if(m ==12){	//12月25，抓明年一月
+			m = 0;
+			y ++;
+		}
+		m = m+1;
+	}
+	
+	if (m < 10) {
+		document.form1.fmm.value = "0"+m;
+	}
+	else{
+	document.form1.fmm.value = m;
+	} 
+	
+	document.form1.fyy.value = y;
+	
+
+ }
+
+	function check_sess(){
+		var sely,selm;	//選取的年月
+		sely = form1.fyy.value;		
+		selm = parseInt(form1.fmm.value)-1;
+	    seldate = new Date();	//設定選擇的日期
+		
+		seldate.setFullYear(sely);
+		seldate.setMonth(selm);
+
+
+
+
+
+
+
+		if (form1.empno.value =="" )		{			
+			alert("請輸入比對者員工號！！\n\nPlease insert the Employee number of the compare!!");
+			form1.empno.focus();
+			return false;
+		}
+
+		/*else if (seldate < nowdate){
+		alert("系統不支援更換過往航班，請重新選擇日期！！\n\n"
+			 +" Please select another date!!");
+			return false;
+		}*/
+	
+		
+						
+		else{	//若員工號不為空值，則以員工號查詢，
+				
+				return true;
+		 }
+
+		
+	}
+		
+		
+		
+	
+	
+</script>
+<style type=text/css>
+<!--
+BODY{margin:0px;/*內容貼緊網頁邊界*/}
+-->
+</style>
+
+
+</head>
+<body onLoad="shownow()">
+<form method="post" name="form1" target="mainFrame" class="txtblue" id="form1" onSubmit="return check_sess()" action="compare.jsp">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr> 
+      <td width="41%" class="txtblue" valign="middle">&nbsp;
+        <select name="fyy" class="t1">
+          <option value="2003">2003</option>
+          <option value="2004">2004</option>
+          <option value="2005">2005</option>
+          <option value="2006">2006</option>
+        </select>
+        <select name="fmm" class="t1">
+          <option value="01">01</option>
+          <option value="02">02</option>
+          <option value="03">03</option>
+          <option value="04">04</option>
+          <option value="05">05</option>
+          <option value="06">06</option>
+          <option value="07">07</option>
+          <option value="08">08</option>
+          <option value="09">09</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+        </select>
+        比對者員工號/序號 
+        <input name="empno" type="text" id="tf_empno" size="10" maxlength="6" class="t1"> 
+      <input type="submit" name="Submit" value="Query" class="btm"> </td>
+      <td width="59%" valign="middle" class="txtblue">&nbsp; </td>
+    </tr>
+  </table>
+</form>
+</body>
+</html>

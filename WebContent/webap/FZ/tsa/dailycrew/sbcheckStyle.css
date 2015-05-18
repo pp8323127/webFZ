@@ -1,0 +1,100 @@
+/* CSS Document */
+
+body,form,input,select{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:10pt;
+}
+a{
+	color:#0000FF;
+}
+a:link ,a:visited{
+	text-decoration:none;
+
+}
+a:hover{
+	text-decoration:underline;
+
+}
+a:active{
+	text-decoration:none;
+
+}
+img{
+	border:0pt;
+}
+.left{
+	text-align:left;
+	padding-left:0.5em;
+}
+
+.right{
+	text-align:right;
+	padding-right:0.5em;
+}
+.center{
+	text-align:center;
+}
+.bold{
+	font-weight:bold;
+}
+
+.bg1{
+	background-color:#3399CC;
+	color:#FFFFFF;
+}
+.bg2{
+	background-color:#E6E6FA;
+	color:#000000;
+}
+.bg3{
+	background-color:#FFFFE0;
+	color:#000000;
+}
+.bg4{
+	background-color:#ADD8E6;
+	color:#000000;
+}
+.bg5{
+	background-color:#F0FFFF;
+	color:#000000;
+}
+.bg6{
+	background-color:#F0F8FF;
+	color:#000000;
+}
+.bg7{
+	background-color:#F2F2F2;
+	color:#000000;
+}
+.bg8{
+	background-color:#D6D6D6;
+	color:#000000;
+
+}
+
+.red{
+	color:#FF0000;
+}
+.blue{
+	color:#0000FF;
+}
+
+.tableStyle1{
+	border-collapse:collapse;
+	border:2pt double gray;  
+}
+.topBorderStyle1{
+	border-top:1pt dashed gray;
+}
+.bottomBorderStyle1{
+	border-bottom:1pt dashed gray;
+}
+.bottomBorderStyle2{
+	border-bottom:1pt dashed #A9A9A9;
+}
+
+.paddingTopBottom1{
+	padding-top:1em;
+	padding-bottom:1em;
+}
+

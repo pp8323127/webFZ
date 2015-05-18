@@ -1,0 +1,223 @@
+/* CSS Document */
+
+.HeaderNav {
+	font-size: 13px;
+	color: #a3a3a3;
+	border-top-style: none;
+	border-right-style: none;
+	border-left-style: none;
+	border-bottom-style: none;
+	font-family: Verdana, 細明體;
+} 
+
+.LeftNav { font-family:Verdana, 細明體; font-size: 13px; color: #999999;border-top-style: none;border-right-style: none;border-left-style: none;border-bottom-style: none;} 
+
+.FontSizeEngA { font-size: 10px; font-family:Verdana, 細明體} 
+.bold { font-weight: bold; font-family: Verdana, 細明體; font-size: 9px} 
+.FontSizeEngB { font-size: 9pt; font-family: Verdana, 細明體 } 
+
+.txt { font-size: 13px; line-height: 150%; color: #999999} 
+
+.black { font-size: 10pt; line-height: 130%; color: #000000} 
+.red9 {  font-size: 12px; color: #990000}
+.blue9 {  font-size: 12px; color: #464883}
+.blue9 {  line-height: 150%}
+.blue12 {  font-size: 12pt; color: #7384D2; font-family: Verdana, 細明體}
+.linktxt {  font-size: 13px; color: #7384d2; line-height: 150%}
+.white {  font-size: 13px; color: #FFFFFF; font-family:Arial, Helvetica, sans-serif;}
+.whitebold {  font-size: 13px; color: #FFFFFF; font-weight: bold; font-family: Verdana, 細明體}
+
+.menu1 {  font-size: 13px; line-height: normal; color: #999999}
+
+.engverdana10px {  font-family: Verdana, 細明體; font-size: 13px; color: #464883}
+.engblueheadline {  font-family: Verdana, 細明體; font-size: 10pt; color: #7384d2}
+
+.txtblue {
+	font-size: 12px;
+	line-height: 13.5pt;
+	color: #464883;
+	font-family:  Verdana;
+}
+.txtred {
+	font-size: 13px;
+	line-height: 13.5pt;
+	color: #000000;
+	font-family:Verdana;
+}
+.txtxred {
+	font-size: 12px;
+	line-height: 13.5pt;
+	color: red;
+	font-family: Verdana;
+}
+.txtgray {
+	font-size: 13px;
+	line-height: 13.5pt;
+	color: #828282;
+}
+.txtgray2 {		/* editcrewinfo.jsp*/
+	font-size: 10pt;
+	line-height: 13.5pt;
+	color: #333333;
+	text-align: center;
+	font-family: 細明體, 新細明體, Courier New;
+}
+.txttitletop {
+	font-family:Arial;
+	font-size: 16px;
+	line-height: 22px;
+	color: #464883;
+	font-weight: bold;
+}
+.txttitle {
+	font-family:Arial;
+	font-size: 14px;
+	line-height: 22px;
+	color: #464883;
+}
+.top {
+	color: #996600;
+	font-family:Arial;
+	font-size: 13px;
+	line-height: 13.5px;
+
+}
+.btm {
+/* font-size: 10pt;
+	font-family:新細明體; 
+	color=#ffffff;
+	border:solid 1pt; 
+	border-color:#ffffff #ffffff #666666 #666666; 
+	Background-Color:#6983AF
+	*/
+font-size: 10pt;
+font-family:新細明體;
+color:#000066;
+background-color : #CCCCFF ; /*背景色彩*/
+border-top : 1px double #208AFF ;/*上框*/ 
+border-bottom : 1px double #208AFF  ;/*下框 208AFF*/ 
+border-left : 1px double #208AFF  ; /*左框 EFEFEF*/
+border-right : 1px double #208AFF  ; /*右框*/
+
+	}
+
+input,textarea,select
+{
+font-family: 細明體;
+font-size: 10pt; 
+color: #333333; 
+border:1px solid #76B1DE; 
+
+}
+
+a:link {  text-decoration: none;font-size: 10pt;color:blue }
+a:visited {  text-decoration: none;font-size: 10pt;color:blue}
+a:hover {  color: #990066; font-size: 10pt; text-decoration: underline}
+a:active {  text-decoration: none;font-size: 10pt;color: #7384d2}
+
+
+.tablehead {
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: #006699;
+	font-size: 12px;
+	text-align: center;
+	font-style: normal;
+	font-weight: bold;
+	color: #FFFFFF;
+	
+}
+.fortable{	/*table外框*/
+border: 1px solid;
+}
+
+.tablebody {  font-family:細明體, 新細明體, Courier New; 
+font-size: 10pt; text-align: center;	border: 1px solid;}
+
+.cs55text {  font-family: 細明體, 新細明體, Courier New; color: #000099; font-size: 14px}
+.cs55titalremark {  font-family: 標楷體; color: #0099CC}
+
+.icon {		/*login.htm的logon用*/
+	border: 1px solid #76B1DE;
+	background-color: #FFFFFF;
+
+}
+
+.t1{
+	font-size: 10pt;
+	font-weight: normal;
+	color: blue;
+	letter-spacing: 1pt;
+	letter-spacing: normal;
+	font-family: 細明體, 新細明體, Courier New;
+	background-color: #FFFFFF;
+	/*border: #76B1DE;*/
+
+}
+.font1 {		/*login.htm用*/
+	font-size: 10pt;
+	font-weight: normal;
+	letter-spacing: 1pt;
+	font-family: 細明體, 新細明體, Courier New;
+
+
+
+}
+.tablehead2{
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: #CCCCCC;
+	font-size: 10pt;
+	text-align: center;
+	font-style: normal;
+	border: #91B0BB;
+ font-weight: bold;
+
+}
+
+.tablehead3 {
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: #006699;
+	font-size: 10pt;
+	text-align: center;
+	font-style: normal;
+	font-weight: normal;
+	color: #FFFFFF;
+	
+}
+
+.small {
+	font-family: 細明體, 新細明體, Courier New;
+	font-size: 9pt;
+	text-align: center;
+}
+.small2 {  /*crew into的英文小字體*/
+	font-family: 細明體, 新細明體, Courier New;
+	font-size: 9pt;
+	text-align: center;
+ 	color: #33FFFF;
+}
+.small3 {
+	font-family: 細明體, 新細明體, Courier New;
+	font-size: 10pt;
+	text-align: center;
+	color: #33FFFF;
+	letter-spacing: 0.5pt;
+	letter-spacing: 1pt;
+}
+.bu {
+	font-family: 細明體;
+	font-size: 10pt;
+	color: #996666;
+	border: 1px  #6699cc ;
+	background-color: #F5EFA3;
+	margin: 1px;
+	padding: 1px;	/*#6983AF*/
+	
+}
+div#leftPane .first
+ { margin-top: 0;  font-size: 10pt; } 
+div#leftPane
+ { font-size: 10pt; } 
+div#leftPane a 
+ { display: block; margin-left: 5px; } 
+div#leftPane a.sect  
+ { font-weight: bold; } 

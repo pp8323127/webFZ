@@ -1,0 +1,57 @@
+<!DOCTYPE weblogic-web-app PUBLIC "-//BEA Systems, Inc.//DTD Web Application 8.1//EN" "http://www.bea.com/servers/wls810/dtd/weblogic810-web-jar.dtd">
+
+<weblogic-web-app>
+
+  <session-descriptor>
+    <session-param>
+      <param-name>TimeoutSecs</param-name>
+      <param-value>600</param-value>
+    </session-param>
+    <session-param>
+      <param-name>CookieName</param-name>
+      <param-value>JSESSIONIDfz</param-value>
+    </session-param>
+    <session-param>
+      <param-name>JDBCConnectionTimeoutSecs</param-name>
+      <param-value>60</param-value>
+    </session-param>
+    <session-param>
+      <param-name>PersistentStoreTable</param-name>
+      <param-value>wl_servlet_sessions</param-value>
+    </session-param>
+    <session-param>
+      <param-name>InvalidationIntervalSecs</param-name>
+      <param-value>180</param-value>
+    </session-param>
+  </session-descriptor>
+
+  <jsp-descriptor>
+    <jsp-param>
+      <param-name>compileCommand</param-name>
+      <param-value>javac</param-value>
+    </jsp-param>
+    <jsp-param>
+      <param-name>printNulls</param-name>
+      <param-value>false</param-value>
+    </jsp-param>
+    <jsp-param>
+      <param-name>keepgenerated</param-name>
+      <param-value>true</param-value>
+    </jsp-param>
+    <jsp-param>
+      <param-name>debug</param-name>
+      <param-value>true</param-value>
+    </jsp-param>
+  </jsp-descriptor>
+
+
+  <charset-params>
+    <input-charset>
+      <resource-path>/</resource-path>
+      <java-charset-name>Big5</java-charset-name>
+    </input-charset>
+  </charset-params>
+
+  <context-root>/webfz</context-root>
+</weblogic-web-app>
+

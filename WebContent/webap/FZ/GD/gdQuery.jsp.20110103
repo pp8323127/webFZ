@@ -1,0 +1,156 @@
+<%@ page contentType="text/html; charset=big5" language="java" import="" errorPage=""%>
+<%
+String userid = (String) session.getAttribute("userid") ; //get user id if already login
+String sGetUsr = (String) session.getAttribute("cs55.usr") ; //Check if logined
+/*response.setHeader("Cache-Control","no-cache");
+response.setDateHeader ("Expires", 0);
+*/
+if ( sGetUsr == null && userid == null) 
+{	//check user session start first or not login
+	response.sendRedirect("../tsa/sendredirect.jsp");
+} 
+%>
+
+<html>
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<link href="style.css" rel="stylesheet" type="text/css">
+<script src="../js/showDate.js"></script>
+<SCRIPT LANGUAGE="JavaScript">
+function check()
+{
+	var str =document.form1.fltno.value;
+	var str1 =document.form1.dpt.value;
+	if (str.length == 0) 
+	{// blank
+		alert("Please input Fltno !!");	
+		document.form1.fltno.focus();
+		return false;
+	}
+/* CS40 2009-1-26
+	if (isNaN(str)== true)
+	{
+		alert("The input is incorrect !!");	
+		document.form1.fltno.focus();
+		return false;
+	}
+*/
+	if (str1.length == 0) 
+	{// blank
+		alert("Please input the departure station !!");	
+		document.form1.dpt.focus();
+		return false;
+	}	
+		
+	document.form1.Submit.disabled=1;
+	document.form1.action="pregdList_noDB2.jsp";
+	/*
+	if(document.form1.version.value=="G")
+	{
+		document.form1.action="gdList.jsp";
+	}
+	else
+	{
+		document.form1.action="gdList_J.jsp";
+	}
+	*/
+	return true;
+}
+</SCRIPT>
+
+</head>
+<body onLoad="showYMD('form1','sel_year','sel_mon','sel_dd')">
+<form name="form1" method="post" action="" class="txtblue" target="mainFrame" onsubmit="return check();">
+  <span class="txtblue">Version :</span>  
+    <select class="txtblue" name="version">
+		<option value="G">General</option>
+		<option value="J">Japan</option>
+		<option value="N" selected>General - No DB2</option>
+		<option value="O">Japan - No DB2</option>
+	</select>
+    &nbsp;
+
+<!--
+  <span class="txtblue">Arln :</span>  
+    <select class="txtblue" name="arln">
+		<option value="CI" selected>CI</option>
+		<option value="AE">AE</option>
+		<option value="KA">KA</option>
+	</select>&nbsp;&nbsp;
+-->
+  <span class="txtblue">Fltdt :</span>  
+	<select class="txtblue" name="sel_year">
+  <%
+	java.util.Date now = new Date();
+	//int syear	=	now.getYear() + 1900;
+	//for (int i=syear; i<syear+2; i++) 
+	int syear	=	now.getYear() + 1900 - 1;
+	for (int i=syear; i<syear+3; i++) 
+	{    
+  %>
+	 <option value="<%=i%>"><%=i%></option>
+  <%
+	}
+  %>
+	</select>
+	<span class="txtblue">/</span>  
+	<select class="txtblue" name="sel_mon">
+  <%
+	for (int j=1; j<13; j++) 
+	{    
+	  if (j<10 )
+		{
+  %>	 
+			<option value="0<%=j%>">0<%=j%></option>
+  <%
+		}
+		else
+		{
+  %>
+		  	<option value="<%=j%>"><%=j%></option>
+  <%
+
+		}
+	}
+  %>
+	</select>
+	/
+	<select class="txtblue" name="sel_dd">
+  <%
+	for (int j=1; j<32; j++) 
+	{    
+	  if (j<10 )
+		{
+  %>	 
+			<option value="0<%=j%>">0<%=j%></option>
+  <%
+		}
+		else
+		{
+  %>
+		  	<option value="<%=j%>"><%=j%></option>
+  <%
+
+		}
+	}
+  %>
+	</select>&nbsp;
+  <span class="txtblue">Fltno :</span>  
+    <input class="txtblue" type="text" size="5" maxlength="5" name="fltno" id="fltno"  onkeyup="javascript:this.value=this.value.toUpperCase();">&nbsp;
+  <span class="txtblue">Dpt :</span>  
+    <input class="txtblue" type="text" size="3" maxlength="3" name="dpt" id="dpt" value= "TPE" onkeyup="javascript:this.value=this.value.toUpperCase();">&nbsp;
+<!-- Betty add start-->
+<!--  <span class="txtblue">Delay from Yesterday :</span>  
+    <select class="txtblue" name="delay"  id="delay">
+		<option value="N" selected>NO</option>
+		<option value="Y">YES</option>
+  </select>&nbsp;
+-->
+<!-- Betty add end-->
+
+  <input class="txtblue" name="Submit" type="submit" class="button6" value="Query" > 
+  <input class="txtblue" name="btn" type="button" class="table_body3" value="Reset" OnClick="document.form1.Submit.disabled=0;" >
+</form>
+</body>
+</html>

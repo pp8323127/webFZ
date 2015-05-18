@@ -1,0 +1,314 @@
+package ws.prac;
+
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import ci.db.ConnAOCI;
+import ci.db.ConnDB;
+import ci.db.ConnectionHelper;
+
+public class ReportListFun {
+
+    /**
+     * @param args
+     */
+    ReportListFlt2Obj fltObj = null;
+    ReportListCfltUpdObj cfltObj = null;
+    PurInfoObj purObj = null;
+
+    /*public static void main(String[] args) {
+        // TODO Auto-generated method stub
+        ReportListFun fltObj = new ReportListFun();
+//        fltObj.getPurFltSch("632937","2013","06");
+        fltObj.getPurCflt("630304", "2013/06/02", "0018", "TPENRT");
+//        fltObj.getPurCflt("632937", "2013/06/17", "0008Z", "TPELAX");
+//        fltObj.getPurInfo("630304");
+        System.out.println("done");	
+    }*/
+
+    public ReportListFun() {
+
+    }
+
+    public void getPurFltSch(String empno, String yy, String mm) {
+        Connection conn = null;
+        Driver dbDriver = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        String sql = null;
+        ConnAOCI cna = new ConnAOCI();
+
+        ArrayList listSch = new ArrayList();
+        int rowCount = 0;
+        
+        String fdate = null; 
+        String ftime = null; 
+        String dd = null;
+        swap3ac.PublishCheck pc = new swap3ac.PublishCheck(yy, mm);
+
+        fltObj = new ReportListFlt2Obj();
+
+        if (!pc.isPublished()){
+            fltObj.setResultMsg("0");
+            fltObj.setErrorMsg("班表尚未正式公佈");
+        } else {
+
+            try {
+//                // 抓AOCIPROD 該月duty為Pusrser的班表
+                cna.setAOCIFZUser();
+                java.lang.Class.forName(cna.getDriver());
+                conn = DriverManager.getConnection(cna.getConnURL(),cna.getConnID(), cna.getConnPW());
+                stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+//                直接連線
+//            	ConnDB cn = new ConnDB();
+//	   			cn.setORT1FZ();
+//	   			java.lang.Class.forName(cn.getDriver());
+//	   			conn = DriverManager.getConnection(cn.getConnURL(),cn.getConnID(),cn.getConnPW());
+//	   			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
+                 sql =
+                 "select dps.duty_cd,to_char(dps.str_dt_tm_loc,'yyyy/mm/dd') fdate," +
+                 "dps.flt_num fltno,to_char(str_dt_tm_loc,'yyyy/mm/dd hh24:mi') stdDt, "+
+                 "to_char(str_dt_tm_loc,'hh24mi') ftime, " +
+                 "dps.act_port_a dpt,dps.act_port_b arv,r.acting_rank qual, r.special_indicator "+
+                 "from duty_prd_seg_v dps, roster_v r where dps.series_num=r.series_num "+
+                 "and dps.delete_ind = 'N' AND  r.delete_ind='N' "+
+                 "and r.staff_num ='"+empno+"' AND dps.act_str_dt_tm_gmt BETWEEN  "+
+                 "to_date('"+yy+mm+"01 00:00','yyyymmdd hh24:mi') AND "+
+                 "Last_Day( To_Date('"+yy+mm+"01 23:59','yyyymmdd hh24:mi')) "+
+                 "AND r.duty_cd='FLY' AND dps.duty_cd IN ('FLY','TVL') AND  r.acting_rank='PR' order by str_dt_tm_gmt";
+
+                // out.println(sql);
+                rs = stmt.executeQuery(sql);
+				if (rs != null) {
+					while (rs.next()) {// 抓出資料筆數
+						ReportListFltObj obj = new ReportListFltObj();
+						obj.setFdate(rs.getString("fdate").trim());
+						obj.setFltno(rs.getString("fltno"));
+						obj.setSect(rs.getString("dpt") + rs.getString("arv"));
+						obj.setDuty(rs.getString("duty_cd"));
+						obj.setQual(rs.getString("qual"));
+						obj.setSpecial_indicator(rs.getString("special_indicator"));
+						
+						fdate = rs.getString("fdate");
+						ftime = rs.getString("ftime");
+						dd = fdate.substring(8);
+						fz.pracP.GetFltnoWithSuffix gf = new fz.pracP.GetFltnoWithSuffix(fdate.substring(0, 4) + fdate.substring(5, 7)+ fdate.substring(8),rs.getString("fltno"), rs.getString("dpt")+ rs.getString("arv"),rs.getString("stdDt"));
+						if (gf.getFltnoWithSuffix().substring(gf.getFltnoWithSuffix().length() - 1).equals("Z")) {
+							// 最後一碼為Z時，不檢查delay班次號碼
+							obj.setFltno(gf.getFltnoWithSuffix());
+							// System.out.println(gf.getFltnoWithSuffix());
+						}
+						listSch.add(obj);
+						rowCount++;
+						// if(rowCount > 100) break;
+					}
+				}	
+				//*******************************************************************************	            
+	            ReportListPre preObj = new ReportListPre(empno, yy, mm);
+	            if(!preObj.isCheck_pre_mm_done()){//前月是否繳交
+	            	fltObj.setCheck_pre_mm_done("前兩個月尚有未交報告");
+	            }
+				if(preObj.isNoticeQA()){//QA訊息
+					//fltObj.setNoticeQA("【提醒您：11/19~23日及12/14~21日客艙每班次需抽問3名組員SMS Q & A，\r\n並將結果誌於CABIN REPORT】");
+					fltObj.setNoticeQA("【提醒您：7/7~7/10日及8/7~8/10日客艙每班次需抽問3名組員SMS Q & A，\r\n並將結果誌於CABIN REPORT】");
+				}				
+				fltObj.setResultMsg(preObj.getResultMsg());
+				fltObj.setErrorMsg(preObj.getErrorMsg());
+				//*******************************************************************************
+				if (rowCount > 0) {
+					fltObj.setResultMsg("1");
+					ReportListFltObj[] array = new ReportListFltObj[listSch.size()];
+					for (int i = 0; i < listSch.size(); i++) {
+						array[i] = (ReportListFltObj) listSch.get(i);
+					}
+					fltObj.setSchList(array);
+				} else {
+					fltObj.setResultMsg("0");
+					fltObj.setErrorMsg("NO data");
+				}
+            } catch (Exception e) {
+                fltObj.setResultMsg("0");
+                fltObj.setErrorMsg("error FS: " + e.toString());
+            } finally {
+                try {
+                    if (rs != null)
+                        rs.close();
+                } catch (SQLException e) {
+                }
+                try {
+                    if (stmt != null)
+                        stmt.close();
+                } catch (SQLException e) {
+                }
+                try {
+                    if (conn != null)
+                        conn.close();
+                } catch (SQLException e) {
+                }
+            }
+        }
+
+    }
+
+	
+
+    // 找出該班是否已編輯
+    public void getPurCflt(String empno, String fdate, String fltno,String sect) {// yyyy/mm/dd
+
+        Driver dbDriver = null;
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        String sql = null;
+        cfltObj = new ReportListCfltUpdObj();
+        String yy = fdate.substring(0, 4);
+        String mm = fdate.substring(5, 7);
+
+        try {
+              ConnDB cn = new ConnDB();
+              cn.setORP3EGUserCP();
+              dbDriver = (Driver) Class.forName(cn.getDriver()).newInstance();
+              conn = dbDriver.connect(cn.getConnURL(), null);
+              stmt = conn.createStatement();
+
+//             ConnectionHelper ch = new ConnectionHelper();
+//             conn = ch.getConnection();
+//             stmt = conn.createStatement();
+
+             sql =
+             //"FROM egtcflt WHERE fltd BETWEEN To_Date('"+yy+mm+"01 00:00','yyyymmdd hh24:mi') AND Last_Day(To_Date('"+yy+mm+"01 2359','yyyymmdd hh24mi'))+1/3  AND psrempn='"+empno+"'";
+             "SELECT To_Char(fltd,'yyyy/mm/dd') fdate,fltno,sect,psrempn,acno,psrsern,psrname,acno,nvl(upd,'Y') upd,nvl(reject,'') reject,to_char(chgdate,'yyyy/mm/dd hh24:mi') chgdate "+//crpt.flag,
+             "FROM egtcflt where fltd = to_date('"+fdate+"','yyyy/mm/dd') and fltno ='"+fltno+"' and sect='"+sect+"'" ;
+             //"SELECT To_Char(cflt.fltd,'yyyy/mm/dd') fdate,cflt.fltno,cflt.sect,psrempn,acno,psrsern,psrname,acno,nvl(upd,'Y') upd,nvl(reject,'') reject,cflt.chgdate "+//crpt.flag,
+             //"FROM egtcflt cflt ,egtcrpt crpt WHERE " +
+             //"cflt.psrempn = crpt.empno and crpt.fltd = cflt.fltd  and crpt.fltno = cflt.fltno and crpt.sect = cflt.sect and " +
+             //"cflt.fltd = to_date('"+fdate+"','yyyy/mm/dd') and cflt.fltno ='"+fltno+"' and cflt.sect='"+sect+"'";
+
+            rs = stmt.executeQuery(sql);
+            
+            if(rs != null){
+            	if (rs.next()) {                    
+                    cfltObj.setWflag("Y");// Y:egtcflt有,N:egtcflt無
+                    cfltObj.setUpd(rs.getString("upd"));// Y:可編輯,N:不可                                                          
+                    cfltObj.setReject(rs.getString("reject"));
+                    cfltObj.setAcno(rs.getString("acno"));
+                    cfltObj.setChgdate(rs.getString("chgdate"));
+                    //判斷報告是否過期未繳	
+                	GregorianCalendar cal4 = new GregorianCalendar();//today
+                	cal4.set(Calendar.HOUR_OF_DAY,00);
+                	cal4.set(Calendar.MINUTE,01);
+                	//Fltd+1天
+                	GregorianCalendar cal5 = new GregorianCalendar();
+                	cal5.set(Calendar.YEAR,Integer.parseInt(fdate.substring(0,4)));
+                	cal5.set(Calendar.MONTH,(Integer.parseInt(fdate.substring(5,7)))-1);
+                	cal5.set(Calendar.DATE,Integer.parseInt(fdate.substring(8))); 
+                	cal5.add(Calendar.DATE,1);  
+                	//非TVL Flt && 非Inspector Flt, 早於今天的fltd又未繳交則底色改為遲交
+                	if(cal4.after(cal5) && (!"N".equals(cfltObj.getUpd()) | "N".equals(cfltObj.getWflag())) && (yy+"/"+mm).equals(fdate.substring(0,7)) && !"TVL".equals(rs.getString("duty_cd")) && !"I".equals(rs.getString("special_indicator")))	
+                	{
+                		cfltObj.setLate(true);
+                	}                    
+                	cfltObj.setResultMsg("1");
+                	//cfltObj.setErrorMsg(sql);
+                }else {
+                    cfltObj.setResultMsg("0");
+                    cfltObj.setErrorMsg("Not Edit yet.");
+                }
+            }             
+        	/*listCflt.add(obj);
+            if (rowCount > 0) {
+            	
+                cfltObj.setResultMsg("1");
+                ReportListCfltUpdObj[] array2 = new ReportListCfltUpdObj[listCflt.size()];
+                for (int i = 0; i < listCflt.size(); i++) {
+                    array2[i] = (ReportListCfltUpdObj) listCflt.get(i);
+                }
+                cfltObj.setCfltList(array2);
+            } else {
+                cfltObj.setResultMsg("0");
+                cfltObj.setErrorMsg("Not Edit yet.");
+            }*/
+            
+        } catch (Exception e) {
+            cfltObj.setResultMsg("0");
+            cfltObj.setErrorMsg("error cflt : " + e.toString());
+        } finally {
+            try {
+                if (rs != null)
+                    rs.close();
+            } catch (SQLException e) {
+            }
+            try {
+                if (stmt != null)
+                    stmt.close();
+            } catch (SQLException e) {
+            }
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException e) {
+            }
+        }
+
+    }
+    //CM info
+    public void getPurInfo(String empno) {
+
+        Driver dbDriver = null;
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        String sql = null;
+        purObj = new PurInfoObj();
+        
+        try {
+        	ConnDB cn = new ConnDB();
+            cn.setORP3FZUserCP();
+            dbDriver = (Driver) Class.forName(cn.getDriver()).newInstance();
+            conn = dbDriver.connect(cn.getConnURL(), null);
+            stmt = conn.createStatement();
+        	sql = "select cname,ename,sern,groups,station,status from egtcbas where empn='"+ empno+"'";
+        	rs = stmt.executeQuery(sql);
+        	
+        	if(rs.next()){
+        		purObj.setPsrCName(rs.getString("cname"));
+        		purObj.setPsrEname(rs.getString("ename"));
+        		purObj.setPsrSern(rs.getString("sern"));
+        		purObj.setPsrGrp(rs.getString("groups"));
+        		purObj.setPsrBase(rs.getString("station"));
+        		purObj.setPsrStatus(rs.getString("status"));
+        		purObj.setResultMsg("1");
+        	} else {
+        		purObj.setResultMsg("0");
+        		purObj.setErrorMsg("Not Data.");
+            }            
+        } catch (Exception e) {
+        	purObj.setResultMsg("0");
+            purObj.setErrorMsg("error : " + e.toString());
+        } finally {
+            try {
+                if (rs != null)
+                    rs.close();
+            } catch (SQLException e) {
+            }
+            try {
+                if (stmt != null)
+                    stmt.close();
+            } catch (SQLException e) {
+            }
+            try {
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException e) {
+            }
+        }
+
+    }
+}

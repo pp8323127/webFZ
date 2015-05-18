@@ -1,0 +1,249 @@
+<%@page import="java.util.GregorianCalendar"%>
+<%@page import="java.util.Calendar"%>
+<%@page import="java.util.ArrayList"%>
+<%@ page contentType="text/html; charset=big5" language="java"  %>
+<%@ page import="eg.zcrpt.*"%>
+<%
+String userid = (String) session.getAttribute("userid") ; //get user id if already login
+String base = (String) session.getAttribute("base");
+if (session.isNew() || userid == null) 
+{		//check user session start first or not login
+	response.sendRedirect("/webfz/FZ/sendredirect.jsp");
+} 
+
+String year = request.getParameter("year");
+String month = request.getParameter("month");
+String fdate;
+String stdDt;
+String fltno;
+String dpt;
+String arv;
+
+boolean status = false;
+String errMsg = "";
+ArrayList dataAL = new ArrayList();
+ZCReport zcrt = new ZCReport();
+zcrt.getZCFltList(year,month,userid);
+//out.println(zcrt.getSql()+"<br>");
+dataAL = zcrt.getObjAL();
+session.setAttribute("zcreportobjAL",dataAL);
+
+//檢查班表是否公布
+swap3ac.PublishCheck pc = new swap3ac.PublishCheck(year, month);
+if(!pc.isPublished())
+{
+	errMsg = year+"/"+month+"班表尚未公佈.";
+}
+else
+{
+	if("Y".equals(zcrt.getStr()))
+	{
+		status = true;
+	}
+	else
+	{
+		status = true;//case when purser open will be error
+		errMsg = zcrt.getStr();
+		//errMsg = zcrt.getSql();
+	}
+}
+
+fz.pracP.dispatch.FlexibleDispatch fld = new fz.pracP.dispatch.FlexibleDispatch();
+
+%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>事務長 <%=year+month%>任務列表</title>
+<link href="style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<%
+if(!status)
+{
+%>
+<div style="background-color:#99FFFF;
+		color:#FF0000;
+		font-family:Verdana;
+		font-size:10pt;padding:5pt;
+		text-align:center; ">
+		ERROR:<%=errMsg%>
+		</div>
+<%
+}
+else if(dataAL.size()<= 0)
+{
+%>
+<div style="background-color:#99FFFF;
+		color:#FF0000;
+		font-family:Verdana;
+		font-size:10pt;padding:5pt;
+		text-align:center; ">查無資料<br>No DATA!!</div>
+<%
+}
+else
+{
+%>
+<script language="javascript" type="text/javascript" src="../../js/subWindow.js"></script>
+<script language="javascript" type="text/javascript">
+function viewCrewList(year,month,day,fltno,sect,stdDt){
+	subwinXY('../../blank.htm','crewList','800','600');
+	document.form1.target="crewList";
+	document.form1.action="../preCrewList.jsp";
+	document.getElementById("yy").value = year;
+	document.getElementById("mm").value = month;
+	document.getElementById("dd").value = day;
+	document.getElementById("fltno").value = fltno;
+	document.getElementById("sect").value = sect;	
+	document.getElementById("stdDt").value = stdDt;	
+	document.form1.submit();
+}
+
+function viewZCReport(idx)
+{
+	subwinXY('../../blank.htm','zcreport','800','600');
+	document.form1.target="zcreport";
+	document.form1.action="ZCreport_print.jsp";
+	document.getElementById("idx").value = idx;	
+	document.form1.submit();
+}
+
+
+function viewRpt(year,month,idx)
+{
+	document.form1.target="_self";
+	document.form1.action="zcedFltIrr.jsp";	
+	document.getElementById("yy").value = year;
+	document.getElementById("mm").value = month;
+	document.getElementById("idx").value = idx;	
+	document.form1.submit();
+}
+</script>
+<form method="post" name="form1" action="">
+	<input type="hidden" name="yy" id="yy">
+	<input type="hidden" name="mm" id="mm">
+	<input type="hidden" name="idx" id="idx">
+
+	<input type="hidden" name="dd" id="dd">
+	<input type="hidden" name="fdate" id="fdate">
+	<input type="hidden" name="fltno" id="fltno">
+	<input type="hidden" name="sect" id="sect">
+	<input type="hidden" name="dpt" id="dpt">
+	<input type="hidden" name="arv" id="arv">
+	<input type="hidden" name="stdDt" id="stdDt">
+</form>
+<table width="72%"  border="0" align="center" cellpadding="2" cellspacing="2" class="tableBorder1">
+<caption class="center r"><%=year+month%>任務列表</caption>
+  <tr class="tableInner3">
+    <td width="17%">Fdate</td>
+    <td width="17%">Fltno</td>
+    <td width="17%">Sect</td>
+
+
+	<td width="15%">Status</td>
+    <td width="17%">Edit/View</td>
+    <td width="17%">Print Crew List</td>
+  </tr>
+  <%
+  	for(int i=0;i<dataAL.size();i++)
+	{
+		ZCReportObj obj = (ZCReportObj)dataAL.get(i);
+		String bgColor="";
+		if(i%2 == 0)
+		{
+			bgColor = "tableInner2";
+		}
+		else
+		{
+			bgColor = "";
+		}	
+  %>
+  <tr  class="<%=bgColor%>">
+    <td height="28" ><%=obj.getFdate()%></td>
+    <td ><%=obj.getFlt_num() %></td>
+    <td ><%=obj.getPort()%></td>    
+	<%
+	//Acting rank 為 FC && Long range ='Y' 才需寫報告
+    //fld.getLong_range(obj.getFdate(), obj.getFlt_num(), obj.getPort(), userid) ;
+	//String tempstr = fld.getLongRang();
+	//if("FC".equals(obj.getAct_rank()) && "Y".equals(tempstr))	
+
+//	if("Y".equals(zcrt.ifNeedZCReport(obj.getAct_rank(), obj.getSpecial_indicator(), tempstr, obj.getPort())) | "Y".equals(obj.getIfsent()))
+	
+	//	out.println(obj.getAct_rank());	
+	//20130401 TPE 區域線事務長 也須寫報告,暫將long range 移除. //
+	//if(("Y".equals(zcrt.ifNeedZCReport(obj.getAct_rank(), obj.getSpecial_indicator(), tempstr, obj.getPort())) && "KHH".equals(base) )|("FC".equals(obj.getAct_rank()) && "TPE".equals(base)) |"Y".equals(obj.getIfsent()) )	
+	/*
+	//20130501 KHH 與 TPE相同 所有航線需填寫 SR3057
+	//20130627 MC / FC 皆可填事務長報告
+	*/
+	if(("FC".equals(obj.getAct_rank()) | "MC".equals(obj.getAct_rank()) |"Y".equals(obj.getIfsent())| "ZC".equals(obj.getSpecial_indicator())) && !"738".equals(obj.getFleet_cd())  ) 
+	{
+		//已送出
+		if("Y".equals(obj.getIfsent()))
+		{
+	%>
+			<td>已送出</td>
+			<td>			
+			<a href="javascript:viewZCReport('<%=i%>');"><img src="../../images/blue_view.gif" width="16" height="16" border="0" alt="ZC Report" title="ZC Report"></a>
+			</td>
+	<%
+		}
+		else
+		{//未編輯或編輯中
+			if("".equals(obj.getIfsent()) | obj.getIfsent() == null)
+			{
+				out.print("<td class='r'>未編輯</td>");
+			}
+			else
+			{
+				out.print("<td class='blue'>編輯中</td>");
+			}
+
+			GregorianCalendar cal1 = new GregorianCalendar();//Flt date
+			GregorianCalendar cal2 = new GregorianCalendar();//now
+			//  2009/02/11 
+			cal1.set(Calendar.YEAR,Integer.parseInt(obj.getFdate().substring(0,4)));
+			cal1.set(Calendar.MONTH,Integer.parseInt(obj.getFdate().substring(5,7))-1);
+			cal1.set(Calendar.DATE,Integer.parseInt(obj.getFdate().substring(8,10)));
+
+			if(cal1.before(cal2) | cal1.equals(cal2))
+			{
+	%>
+			<td><a href="javascript:viewRpt('<%=year%>','<%=month%>','<%=i%>');"><img src="../../images/pencil.gif" alt="Edit Report" width="16" height="16"  border="0" title="Edit Report"></a>
+			</td> 
+	<%
+			}
+			else
+			{
+	%>
+			<td><img src="../../images/cancel_16x16.png" alt="Edit Report" width="16" height="16"  border="0" title="Edit Report"></td> 
+	<%
+			}
+		}
+	}
+	else
+	{//無需編輯
+	%>
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<%
+	}
+	%>
+	</td>
+    <td>
+	<a href="javascript:viewCrewList('<%=obj.getFdate().substring(0,4)%>','<%=obj.getFdate().substring(5,7)%>','<%=obj.getFdate().substring(8)%>','<%=obj.getFlt_num()%>','<%=obj.getPort()%>','<%=obj.getStdDt()%>');"><img src="../../images/format-justify-fill.png" width="16" height="16" border="0" alt="Print Crew List" title="Print Crew List"></a>
+	</td>
+  </tr>
+<%
+		}
+	
+%>  
+</table>
+
+<%
+}
+%>
+</body>
+</html>

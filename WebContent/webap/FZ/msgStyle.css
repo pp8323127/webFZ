@@ -1,0 +1,38 @@
+/* Style of Message text */
+.info1{
+	background-image:url(/webfz/FZ/images/messagebox_info.png);
+	background-color:#ffffdd;
+	background-attachment: fixed;
+	background-repeat:no-repeat;
+	background-attachment: scroll;
+	background-position: 10px 3px;	
+	padding: 0.2em 40px 0.5em 40px;
+	border:1pt solid #ffee66;	
+	margin: 0.5em 0pt 1em 0pt;
+	position: relative;
+}
+.warning{
+	background-image:url(/webfz/FZ/images/messagebox_warning.png);
+	background-color:#FFDDDD;
+	background-attachment: fixed;
+	background-repeat:no-repeat;
+	background-attachment: scroll;
+	background-position: 10px 3px;	
+	padding: 0.2em 40px 0.5em 40px;
+	border:1pt solid #990000;	
+	margin: 0.5em 0pt 1em 0pt;
+	position: relative;
+}
+
+.warning2{
+	background-image:url(/webfz/FZ/images/messagebox_warning.png);
+	background-color:#ffffdd;
+	background-attachment: fixed;
+	background-repeat:no-repeat;
+	background-attachment: scroll;
+	background-position: 10px 3px;	
+	padding: 0.2em 40px 0.5em 40px;
+	border:1pt solid #ffee66;	
+	margin: 0.5em 0pt 1em 0pt;
+	position: relative;
+}

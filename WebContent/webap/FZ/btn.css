@@ -1,0 +1,23 @@
+/* Style For Button */
+
+/* 需搭配底圖：bg-btn.gif */
+.btn1{
+	background-color: #dddddd;
+	
+	/* 視檔案路徑更改 */
+	background-image: url(/webeg/images/bg-btn.gif);
+	
+	background-repeat: repeat-x;
+	background-attachment: scroll;
+
+	background-position: 0pt 0pt;
+
+	padding: 1pt;
+	border-style: solid;
+	border-color: #aaaaaa;
+	border-width: 1pt;
+
+	font-family:Verdana;
+	font-size:10pt;
+
+}

@@ -1,0 +1,946 @@
+<%@ page contentType="text/html; charset=big5" language="java" import="apis.*,java.sql.*,ci.db.*,java.util.*,java.io.*,java.text.*,dz.*" %>
+<jsp:useBean id="apisPersonal" class="fz.ApisPersonal" />
+<%
+String sGetUsr = (String) session.getAttribute("cs55.usr") ; //Check if logined
+//response.setHeader("Cache-Control","no-cache");
+//response.setDateHeader ("Expires", 0);
+if (session.isNew() || sGetUsr == null) {		//check user session start first
+    %> <jsp:forward page="../sendredirect.jsp" /> <%
+}//if
+String status= (String) session.getAttribute("seStatus"); 
+
+String carrier   = ""; 
+String fltno     = ""; 
+String fdate     = "";    
+String fltyyyy   = ""; 
+String fltmm     = ""; 
+String fltdd     = ""; 	 
+String empno     = ""; 
+String lname     = ""; 
+String fname     = ""; 
+String depart    = ""; 
+String dest      = "";  
+String nation    = ""; 
+String birth     = ""; 
+String birthyyyy = ""; 
+String birthmm   = ""; 
+String birthdd   = ""; 
+String birthcity = ""; 
+String birthcountry = ""; 
+String resicountry  = ""; 
+String passport     = ""; 
+String doctype      = "";  
+String passcountry  = ""; 
+String passexp      = ""; 
+String passyyyy     = ""; 
+String passmm       = ""; 
+String passdd       = ""; 
+String gender       = ""; 
+String gdorder      = "";  
+String occu         = "";  
+String tvlstatus    = "";  
+String dh           = "";  
+String meal         = "";  
+String certno       = "";  
+String certctry     = "";  
+String certdoctype  = "";  
+String certexp      = "";  
+String certyyyy  = "";  
+String certmm    = "";  
+String certdd    = "";  
+String remark    = "";  
+String resiaddr1 = "";  
+String resiaddr2 = "";  
+String resiaddr3 = "";  
+String resiaddr4 = "";  
+String resiaddr5 = "";  
+
+String bodytag = "";
+String chgtype = request.getParameter("chgtype"); 
+String insertwho = request.getParameter("insertwho"); 
+
+if (chgtype.equals("modify")) bodytag = "<body onload='getValue();'>";
+if (chgtype.equals("insert")){     
+   if (insertwho.equals("unknown")) bodytag = "<body>";	
+   if (insertwho.equals("known"))   bodytag = "<body onload='getPersonal();'>";
+}//if
+
+Calendar cal = new GregorianCalendar();
+cal.setTime(new java.util.Date()); 
+String syear   = "" + cal.get(Calendar.YEAR);        int iyear = Integer.parseInt(syear);
+//String smonth  = "" + (cal.get(Calendar.MONTH)+1);   if (Integer.parseInt(smonth)  < 10) smonth  = "0" + smonth;
+//String sdate   = "" + cal.get(Calendar.DATE);        if (Integer.parseInt(sdate)   < 10) sdate   = "0" + cal.get(Calendar.DATE);
+//String shour   = "" + cal.get(Calendar.HOUR_OF_DAY); if (Integer.parseInt(shour)   < 10) shour   = "0" + cal.get(Calendar.HOUR_OF_DAY);
+//String sminute = "" + cal.get(Calendar.MINUTE);      if (Integer.parseInt(sminute) < 10) sminute = "0" + cal.get(Calendar.MINUTE);
+//String ssecond = "" + cal.get(Calendar.SECOND);      if (Integer.parseInt(ssecond) < 10) ssecond = "0" + cal.get(Calendar.MINUTE);
+
+Connection conn = null;
+Statement stmt  = null;
+ResultSet rs = null;
+DB2Conn cn = new DB2Conn();
+
+Driver dbDriver = null;
+String sql = null;
+String errMsg = "";
+
+if (chgtype.equals("modify")){    	
+   carrier   = request.getParameter("carrier"); 
+   fltno     = request.getParameter("fltno"); 
+   fdate     = request.getParameter("fdate");    
+   fltyyyy   = "20"+fdate.substring(0,2);
+   fltmm     = fdate.substring(2,4);
+   fltdd     = fdate.substring(4,6);	 
+   empno     = request.getParameter("empno"); 
+   lname     = request.getParameter("lname"); 
+   fname     = request.getParameter("fname"); 
+   depart    = request.getParameter("depart"); 
+   dest      = request.getParameter("dest"); 
+   nation    = request.getParameter("nation"); 
+   birth     = request.getParameter("birth");    
+   if (birth.substring(0,1) == "0" || birth.substring(0,1) == "1") birthyyyy = "20"+birth.substring(0,2);
+   else birthyyyy = "19"+birth.substring(0,2);
+   birthmm   = birth.substring(2,4);
+   birthdd   = birth.substring(4,6);
+   birthcity = request.getParameter("birthcity"); 
+   birthcountry = request.getParameter("birthcountry"); 
+   resicountry  = request.getParameter("resicountry"); 
+   passport     = request.getParameter("passport"); 
+   doctype      = request.getParameter("doctype"); 
+   passcountry  = request.getParameter("passcountry"); 
+   passexp      = request.getParameter("passexp"); 
+   passyyyy     = "20"+passexp.substring(0,2);
+   passmm       = passexp.substring(2,4);
+   passdd       = passexp.substring(4,6);
+   gender       = request.getParameter("gender"); 
+   gdorder      = request.getParameter("gdorder"); 
+   occu         = request.getParameter("occu"); 
+   tvlstatus    = request.getParameter("tvlstatus"); 
+   dh           = request.getParameter("dh"); 
+   meal         = request.getParameter("meal"); 
+   certno       = request.getParameter("certno"); 
+   certctry     = request.getParameter("certctry"); 
+   certdoctype  = request.getParameter("certdoctype"); 
+   certexp      = request.getParameter("certexp"); 
+   certyyyy = "20"+certexp.substring(0,2);
+   certmm   = certexp.substring(2,4);
+   certdd   = certexp.substring(4,6);
+   remark   = request.getParameter("remark");   
+}else if (chgtype.equals("insert")){    
+   if (insertwho.equals("unknown")) {
+       // do nothing
+   }else if (insertwho.equals("known")){	   	   
+	   carrier = request.getParameter("carrier"); 
+       fltno   = request.getParameter("fltno"); 
+	   depart  = request.getParameter("depart"); 
+	   dest    = request.getParameter("dest"); 
+	   fltyyyy = request.getParameter("fltyyyy"); 
+	   fltmm   = request.getParameter("fltmm"); 
+	   fltdd   = request.getParameter("fltdd"); 
+	   fdate   = fltyyyy.substring(2,4) + fltmm + fltdd;	 
+       empno   = request.getParameter("empno"); 
+	   remark  = request.getParameter("remark"); 	   
+	   
+	   String[] p;	       
+	   p = apisPersonal.getApisPersonal(empno);   
+	  
+	   lname    = p[0];	   				 
+       fname    = p[1];				 
+       nation   = p[2];	 	   
+	   birth    = p[3]; 
+	   if (birth.length() == 6){	  	   
+	      if (birth.substring(0,1) == "0" || birth.substring(0,1) == "1") birthyyyy = "20"+birth.substring(0,2);
+          else birthyyyy = "19"+birth.substring(0,2);
+	      birthmm  = birth.substring(2,4);
+          birthdd  = birth.substring(4,6);	  
+       }else{
+	      birthyyyy = "";
+		  birthmm = "";
+		  birthdd = ""; 
+	   }//if
+	    	   				 
+	   passport = p[4]; 				 
+	   gender   = p[5];	   				 
+	   gdorder  = p[6];
+	   occu     = p[7];				 
+	   meal     = p[8]; 
+	   certno   = p[9];	   
+	   certctry = p[10];	   
+	   passcountry  = p[11];	   
+	   doctype      = p[12];  				 
+	   birthcity    = p[13];				 
+	   birthcountry = p[14];	   
+	   resicountry  = p[15];	   
+	   resiaddr1    = p[16];	   
+	   resiaddr2    = p[17]; 				 
+	   resiaddr3    = p[18];			 
+	   resiaddr4    = p[19]; 				 
+	   resiaddr5    = p[20];	   	
+	   tvlstatus    = p[21];	 	 
+	   passexp      = p[22]; 
+	   if (passexp.length() == 6){
+	      passyyyy = "20"+passexp.substring(0,2);
+          passmm   = passexp.substring(2,4);
+          passdd   = passexp.substring(4,6);	   
+	   }else{
+	      passyyyy = "";
+		  passmm   = "";
+		  passdd   = "";
+	   }//if 
+	   certdoctype  = p[23];
+	   certexp      = p[24];
+	   if (certexp.length() == 6){
+   	      certyyyy  = "20"+certexp.substring(0,2);
+          certmm    = certexp.substring(2,4);
+          certdd    = certexp.substring(4,6);
+	   }else{
+	      certyyyy = "";
+		  certmm   = "";
+		  certdd   = "";	   
+	   }//if	     
+   }//if	  
+}//if
+%>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>APIS: Modify</title>
+<link href="../menu.css" rel="stylesheet" type="text/css">
+<script language=javascript>
+function getValue(){
+	 document.form1.carrier.value = "<%=carrier%>";
+	 document.form1.fltno.value   = "<%=fltno%>";
+	 document.form1.fltyyyy.value = "<%=fltyyyy%>";
+ 	 document.form1.fltmm.value   = "<%=fltmm%>";
+	 document.form1.fltdd.value   = "<%=fltdd%>";
+	 document.form1.empno.value   = "<%=empno%>";
+	 document.form1.lname.value   = "<%=lname%>";
+	 document.form1.fname.value   = "<%=fname%>";	 
+	 document.form1.depart.value  = "<%=depart%>";
+	 document.form1.dest.value    = "<%=dest%>";
+	 document.form1.nation.value  = "<%=nation%>";	 
+	 document.form1.birthyyyy.value = "<%=birthyyyy%>";
+ 	 document.form1.birthmm.value   = "<%=birthmm%>";
+	 document.form1.birthdd.value   = "<%=birthdd%>";	 
+	 document.form1.birthcity.value = "<%=birthcity%>";
+	 document.form1.birthcountry.value = "<%=birthcountry%>";
+	 document.form1.resicountry.value  = "<%=resicountry%>";
+     document.form1.occu.value     = "<%=occu%>";
+	 document.form1.gender.value   = "<%=gender%>";
+	 document.form1.passport.value = "<%=passport%>";
+	 document.form1.doctype.value  = "<%=doctype%>";
+	 document.form1.passcountry.value = "<%=passcountry%>";	 
+	 document.form1.passyyyy.value = "<%=passyyyy%>";
+ 	 document.form1.passmm.value   = "<%=passmm%>";
+	 document.form1.passdd.value   = "<%=passdd%>";
+	 document.form1.certno.value  = "<%=certno%>";
+	 document.form1.certdoctype.value  = "<%=certdoctype%>";
+	 document.form1.certctry.value  = "<%=certctry%>";	 
+	 document.form1.certyyyy.value = "<%=certyyyy%>";
+ 	 document.form1.certmm.value   = "<%=certmm%>";
+	 document.form1.certdd.value   = "<%=certdd%>";	 
+	 document.form1.tvlstatus.value = "<%=tvlstatus%>";
+	 document.form1.meal.value      = "<%=meal%>";
+	 document.form1.dh.value        = "<%=dh%>";	 	 	 
+	 document.form1.gdorder.value   = "<%=gdorder%>";
+	 document.form1.remark.value    = "<%=remark%>";
+} //function
+
+function refreshForm(){
+    if (document.form1.empno.value.length == 6){		
+        if (document.form1.fltno.value.length < 4){
+	        alert("Please fill the flight number with at least 4 digits");
+		    eval("document.form1.fltno.focus()");
+		    return;
+		}//if
+		
+		if (document.form1.depart.value.length < 3){
+	        alert("Please fill the depart station");
+		    eval("document.form1.depart.focus()");
+		return;
+		}//if
+		
+		if (document.form1.dest.value.length < 3){
+	        alert("Please fill the destination station");
+		    eval("document.form1.dest.focus()");
+		return;
+		}//if
+			    
+		document.form1.chgtype.value="insert";
+	    document.form1.insertwho.value="known";
+	    document.form1.target = "_self";	    
+		document.form1.action = "apis_fillform.jsp";
+	    document.form1.submit();						
+    }//if
+} //function
+
+function getPersonal(){
+	 document.form1.carrier.value = "<%=carrier%>";
+	 document.form1.fltno.value   = "<%=fltno%>";
+	 document.form1.depart.value  = "<%=depart%>";
+	 document.form1.dest.value    = "<%=dest%>";	 
+	 document.form1.fltyyyy.value = "<%=fltyyyy%>";
+ 	 document.form1.fltmm.value   = "<%=fltmm%>";
+	 document.form1.fltdd.value   = "<%=fltdd%>";
+     document.form1.empno.value   = "<%=empno%>";
+	 document.form1.lname.value  = "<%=lname%>";
+	 document.form1.fname.value  = "<%=fname%>";
+	 document.form1.nation.value = "<%=nation%>";	 
+	 document.form1.birthyyyy.value = "<%=birthyyyy%>";
+ 	 document.form1.birthmm.value   = "<%=birthmm%>";
+	 document.form1.birthdd.value   = "<%=birthdd%>";	 
+	 document.form1.birthcity.value = "<%=birthcity%>";
+	 document.form1.birthcountry.value = "<%=birthcountry%>";
+	 document.form1.resicountry.value  = "<%=resicountry%>";
+     document.form1.occu.value     = "<%=occu%>";
+	 document.form1.gender.value   = "<%=gender%>";
+	 document.form1.passport.value = "<%=passport%>";
+	 document.form1.doctype.value  = "<%=doctype%>";
+	 document.form1.passcountry.value = "<%=passcountry%>";	 
+	 document.form1.passyyyy.value = "<%=passyyyy%>";
+ 	 document.form1.passmm.value   = "<%=passmm%>";
+	 document.form1.passdd.value   = "<%=passdd%>";
+	 document.form1.certno.value   = "<%=certno%>";
+	 document.form1.certdoctype.value = "<%=certdoctype%>";
+	 document.form1.certctry.value = "<%=certctry%>";	 
+	 document.form1.certyyyy.value = "<%=certyyyy%>";
+ 	 document.form1.certmm.value   = "<%=certmm%>";
+	 document.form1.certdd.value   = "<%=certdd%>";	 
+	 document.form1.tvlstatus.value = "<%=tvlstatus%>";
+	 document.form1.meal.value      = "<%=meal%>";
+	 document.form1.dh.value        = "<%=dh%>";	 	 	 
+	 document.form1.gdorder.value   = "<%=gdorder%>";
+	 document.form1.resiaddr1.value   = "<%=resiaddr1%>";
+} //function
+
+
+function cnl(){
+	   window.history.back();	   
+}//function
+
+function upd(){	
+	if(document.form1.carrier.value == ""){	
+	 	alert("Carrier can not be empty!!");
+		eval("document.form1.carrier.focus()");
+		return false;
+	}//carrier
+	
+	if(document.form1.fltno.value == ""){	
+	 	alert("flt number can not be empty!!");
+		eval("document.form1.fltno.focus()");
+		return false;
+	}//fltno
+	
+	if(document.form1.fltyyyy.value == "") {
+	 	alert("flt year can not be empty!!");
+		eval("document.form1.fltyyyy.focus()");
+		return false;
+	}//fltyyyy
+	
+	if(document.form1.fltmm.value == "") {
+	 	alert("flt month can not be empty!!");
+		eval("document.form1.fltmm.focus()");
+		return false;
+	}//fltmm	
+	
+	if(document.form1.fltdd.value == "") {
+	 	alert("flt day can not be empty!!");
+		eval("document.form1.fltdd.focus()");
+		return false;
+	}//fltdd
+	
+	if(document.form1.empno.value == ""){	
+	 	alert("Empno can not be empty!!");
+		eval("document.form1.empno.focus()");
+		return false;
+	}//empno
+	
+	if(document.form1.lname.value == ""){	
+	 	alert("lname can not be empty!!");
+		eval("document.form1.lname.focus()");
+		return false;
+	}//lname	
+
+	if(document.form1.fname.value == ""){	
+	 	alert("fname can not be empty!!");
+		eval("document.form1.fname.focus()");
+		return false;
+	}//fname
+	
+	if(document.form1.depart.value == ""){	
+	 	alert("Dep can not be empty!!");
+		eval("document.form1.depart.focus()");
+		return false;
+	}//depart
+	
+	if(document.form1.dest.value == ""){	
+	 	alert("Arv can not be empty!!");
+		eval("document.form1.dest.focus()");
+		return false;
+	}//dest	
+
+	if(document.form1.nation.value == "") {
+	 	alert("Nation can not be empty!!");
+		eval("document.form1.nation.focus()");
+		return false;
+	}//nation
+
+	if(document.form1.birthyyyy.value == "") {
+	 	alert("Birth year can not be empty!!");
+		eval("document.form1.birthyyyy.focus()");
+		return false;
+	}//birthyyyy
+
+	if(document.form1.birthmm.value == "") {
+	 	alert("Birth month can not be empty!!");
+		eval("document.form1.birthmm.focus()");
+		return false;
+	}//birthmm
+
+	if(document.form1.birthdd.value == "") {
+	 	alert("Birth day can not be empty!!");
+		eval("document.form1.birthdd.focus()");
+		return false;
+	}//birthdd
+	
+	if(document.form1.birthcity.value == "") {
+	 	alert("Birth city can not be empty!!");
+		eval("document.form1.birthcity.focus()");
+		return false;
+	}//birthcity
+	
+	if(document.form1.birthcountry.value == "") {
+	 	alert("Birth country can not be empty!!");
+		eval("document.form1.birthcountry.focus()");
+		return false;
+	}//birthcountry	
+
+	if(document.form1.resicountry.value == "") {
+	 	alert("Resident country can not be empty!!");
+		eval("document.form1.resicountry.focus()");
+		return false;
+	}//resicountry
+	
+	if(document.form1.occu.value == "") {
+	 	alert("Occupation can not be empty!!");
+		eval("document.form1.occu.focus()");
+		return false;
+	}//occu 
+	
+	if(document.form1.gender.value == "") {
+	 	alert("Gender can not be empty!!");
+		eval("document.form1.gender.focus()");
+		return false;
+	}//gender		
+
+	if(document.form1.passport.value == "") {
+	 	alert("Passport number can not be empty!!");
+		eval("document.form1.passport.focus()");
+		return false;
+	}//passport
+	
+	if(document.form1.doctype.value == "") {
+	 	alert("Doc type can not be empty!!");
+		eval("document.form1.doctype.focus()");
+		return false;
+	}//doctype	
+	
+	if(document.form1.passcountry.value == "") {
+	 	alert("Passport country can not be empty!!");
+		eval("document.form1.passcountry.focus()");
+		return false;
+	}//passcountry
+	
+	if(document.form1.passyyyy.value == "") {
+	 	alert("passport expiry year can not be empty!!");
+		eval("document.form1.passyyyy.focus()");
+		return false;
+	}//passyyyy
+	
+	if(document.form1.passmm.value == "") {
+	 	alert("passport expiry month can not be empty!!");
+		eval("document.form1.passmm.focus()");
+		return false;
+	}//passmm	
+	
+	if(document.form1.passdd.value == "") {
+	 	alert("ppassport expiry day can not be empty!!");
+		eval("document.form1.passdd.focus()");
+		return false;
+	}//passdd
+    
+	/*
+	if(document.form1.certno.value == "") {
+	 	alert("2nd doc number can not be empty!!");
+		eval("document.form1.certno.focus()");
+		return false;
+	}//certno
+	
+	if(document.form1.certdoctype.value == "") {
+	 	alert("2nd doc type can not be empty!!");
+		eval("document.form1.certdoctype.focus()");
+		return false;
+	}//certdoctype	
+	
+	if(document.form1.certctry.value == "") {
+	 	alert("2nd doc country can not be empty!!");
+		eval("document.form1.certctry.focus()");
+		return false;
+	}//certctry
+	
+	if(document.form1.certyyyy.value == "") {
+	 	alert("2nd doc expiry year can not be empty!!");
+		eval("document.form1.certyyyy.focus()");
+		return false;
+	}//certyyyy
+	
+	if(document.form1.certmm.value == "") {
+	 	alert("2nd doc expiry month can not be empty!!");
+		eval("document.form1.certmm.focus()");
+		return false;
+	}//certmm	
+	
+	if(document.form1.certdd.value == "") {
+	 	alert("2nd doc expiry day can not be empty!!");
+		eval("document.form1.certdd.focus()");
+		return false;
+	}//certdd
+	
+	if(document.form1.meal.value == "") {
+	 	alert("Meal can not be empty!!");
+		eval("document.form1.meal.focus()");
+		return false;
+	}//meal
+	
+	
+	if(document.form1.dh.value == "") {
+	 	alert("dh number can not be empty!!");
+		eval("document.form1.dh.focus()");
+		return false;
+	}//dh
+	*/
+	if(document.form1.gdorder.value == "") {
+	 	alert("GD order number can not be empty!!");
+		eval("document.form1.gdorder.focus()");
+		return false;
+	}//gdorder
+	
+	flag = confirm("Are you sure to save data?");
+	if (flag) {
+	    if(document.form1.chgtype.value == "modify"){           
+		   document.form1.action="apis_update.jsp";
+        }else if(document.form1.chgtype.value == "insert"){
+           document.form1.action="apis_insert.jsp";
+        }//if		
+		document.form1.submit();
+	}else{ 
+	    return false;
+	}//if
+}//function
+</script>
+</head>
+<%=bodytag %> 
+<form name="form1" method="post">
+<input name="chgtype" type="hidden" value=<%=chgtype%> >
+<input name="insertwho" type="hidden" value=<%=insertwho%> >
+<input name="resiaddr1" type="hidden" value=<%=resiaddr1%>>
+<input name="resiaddr2" type="hidden" value=<%=resiaddr2%>>
+<input name="resiaddr3" type="hidden" value=<%=resiaddr3%>>
+<input name="resiaddr4" type="hidden" value=<%=resiaddr4%>>
+<input name="resiaddr5" type="hidden" value=<%=resiaddr5%>>
+<table width="100%" border="0" cellspacing="1" cellpadding="1">
+    <tr> 
+      <td width="14%" align="left" bgcolor="#DAFCD1"><font color="#000000">*Flight 
+        number</font></font></td>
+      <td width="28%" align="left"><input name="fltno" type="text" size="5" maxlength="5" onkeyup="javascript:this.value=this.value.toUpperCase();"></td>
+      <td width="14%" align="left" bgcolor="#DAFCD1"><font color="#000000">Carrier</font></font></td>
+      <td  align="left"><input name="carrier" type="text" size="2" maxlength="2" value="CI" onkeyup="javascript:this.value=this.value.toUpperCase();"></td>
+   
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">*Departure</font></td>
+      <td align="left"><input name="depart" type="text" size="3" maxlength="3" onkeyup="javascript:this.value=this.value.toUpperCase();"> </td>
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">Deadhead</font></td>
+      <td align="left"> <select name="dh">
+          <option value=""></option>
+          <option value="ACM">ACM</option>
+          <option value="ECM">ECM</option>
+          <option value="JPS">JPS</option>
+          <option value="OCM">OCM</option>
+          <option value="SUP">SUP</option>
+        </select> </td> 
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">*Arrival</font></td>
+      <td align="left"> <input name="dest" type="text" size="3" maxlength="3" onkeyup="javascript:this.value=this.value.toUpperCase();"> </td>
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">GD order</font></td>
+      <td align="left"><input name="gdorder" type="text" size="6" maxlength="6"> 
+	</tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">*Flight date </font></font></td>
+      <td align="left"> <select name="fltyyyy">
+          <option value=""></option>
+          <%
+	   for (int i=iyear-1; i< iyear+2; i++) {    
+           %>
+          <option value="<%=i%>"><%=i%></option>
+          <%
+	   }//for
+       %>
+        </select>
+        / 
+        <select name="fltmm">
+          <option value=""></option>
+          <%
+	   for (int j=1; j<13; j++) {    
+	       if (j<10 ){
+              %>
+          <option value="0<%=j%>">0<%=j%></option>
+          <%
+		   }else{
+              %>
+          <option value="<%=j%>"><%=j%></option>
+          <%
+		   }//if
+	   }//for
+       %>
+        </select>
+        / 
+        <select name="fltdd">
+          <option value=""></option>
+          <%
+	   for (int j=1; j<32; j++) 	{    
+           if (j<10 ){
+              %>
+          <option value="0<%=j%>">0<%=j%></option>
+          <%
+	       }else{
+              %>
+          <option value="<%=j%>"><%=j%></option>
+          <%
+		   }//if
+       }//for
+       %>
+        </select> </td>
+    </tr>
+
+	<tr>
+	     
+      <td width="14%" align="left" bgcolor="#DAFCD1"><font color="#000000">*Employee number</font></td>
+      <td width="28%" align="left"> <input name="empno" type="text" size="6" maxlength="6" 
+	    <%if (chgtype.equals("modify")){  
+		     %>readonly<% 
+		}else if(chgtype.equals("insert")){
+		      %>onkeyup="refreshForm();"<%
+		}//if
+	    %>
+	> </td>	
+	</tr>	
+	</table>
+	<hr>
+  <table width="100%" border="0" cellspacing="1" cellpadding="1">
+    <tr> 
+      <td width="14%" align="left" bgcolor="#DAFCD1"><font color="#000000">Last 
+        name</font></td>
+      <td width="28%"align="left"> <input name="lname" type="text" size="35" maxlength="35" onKeyUp="javascript:this.value=this.value.toUpperCase();"> 
+      </td>
+      <td width="18%" align="left" >&nbsp;</td>
+      <td align="left">&nbsp;</td>
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">First name</font></td>
+      <td align="left"> <input name="fname" type="text" size="35" maxlength="35" onKeyUp="javascript:this.value=this.value.toUpperCase();" > 
+      </td>
+      <td align="left" >&nbsp;</td>
+      <td align="left">&nbsp;</td>
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">Nationality</font></td>
+      <td align="left"> <select name="nation">
+          <option value=""></option>
+          <option value="TW">TW</option>
+          <option value="US">US</option>
+          <option value="CA">CA</option>
+        </select> </td>
+      <td align="left" >&nbsp;</td>
+      <td align="left">&nbsp;</td>
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">Birthday</font></td>
+      <td align="left"> <select name="birthyyyy">
+          <option value=""></option>
+          <%
+	   for (int i=iyear-60; i< iyear-15; i++) {    
+           %>
+          <option value="<%=i%>"><%=i%></option>
+          <%
+	   }//for
+       %>
+        </select>
+        / 
+        <select name="birthmm">
+          <option value=""></option>
+          <%
+	   for (int j=1; j<13; j++) {    
+	       if (j<10 ){
+              %>
+          <option value="0<%=j%>">0<%=j%></option>
+          <%
+		   }else{
+              %>
+          <option value="<%=j%>"><%=j%></option>
+          <%
+		   }//if
+	   }//for
+       %>
+        </select>
+        / 
+        <select name="birthdd">
+          <option value=""></option>
+          <%
+	   for (int j=1; j<32; j++) 	{    
+           if (j<10 ){
+              %>
+          <option value="0<%=j%>">0<%=j%></option>
+          <%
+	       }else{
+              %>
+          <option value="<%=j%>"><%=j%></option>
+          <%
+		   }//if
+       }//for
+       %>
+        </select> </td>
+      <td align="left" >&nbsp;</td>
+      <td align="left">&nbsp;</td>
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">Birth city</font></td>
+      <td align="left"><input name="birthcity" type="text" size="35" maxlength="35" onKeyUp="javascript:this.value=this.value.toUpperCase();"> 
+      </td>
+      <td align="left">&nbsp;</td>
+      <td align="left">&nbsp;</td>
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">Birth country </font></td>
+      <td align="left"> <select name="birthcountry">
+          <option value=""></option>
+          <option value="TWN">TWN</option>
+          <option value="USA">USA</option>
+          <option value="CAN">CAN</option>
+          <option value="CHN">CHN</option>
+        </select> </td>
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">Resident country 
+        </font></td>
+      <td align="left"> <select name="resicountry">
+          <option value=""></option>
+          <option value="TWN">TWN</option>
+          <option value="USA">USA</option>
+          <option value="CAN">CAN</option>
+          <option value="CAN">CHN</option>
+        </select> </td>
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">Occupation</font></td>
+      <td align="left"> <select name="occu">
+          <option value=""></option>
+          <option value="CA">CA</option>
+          <option value="RP">RP</option>
+          <option value="FO">FO</option>
+          <option value="FE">FE</option>
+          <option value="OE">OE</option>
+          <option value="PR">PR</option>
+          <option value="MF">MF</option>
+          <option value="MC">MC</option>
+          <option value="MY">MY</option>
+          <option value="FF">FF</option>
+          <option value="FC">FC</option>
+          <option value="FY">FY</option>
+        </select> </td>
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">Gender</font></td>
+      <td align="left"><select name="gender">
+          <option value="M">M</option>
+          <option value="F">F</option>
+          <option value=""></option>
+        </select> </td>
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">Passport number 
+        </font></td>
+      <td align="left"> <input name="passport" type="text" size="20" maxlength="20" onKeyUp="javascript:this.value=this.value.toUpperCase();"> 
+      </td>
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">Passport doc type 
+        </font></td>
+      <td align="left"> <select name="doctype">
+          <option value="P">P</option>
+          <option value="L">L</option>
+          <option value="C">C</option>
+          <option value="A">A</option>
+        </select> </td>
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">Passport country 
+        </font></td>
+      <td align="left"> <select name="passcountry">
+          <option value=""></option>
+          <option value="TWN">TWN</option>
+          <option value="USA">USA</option>
+          <option value="CAN">CAN</option>
+          <option value="CAN">CHN</option>
+        </select> </td>
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">Passport expiry</font></td>
+      <td align="left"> <select name="passyyyy">
+          <option value=""></option>
+          <%
+	   for (int i=iyear; i< iyear+16; i++) {    
+           %>
+          <option value="<%=i%>"><%=i%></option>
+          <%
+	   }//for
+       %>
+        </select>
+        / 
+        <select name="passmm">
+          <option value=""></option>
+          <%
+	   for (int j=1; j<13; j++) {    
+	       if (j<10 ){
+              %>
+          <option value="0<%=j%>">0<%=j%></option>
+          <%
+		   }else{
+              %>
+          <option value="<%=j%>"><%=j%></option>
+          <%
+		   }//if
+	   }//for
+       %>
+        </select>
+        / 
+        <select name="passdd">
+          <option value=""></option>
+          <%
+	   for (int j=1; j<32; j++) 	{    
+           if (j<10 ){
+              %>
+          <option value="0<%=j%>">0<%=j%></option>
+          <%
+	       }else{
+              %>
+          <option value="<%=j%>"><%=j%></option>
+          <%
+		   }//if
+       }//for
+       %>
+        </select> </td>
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">2nd doc number 
+        </font></td>
+      <td align="left"> <input name="certno" type="text" size="30" maxlength="30" onKeyUp="javascript:this.value=this.value.toUpperCase();"> 
+      </td>
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">2nd doc type </font></td>
+      <td align="left"> <select name="certdoctype">
+          <option value="L">L</option>
+          <option value="C">C</option>
+          <option value="A">A</option>
+          <option value=""></option>
+        </select> </td>
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">2nd doc country 
+        </font></td>
+      <td align="left"> <select name="certctry">
+          <option value=""></option>
+          <option value="TWN">TWN</option>
+          <option value="USA">USA</option>
+          <option value="CAN">CAN</option>
+        </select> </td>
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">2nd doc expiry</font></td>
+      <td align="left"> <select name="certyyyy">
+          <option value=""></option>
+          <%
+	   for (int i=iyear; i< iyear+16; i++) {    
+           %>
+          <option value="<%=i%>"><%=i%></option>
+          <%
+	   }//for
+       %>
+        </select>
+        / 
+        <select name="certmm">
+          <option value=""></option>
+          <%
+	   for (int j=1; j<13; j++) {    
+	       if (j<10 ){
+              %>
+          <option value="0<%=j%>">0<%=j%></option>
+          <%
+		   }else{
+              %>
+          <option value="<%=j%>"><%=j%></option>
+          <%
+		   }//if
+	   }//for
+       %>
+        </select>
+        / 
+        <select name="certdd">
+          <option value=""></option>
+          <%
+	   for (int j=1; j<32; j++) 	{    
+           if (j<10 ){
+              %>
+          <option value="0<%=j%>">0<%=j%></option>
+          <%
+	       }else{
+              %>
+          <option value="<%=j%>"><%=j%></option>
+          <%
+		   }//if
+       }//for
+       %>
+        </select> </td>
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">Travel status </font></td>
+      <td align="left"><select name="tvlstatus">
+          <option value=""></option>
+          <option value="CR1">CR1</option>
+          <option value="CR2">CR2</option>
+          <option value="CR3">CR3</option>
+          <option value="CR4">CR4</option>
+          <option value="CR5">CR5</option>
+        </select> </td>
+    </tr>
+    <tr> 
+      <td align="left" bgcolor="#DAFCD1"><font color="#000000">Meal </font></td>
+      <td align="left"> <select name="meal">
+          <option value=""></option>
+          <option value="AV">AV</option>
+          <option value="NB">NB</option>
+          <option value="NP">NP</option>
+        </select> </td>
+    </tr>
+    <tr> 
+      <td align="left"></td>
+      <td align="left"> <input name="button" type="button" value="Save" onClick="upd()"> 
+        &nbsp;&nbsp; <input name="button" type="button" value="Cancel" onClick="cnl()"> 
+      </td>
+    </tr>
+  </table>
+</form>
+</body>
+</html>
+

@@ -1,0 +1,128 @@
+body {
+	/*background-color:#CAE1FD;*/
+	/*background-color:#f0f0f0;*/
+	font-family:"細明體", "新細明體", Arial, Helvetica, sans-serif;
+	font-size:10pt;
+	
+}
+
+
+a:visited {
+	color: #0033FF;
+}
+a:link {
+	color: #0033FF;
+}
+a:hover  {
+	color: #006699;
+	background-color: #CCCC99;
+}
+a:active  {
+	color: #006699;
+	background-color: #CCCC99;
+}
+table{
+	border: 1pt solid; 
+	border-color:#000066;
+	
+	 
+}
+.input_lightblue{
+color:#000066;
+background-color : #CCCCFF ; /*背景色彩*/
+border-top : 1px double #EFEFEF ;/*上框*/ 
+border-bottom : 1px double #208AFF  ;/*下框*/ 
+border-left : 1px double #EFEFEF  ; /*左框*/
+border-right : 1px double #208AFF  ; /*右框*/
+font-family:Arial, Helvetica, sans-serif;
+font-size:10pt;letter-spacing:1pt;
+ }
+
+
+.table_no_border{
+
+	border: 0pt solid; 
+ 
+}
+.fortable{
+	border: 1pt solid;
+ }
+ .table_head {
+	background-color:#99CCFF;
+/*	border: 1pt solid;
+	padding:inherit;*/
+}
+.table_body_blank{	/*白底*/
+background-color:#FFFFFF}
+.table_body{/*淺紫藍色*/
+background-color:#CCCCFF;
+}
+.table_body2{/* 淡紫色*/
+background-color:#CC99CC;
+}
+.table_body3{	/*黃色*/
+background-color:#CCCC99;
+}
+.table_body4{/*淺黃色*/
+background-color:#CCFFFF}
+.table_body5{background-color:#F0E68C}
+.table_body6{background-color:#BDB76B}
+.table_body7{background-color:#9999FF}
+.table_body8{background-color:#6699FF}
+.table_body9{background-color:#3399CC}
+.button1{
+	background-color:#CCCCFF;
+	color:#000066;
+	border-top: 1pt solid #208AFF;
+	border-right: 1pt outset #208AFF;
+	border-bottom: 1pt outset #208AFF;
+	border-left: 1pt  solid #208AFF;
+
+}
+.button2{ 	/*立體樣式的button*/
+color:#000066;
+background-color : #CCCCFF ; /*背景色彩*/
+border-top : 1px double #208AFF ;/*上框#EFEFEF*/ 
+border-bottom : 1px double #208AFF  ;/*下框*/ 
+border-left : 1px double #208AFF  ; /*左框*/
+border-right : 1px double #208AFF  ; /*右框*/
+}
+.button_yellow{ 	/*立體樣式的button*/
+color:#000000;
+background-color:#CCCC66 ; /*背景色彩*/
+border-top : 1px double #208AFF ;/*上框#EFEFEF*/ 
+border-bottom : 1px double #208AFF  ;/*下框*/ 
+border-left : 1px double #208AFF  ; /*左框*/
+border-right : 1px double #208AFF  ; /*右框*/
+}
+.button_y2{
+color: #000000; border: 1px outset #C0C0C0; background-color: #E7CE96
+}
+.button_b2{
+color: #000066; border: 1px outset #208AFF; background-color: #CCCCFF
+}
+.font_hightlight{color:#0000FF;font-size:10pt}/*中文字型,10pt字*/
+.font_hilred{color:#FF0000;font-size:10pt}/*中文字型,10pt字*/
+
+.fonte_dblue{color:#339999;font-size:10pt;font-family: Arial, Helvetica, sans-serif}/*英文字型,10pt字*/
+.font_dblue{color:#339999;font-size:10pt}/*中文字型,10pt字*/
+.fontbig_dblue{color:#339999;font-size:14pt}/*中文字型，14pt字*/
+.fontbige_dblue{color:#339999;font-size:14pt;font-family: Arial, Helvetica, sans-serif}/*英文字型,14pt字*/
+.fonte_white{color:#FFFFFF;font-size:10pt;font-family:Arial, Helvetica, sans-serif}
+.fonte_black{color:#000000;font-size:10pt;font-family:Arial, Helvetica, sans-serif}
+.fonte_dblue2{color:#000066;font-size:10pt;font-family: Arial, Helvetica, sans-serif}/*英文字型,10pt字*/
+.font_dblue2{color:#000066;font-size:10pt}/*中文字型,10pt字*/
+.fontbig_dblue2{color:#000066;font-size:14pt}/*中文字型，14pt字*/
+.fontbige_dblue2{color:#000066;font-size:14pt;font-family: Arial, Helvetica, sans-serif}/*英文字型,14pt字*/
+.tablehead3 {
+	font-family: "Arial", "Helvetica", "sans-serif";
+	background-color: #006699;
+	font-size: 10pt;
+	text-align: center;
+	font-style: normal;
+	font-weight: normal;
+	color: #FFFFFF;
+	
+}
+
+

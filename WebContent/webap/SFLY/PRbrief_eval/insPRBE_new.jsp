@@ -1,0 +1,320 @@
+<%@page import="java.util.ArrayList"%>
+<%@ page contentType="text/html; charset=big5" language="java" %>
+<%@ page import="java.sql.*,ci.db.ConnDB,eg.prfe.*" %>
+<%
+
+String userid = (String) session.getAttribute("userid") ; //get user id if already login
+
+if (userid == null) 
+{		
+	response.sendRedirect("../logout.jsp");
+}
+
+String empno  = request.getParameter("empno");
+String sdate = request.getParameter("sdate");
+String time_hh = request.getParameter("brief_hh");
+String time_mi = request.getParameter("brief_mi");
+String time_hh2 = request.getParameter("brief_hh2");
+String time_mi2 = request.getParameter("brief_mi2");
+String fltno = request.getParameter("fltno");
+String comm = request.getParameter("comm");
+String flag = request.getParameter("flag");
+
+ArrayList objAL = (ArrayList) session.getAttribute("objAL") ;
+PRBriefEval prbe = new PRBriefEval();
+prbe.setFlag(flag);
+ArrayList emptyscoreAL = prbe.getPRBriefEvalSubScoreEmpty();
+
+Connection conn = null;
+Statement stmt = null;
+PreparedStatement pstmt = null;
+PreparedStatement pstmt2 = null;
+int j=1;
+String forwardPage = "";
+String sql = null;
+String commitstr = "N";
+Driver dbDriver = null;
+ConnDB cn = new ConnDB();
+
+try
+{
+//ort1
+cn.setORP3EGUserCP();
+dbDriver = (Driver) Class.forName(cn.getDriver()).newInstance();
+conn = dbDriver.connect(cn.getConnURL(), null);
+conn.setAutoCommit(false);	
+//********************************************************************
+if(objAL.size()<=0)
+{
+	//int chk1 = 0;
+	//int chk2 = 0;
+	//int chk3 = 0;
+	//int chk4 = 0;
+	//int chk5 = 0;
+
+	double chk1 = 0;
+	double chk2 = 0;
+	double chk3 = 0;
+	double chk4 = 0;
+	double chk5 = 0;
+
+	String chk1_p = "";
+	String chk2_p = "";
+	String chk3_p = "";
+	String chk4_p = "";
+	String chk5_p = "";
+	for(int i=0; i<emptyscoreAL.size(); i++)
+	{
+		PRBriefSubScoreObj scoreobj = (PRBriefSubScoreObj) emptyscoreAL.get(i);
+		String score = (String) request.getParameter(scoreobj.getSubitem_no());	
+
+		if("A".equals(scoreobj.getItem_no()))
+		{
+			chk1_p = scoreobj.getMain_percentage();
+			chk1 = chk1 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}		
+		if("B".equals(scoreobj.getItem_no()))
+		{
+			chk2_p = scoreobj.getMain_percentage();
+			chk2 = chk2 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}
+		if("C".equals(scoreobj.getItem_no()))
+		{
+			chk3_p = scoreobj.getMain_percentage();
+			chk3 = chk3 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}
+		if("D".equals(scoreobj.getItem_no()))
+		{
+			chk4_p = scoreobj.getMain_percentage();
+			chk4 = chk4 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}
+		if("E".equals(scoreobj.getItem_no()))
+		{
+			chk5_p = scoreobj.getMain_percentage();
+			chk5 = chk5 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}
+		if("F".equals(scoreobj.getItem_no()))
+		{
+			chk1_p = scoreobj.getMain_percentage();
+			chk1 = chk1 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}		
+		if("G".equals(scoreobj.getItem_no()))
+		{
+			chk2_p = scoreobj.getMain_percentage();
+			chk2 = chk2 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}
+		if("H".equals(scoreobj.getItem_no()))
+		{
+			chk3_p = scoreobj.getMain_percentage();
+			chk3 = chk3 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}
+		if("I".equals(scoreobj.getItem_no()))
+		{
+			chk4_p = scoreobj.getMain_percentage();
+			chk4 = chk4 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}
+		if("J".equals(scoreobj.getItem_no()))
+		{
+			chk5_p = scoreobj.getMain_percentage();
+			chk5 = chk5 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}
+	}
+
+	sql = "INSERT INTO egtprbe (brief_dt,brief_time,fltno,purempno,chk1_score,chk2_score,chk3_score,chk4_score,chk5_score,comm,newuser,newdate) VALUES (to_date(?,'yyyy/mm/dd'),?,?,?,Round(?,1),Round(?,1),Round(?,1),Round(?,1),Round(?,1),?,?,sysdate)";
+//out.println("INSERT INTO egtprbe (brief_dt,brief_time,fltno,purempno,chk1_score,chk2_score,chk3_score,chk4_score,chk5_score,comm,newuser,newdate) VALUES (to_date('"+sdate+"','yyyy/mm/dd'),'"+time_hh+":"+time_mi+"~"+time_hh2+":"+time_mi2+"','"+fltno+"','"+empno+"',Round('"+((Integer.parseInt(chk1_p) * chk1)/10000)+"',1),Round('"+((Integer.parseInt(chk2_p) * chk2)/10000)+"',1),Round('"+((Integer.parseInt(chk3_p) * chk3)/10000)+"',1),Round('"+((Integer.parseInt(chk4_p) * chk4)/10000)+"',1),Round('"+((Integer.parseInt(chk5_p) * chk5)/10000)+"',1),'"+comm+"','"+userid+"',sysdate)");
+
+	pstmt = conn.prepareStatement(sql);			
+	j=1;
+	pstmt.setString(j,sdate);
+	pstmt.setString(++j, time_hh+":"+time_mi+"~"+time_hh2+":"+time_mi2);
+	pstmt.setString(++j, fltno);
+	pstmt.setString(++j, empno);
+	pstmt.setDouble(++j, ((Integer.parseInt(chk1_p) * chk1)/10000));
+	pstmt.setDouble(++j, ((Integer.parseInt(chk2_p) * chk2)/10000));		
+	pstmt.setDouble(++j, ((Integer.parseInt(chk3_p) * chk3)/10000));
+	pstmt.setDouble(++j, ((Integer.parseInt(chk4_p) * chk4)/10000));	
+	pstmt.setDouble(++j, ((Integer.parseInt(chk5_p) * chk5)/10000));
+	pstmt.setString(++j, comm);				
+	pstmt.setString(++j, userid);
+	pstmt.executeUpdate();	
+	//***************************************************************************************
+
+	sql = "INSERT INTO egtprbe2 (brief_dt,purempno,item_no,subitem_no,score,comm) VALUES (to_date(?,'yyyy/mm/dd'),?,?,?,to_number(?),?)";	
+
+	pstmt2 = conn.prepareStatement(sql);			
+	
+	for(int i=0; i<emptyscoreAL.size(); i++)
+	{
+		PRBriefSubScoreObj scoreobj = (PRBriefSubScoreObj) emptyscoreAL.get(i);
+		String score = (String) request.getParameter(scoreobj.getSubitem_no());	
+
+//out.println("<br>"+"INSERT INTO egtprbe2 (brief_dt,purempno,item_no,subitem_no,score,comm) VALUES (to_date('"+sdate+"','yyyy/mm/dd'),'"+empno+"','"+scoreobj.getItem_no()+"','"+scoreobj.getSubitem_no()+"',to_number('"+request.getParameter(scoreobj.getSubitem_no())+"'),'"+request.getParameter("comm"+scoreobj.getSubitem_no())+"')");
+
+		j=1; 
+		pstmt2.setString(j,sdate);
+		pstmt2.setString(++j, empno);
+		pstmt2.setString(++j, scoreobj.getItem_no());
+		pstmt2.setString(++j, scoreobj.getSubitem_no());
+		pstmt2.setString(++j, request.getParameter(scoreobj.getSubitem_no()));
+		pstmt2.setString(++j, request.getParameter("comm"+scoreobj.getSubitem_no()));
+		pstmt2.executeUpdate();	
+	}
+}
+else
+{
+	//int chk1 = 0;
+	//int chk2 = 0;
+	//int chk3 = 0;
+	//int chk4 = 0;
+	//int chk5 = 0;
+
+	double chk1 = 0;
+	double chk2 = 0;
+	double chk3 = 0;
+	double chk4 = 0;
+	double chk5 = 0;
+
+	String chk1_p = "";
+	String chk2_p = "";
+	String chk3_p = "";
+	String chk4_p = "";
+	String chk5_p = "";
+
+	for(int i=0; i<emptyscoreAL.size(); i++)
+	{
+		PRBriefSubScoreObj scoreobj = (PRBriefSubScoreObj) emptyscoreAL.get(i);
+		String score = (String) request.getParameter(scoreobj.getSubitem_no());	
+		
+		if("A".equals(scoreobj.getItem_no()))
+		{
+			chk1_p = scoreobj.getMain_percentage();
+			chk1 = chk1 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}		
+		if("B".equals(scoreobj.getItem_no()))
+		{
+			chk2_p = scoreobj.getMain_percentage();
+			chk2 = chk2 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}
+		if("C".equals(scoreobj.getItem_no()))
+		{
+			chk3_p = scoreobj.getMain_percentage();
+			chk3 = chk3 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}
+		if("D".equals(scoreobj.getItem_no()))
+		{
+			chk4_p = scoreobj.getMain_percentage();
+			chk4 = chk4 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}
+		if("E".equals(scoreobj.getItem_no()))
+		{
+			chk5_p = scoreobj.getMain_percentage();
+			chk5 = chk5 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}
+		if("F".equals(scoreobj.getItem_no()))
+		{
+			chk1_p = scoreobj.getMain_percentage();
+			chk1 = chk1 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}		
+		if("G".equals(scoreobj.getItem_no()))
+		{
+			chk2_p = scoreobj.getMain_percentage();
+			chk2 = chk2 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}
+		if("H".equals(scoreobj.getItem_no()))
+		{
+			chk3_p = scoreobj.getMain_percentage();
+			chk3 = chk3 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}
+		if("I".equals(scoreobj.getItem_no()))
+		{
+			chk4_p = scoreobj.getMain_percentage();
+			chk4 = chk4 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}
+		if("J".equals(scoreobj.getItem_no()))
+		{
+			chk5_p = scoreobj.getMain_percentage();
+			chk5 = chk5 + (Integer.parseInt(score)*Integer.parseInt(scoreobj.getSub_percentage()));
+		}
+	}
+
+	sql = "update egtprbe set brief_time =?, fltno = ?, chk1_score = Round(?,1), chk2_score = Round(?,1), chk3_score = Round(?,1), chk4_score = Round(?,1), chk5_score = Round(?,1), comm =? where brief_dt = to_date(?,'yyyy/mm/dd') and purempno = ? ";
+
+//out.println("<br>"+"update egtprbe set brief_time ='"+time_hh+":"+time_mi+"~"+time_hh2+":"+time_mi2+"', fltno = '"+fltno+"', chk1_score = Round('"+((Integer.parseInt(chk1_p) * chk1)/10000)+"',1), chk2_score = Round('"+((Integer.parseInt(chk2_p) * chk2)/10000)+"',1), chk3_score = Round('"+((Integer.parseInt(chk3_p) * chk3)/10000)+"',1), chk4_score = Round('"+((Integer.parseInt(chk4_p) * chk4)/10000)+"',1), chk5_score = Round('"+((Integer.parseInt(chk5_p) * chk5)/10000)+"',1), comm ='"+comm+"' where brief_dt = to_date('"+sdate+"','yyyy/mm/dd') and purempno = '"+empno+"' ");
+
+
+	pstmt = conn.prepareStatement(sql);			
+	j=1;
+	pstmt.setString(j, time_hh+":"+time_mi+"~"+time_hh2+":"+time_mi2);
+	pstmt.setString(++j, fltno);
+	pstmt.setDouble(++j, ((Integer.parseInt(chk1_p) * chk1)/10000));
+	pstmt.setDouble(++j, ((Integer.parseInt(chk2_p) * chk2)/10000));		
+	pstmt.setDouble(++j, ((Integer.parseInt(chk3_p) * chk3)/10000));
+	pstmt.setDouble(++j, ((Integer.parseInt(chk4_p) * chk4)/10000));	
+	pstmt.setDouble(++j, ((Integer.parseInt(chk5_p) * chk5)/10000));
+	pstmt.setString(++j, comm);				
+	pstmt.setString(++j, sdate);
+	pstmt.setString(++j, empno);
+	pstmt.executeUpdate();	
+	//***************************************************************************************
+	stmt   = conn.createStatement();
+	sql = "delete from egtprbe2 where brief_dt = to_date('"+sdate+"','yyyy/mm/dd') and purempno = '"+empno+"'";
+	stmt.executeUpdate(sql);	
+
+	sql = "INSERT INTO egtprbe2 (brief_dt,purempno,item_no,subitem_no,score,comm) VALUES (to_date(?,'yyyy/mm/dd'),?,?,?,to_number(?),?)";
+
+	pstmt2 = conn.prepareStatement(sql);			
+	
+	for(int i=0; i<emptyscoreAL.size(); i++)
+	{
+		PRBriefSubScoreObj scoreobj = (PRBriefSubScoreObj) emptyscoreAL.get(i);
+		String score = (String) request.getParameter(scoreobj.getSubitem_no());	
+
+//out.println("<br>"+"INSERT INTO egtprbe2 (brief_dt,purempno,item_no,subitem_no,score,comm) VALUES (to_date('"+sdate+"','yyyy/mm/dd'),'"+empno+"','"+scoreobj.getItem_no()+"','"+scoreobj.getSubitem_no()+"',to_number('"+request.getParameter(scoreobj.getSubitem_no())+"'),'"+request.getParameter("comm"+scoreobj.getSubitem_no())+"')");
+
+		j=1; 
+		pstmt2.setString(j,sdate);
+		pstmt2.setString(++j, empno);
+		pstmt2.setString(++j, scoreobj.getItem_no());
+		pstmt2.setString(++j, scoreobj.getSubitem_no());
+		pstmt2.setString(++j, request.getParameter(scoreobj.getSubitem_no()));
+		pstmt2.setString(++j, request.getParameter("comm"+scoreobj.getSubitem_no()));
+		pstmt2.executeUpdate();	
+	}
+}
+conn.commit();
+commitstr = "Y";
+}
+catch (Exception e)
+{  out.print(e.toString());
+	try 
+	{ 
+		 conn.rollback(); 
+	} 
+    catch (SQLException e1) 
+	{ 
+		out.print(e1.toString()); 
+	}
+	 %>
+	<script language="javascript" type="text/javascript">
+	alert("Update failed!!\n資料更新失敗!!");
+	window.history.back(-1);
+	</script>
+	<%
+}
+finally
+{
+	try{if(stmt != null) stmt.close();}catch(SQLException e){}
+	try{if(pstmt != null) pstmt.close();}catch(SQLException e){}
+	try{if(pstmt2 != null) pstmt2.close();}catch(SQLException e){}
+	try{if(conn != null) conn.close();}catch(SQLException e){}
+	if("Y".equals(commitstr))
+	{
+%>
+		<script language="javascript" type="text/javascript">
+		alert("Update completed!!");			
+		window.location.href='PRbrief_evalView.jsp?empno=<%=empno%>&sdate=<%=sdate%>&edate=<%=sdate%>&flag=<%=flag%>';
+		</script>
+<%
+	}
+}
+%>

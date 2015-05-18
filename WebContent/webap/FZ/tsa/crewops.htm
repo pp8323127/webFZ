@@ -1,0 +1,61 @@
+<html>
+<head>
+<title>Crew OPS Edit</title>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<script language="JavaScript" type="text/JavaScript">
+function showdate(){
+	var y;
+	
+	now = new Date();
+	y = now.getFullYear();
+	
+	document.form1.year.value=y;
+}
+
+</script>
+
+<link href="../menu.css" rel="stylesheet" type="text/css">
+</head>
+
+<body onLoad="showdate()">
+
+<form name="form1" method="post" action="crewops.jsp" class="txtblue" target="mainFrame">
+   <span class="txtxred">1000hr Check</span><span class="txtblue"> Year</span>  
+  <select name="year">
+    <!--option value="2003">2003</option>
+	<option value="2004">2004</option>
+	<option value="2005">2005</option>
+	<option value="2006">2006</option>
+	<option value="2007">2007</option>
+	<option value="2008">2008</option 
+	oo 已於 2010 年全年未使用 -->
+	<option value="2009">2009</option>
+	<option value="2010">2010</option>
+	<option value="2011">2011</option>
+  </select>
+  Fleet
+  <select name="fleet" size="1">
+	  <option value="" selected>ALL</option>
+	  <option value="330">330</option>
+	  <option value="333">333</option>
+	  <option value="343">343</option>
+	  <option value="738">738</option>
+	  <option value="744">744</option>
+	  <option value="742">742</option>
+	  <option value="747">747</option>
+	  <option value="AB6">AB6</option>
+  </select>
+  Rank
+  <select name="rank" size="1">
+	  <option value="" selected>ALL</option>
+	  <option value="CA">CA</option>
+	  <option value="CP">CP</option>
+	  <option value="FO">FO</option>
+	  <option value="FE">FE</option>
+	  <option value="GE">GE</option>
+  </select>
+  <input name="Submit" type="submit" class="btm" value="Query">
+  <input name="Submit2" type="reset" class="btm" value="Reset">
+</form>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<%@ page contentType="text/html; charset=big5" language="java" %>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<script language="JavaScript">
+function getCalendar(obj){    
+	eval("wincal=window.open('Calendar.htm','" + obj +"','width=350,height=200')");
+}
+</script>
+<script language=javascript>
+function checkdate(){
+	 if(document.form1.s_date.value ==""){
+	 	alert("Please select check start date!!\n請輸入查核開始日!!");
+		return false;
+	 }
+	 else if(document.form1.e_date.value ==""){
+	 	alert("Please select check end date!!\n請輸入查核結束日!!");
+		return false;
+	 }
+	 else{
+	 	return true;
+	 }
+
+}
+</script>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>Licence check date Query</title>
+<link href="../../menu.css" rel="stylesheet" type="text/css" >
+</head>
+<body>
+<form name="form1" action="showLic.jsp" target="mainFrame" method="post" onSubmit="return checkdate()">
+  <span class="txtblue">Licence check date</span>
+  <td width="46%" bgcolor="#CCCCCC"> <font face="Arial, Helvetica, sans-serif" size="2">          <span onclick="getCalendar('s_date')" style="cursor:pointer">
+  <input maxlength="10" type="text" name="s_date" class="text" size="15" onFocus="this.blur()"  style="cursor:pointer">
+  <img src="../../images/p2.gif" width="22" height="22"> </span></font></td>
+  <span class="txtblue">to</span> 
+  <td width="46%" bgcolor="#CCCCCC"> <font face="Arial, Helvetica, sans-serif" size="2">          <span onclick="getCalendar('e_date')" style="cursor:pointer">
+  <input maxlength="10" type="text" name="e_date" class="text" size="15" onFocus="this.blur()"  style="cursor:pointer">
+  <img src="../../images/p2.gif" width="22" height="22"> </span></font></td>
+  <input type="submit" name="Submit" value="Query"  >
+</form>
+</body>
+</html>

@@ -1,0 +1,25 @@
+package ws.prac;
+
+public class ReportListMain  {
+
+    /**
+     * @param args
+     */
+	
+    public ReportListFlt2Obj reportListFlt(String empno,String yy,String mm){//傳回當月班表
+    	ReportListFun rtobj = new ReportListFun();
+    	rtobj.getPurFltSch(empno, yy, mm);
+    	return rtobj.fltObj; 
+    }
+    public ReportListCfltUpdObj reportListCflt(String empno ,String fdate ,String fltno ,String sect){//傳回報告編輯狀態
+    	ReportListFun rtobj = new ReportListFun();
+    	rtobj.getPurCflt(empno, fdate, fltno, sect);
+		return rtobj.cfltObj;
+    }
+
+	public PurInfoObj getPurInfo(String empno ){//傳回CM資料
+		ReportListFun rtobj = new ReportListFun();
+		rtobj.getPurInfo(empno);
+		return rtobj.purObj;
+	}
+}

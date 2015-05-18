@@ -1,0 +1,84 @@
+package ws.prac;
+
+public class ReportListCfltUpdObj {
+	// 取得是否已經更新 list.add
+	/**
+	 * @param args
+	 */
+	private String wflag 	= ""; // Y: 有報告 N:無報告
+	private String upd 		= ""; // Y:報告可再編輯 N:報告不可再編輯
+	private String reject 	= ""; // 報告是否被退回
+	private String acno 	= "";
+	private boolean late 	= false;
+	private String chgdate 	= "";
+
+	private String errorMsg = "";
+	private String resultMsg = "";
+
+	// ////
+
+	public String getWflag() {
+		return wflag;
+	}
+
+	public void setWflag(String wflag) {
+		this.wflag = wflag;
+	}
+
+	public String getUpd() {
+		return upd;
+	}
+
+	public void setUpd(String upd) {
+		this.upd = upd;
+	}
+
+	public String getReject() {
+		return reject;
+	}
+
+	public void setReject(String reject) {
+		this.reject = reject;
+	}
+
+	public String getAcno() {
+		return acno;
+	}
+
+	public void setAcno(String acno) {
+		this.acno = acno;
+	}
+
+	public String getErrorMsg() {
+		return this.errorMsg;
+	}
+
+	public void setErrorMsg(String errorMsg) {
+		this.errorMsg = errorMsg;
+	}
+
+	public String getResultMsg() {
+		return this.resultMsg;
+	}
+
+	public void setResultMsg(String resultMsg) {
+		this.resultMsg = resultMsg;
+	}
+
+	public boolean isLate() {
+		return late;
+	}
+
+	public void setLate(boolean late) {
+		this.late = late;
+	}
+
+	public String getChgdate() {
+		return chgdate;
+	}
+
+	public void setChgdate(String chgdate) {
+		this.chgdate = chgdate;
+	}
+
+}

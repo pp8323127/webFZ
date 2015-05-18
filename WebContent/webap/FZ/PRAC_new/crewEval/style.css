@@ -1,0 +1,150 @@
+body {
+	font-family:"細明體", "新細明體", Arial, Helvetica, sans-serif;
+	font-size:10pt;
+}
+.HeaderNav { font-family: "新細明體", "Verdana"; font-size: 9pt; color: #a3a3a3} 
+
+.FontSizeEngA { font-size: 9px; font-family: "Verdana", "新細明體"} 
+
+.bold { font-weight: bold; font-family: "Verdana", "新細明體"; font-size: 9px} 
+
+.FontSizeEngB { font-size: 9pt; font-family: "Verdana", "新細明體" } 
+
+.LeftNav { font-family: "Verdana", "新細明體"; font-size: 9pt; color: #999999} 
+
+.txt { font-size: 9pt; line-height: 150%; color: #999999} 
+
+.black { font-size: 10pt; line-height: 130%; color: #000000} 
+
+a:hover,a:actived {  color: #7384d2;  text-decoration: underline;}
+
+a:link,a:visited {  color: blue; text-decoration: none; }
+
+
+.blue9 {  font-size: 9pt; color: #464883}
+
+.blue9 {  line-height: 150%}
+
+.blue12 {  font-size: 12pt; color: #7384D2}
+
+.linktxt {  font-size: 9pt; color: #7384d2; line-height: 150%}
+
+.white {  font-size: 9pt; color: #FFFFFF; font-family: "Arial", "Helvetica", "sans-serif"}
+
+.whitebold {  font-size: 9px; color: #FFFFFF; font-weight: bold; font-family: "Verdana", "細明體"}
+
+.menu1 {  font-size: 9pt; line-height: normal; color: #999999}
+
+.table_no_border{	border: 0pt solid; }
+
+.table_border2{	border: 1pt solid; border-collapse:collapse  }
+
+.fortable{
+	border: 1pt solid;
+ }
+
+.table_head {
+	background-color:#99CCFF;
+	padding:inherit;
+}
+.table_body{/*淺紫藍色*/
+background-color:#CCCCFF;
+}
+.table_body2{/* 淡紫色*/
+background-color:#CC99CC;
+}
+.table_body3{	/*黃色*/
+background-color:#CCCC99;
+}
+.table_body4{/*淺黃色*/
+background-color:#CCFFFF}
+.button1{
+	background-color:#CCCCFF;
+	color:#000066;
+	border-top: 1pt solid #208AFF;
+	border-right: 1pt outset #208AFF;
+	border-bottom: 1pt outset #208AFF;
+	border-left: 1pt  solid #208AFF;
+
+}
+.button2{	/*立體樣式的button*/
+color:#000066;
+background-color : #CCCCFF ; /*背景色彩*/
+border-top : 1px double #EFEFEF ;/*上框*/ 
+border-bottom : 1px double #208AFF  ;/*下框*/ 
+border-left : 1px double #EFEFEF  ; /*左框*/
+border-right : 1px double #208AFF  ; /*右框*/
+}
+
+.fonte_dblue{color:#339999;font-size:10pt;font-family: Arial, Helvetica, sans-serif}/*英文字型,10pt字*/
+.font_dblue{color:#339999;font-size:10pt}/*中文字型,10pt字*/
+.fontbig_dblue{color:#339999;font-size:14pt}/*中文字型，14pt字*/
+.fontbige_dblue{color:#339999;font-size:14pt;font-family: Arial, Helvetica, sans-serif}/*英文字型,14pt字*/
+
+.fonte_dblue2{color:#000066;font-size:10pt;font-family: Arial, Helvetica, sans-serif}/*英文字型,10pt字*/
+.font_dblue2{color:#000066;font-size:10pt}/*中文字型,10pt字*/
+.fontbig_dblue2{color:#000066;font-size:14pt}/*中文字型，14pt字*/
+.txttitletop {
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	line-height: 22px;
+	color: #464883;
+	font-weight: bold;
+}
+.txtblue {
+	font-size: 12px;
+	line-height: 13.5pt;
+	color: #464883;
+	font-family:  "Verdana";
+}
+.tablehead {
+	font-family: "Arial", "Helvetica", "sans-serif";
+	background-color: #006699;
+	font-size: 12px;
+	text-align: center;
+	font-style: normal;
+	font-weight: bold;
+	color: #FFFFFF;
+	
+}
+.btm { font-size: 10pt;
+	font-family:"新細明體"; 
+	color=#ffffff;
+	border:solid 1pt; 
+	border-color:#ffffff #ffffff #666666 #666666; 
+	Background-Color:#6983AF}
+.tablebody {  font-family:"細明體", "新細明體", "Courier New"; 
+font-size: 10pt; text-align: center;	border: 1px solid;}
+.tablehead3 {
+	font-family: "Arial", "Helvetica", "sans-serif";
+	background-color: #006699;
+	font-size: 10pt;
+	text-align: center;
+	font-style: normal;
+	font-weight: normal;
+	color: #FFFFFF;
+	
+}
+.tablehead {
+	font-family: "Arial", "Helvetica", "sans-serif";
+	background-color: #006699;
+	font-size: 12px;
+	text-align: center;
+	font-style: normal;
+	font-weight: bold;
+	color: #FFFFFF;
+	}
+	.cs55text {  font-family: "細明體", "新細明體", "Courier New"; color: #000099; font-size: 14px}
+.txtgray2 {		/* editcrewinfo.jsp*/
+	font-size: 10pt;
+	line-height: 13.5pt;
+	color: #333333;
+	align: center;
+	font-family: "細明體", "新細明體", "Courier New";
+}
+.txtred {
+	font-size: 12px;
+	line-height: 13.5pt;
+	color: red;
+	font-family:  "Verdana";
+}

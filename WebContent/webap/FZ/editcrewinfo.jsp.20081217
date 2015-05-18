@@ -1,0 +1,210 @@
+<%@ page contentType="text/html; charset=big5" language="java"  %>
+<%@page import="fz.*,java.sql.*"%>
+<%
+response.setHeader("Cache-Control","no-cache");
+response.setDateHeader ("Expires", 0);
+String sGetUsr = (String) session.getAttribute("userid") ; //get user id if already login
+if (session.isNew() || sGetUsr == null) 
+{		//check user session start first or not login
+ %>
+ <jsp:forward page="sendredirect.jsp" /> 
+<%
+} 
+
+String userid =(String) session.getAttribute("userid") ; 
+/*String occu = (String) session.getAttribute("occu") ;
+String base = (String) session.getAttribute("base") ;
+*/
+Connection conn = null;
+Driver dbDriver = null;
+
+Statement stmt = null;
+ResultSet myResultSet = null;
+boolean t = false;
+try{
+
+dbDriver = (Driver) Class.forName("weblogic.jdbc.pool.Driver").newInstance();
+conn = dbDriver.connect("jdbc:weblogic:pool:CAL.FZCP02", null);
+
+stmt = conn.createStatement();
+
+
+/*
+//get crew info
+chkUser ck = new chkUser();
+String rs = ck.findCrew(empno);
+if (rs.equals("1"))
+{
+	cname = ck.getName();
+	occu = ck.getOccu();
+	base = ck.getBase();
+}
+else
+{
+	empno = "Crew not found";
+	cname = "";
+    occu = "";
+	base = "";
+}
+
+*/
+String cname	= 	null;
+String occu		= 	null;
+String base		=	null;
+String box		=   null;
+String sess		=	null;
+String ename	=	null;
+String cabin	=	null;
+String fleet	=	null;
+String mphone	=	null;
+String hphone	=	null;
+//String address	=	null;
+String icq		=	null;
+String email	=	null;
+
+	
+//String sql = "SELECT EMPNO,BOX,SESS,NVL(NAME,'&nbsp;') NAME,ENAME,NVL(CABIN,'&nbsp;') CABIN,OCCU,NVL(FLEET,'&nbsp;') FLEET,BASE,EMAIL, MPHONE,HPHONE, ICQ FROM FZTCREW WHERE EMPNO = '" + userid +"'";
+
+String sql = " SELECT cr.EMPNO, cr.BOX, cr.SESS,NVL(cb.cNAME,'&nbsp;') NAME, cb.ename ENAME,NVL(cb.CABIN,'&nbsp;') CABIN, cr.OCCU,NVL(cr.FLEET,'&nbsp;') FLEET, cb.station BASE, cr.EMAIL, cr.MPHONE, cr.HPHONE, cr.ICQ FROM FZTCREW cr, egtcbas cb WHERE EMPNO = '" + userid +"' AND cr.empno = Trim(cb.empn) ";
+myResultSet = stmt.executeQuery(sql); 
+
+if(myResultSet != null){
+	while (myResultSet.next()){
+	
+		box		=	myResultSet	.getString("BOX");
+		sess	=	myResultSet	.getString("SESS");
+		ename	=	myResultSet	.getString("ENAME");
+		cabin	=	myResultSet	.getString("CABIN");
+		fleet	=	myResultSet	.getString("FLEET");
+		mphone	=	myResultSet	.getString("MPHONE");
+		hphone	=	myResultSet	.getString("HPHONE");
+		//address	=	myResultSet	.getString("ADDRESS");
+		icq		=	myResultSet	.getString("ICQ");	
+		cname	= 	myResultSet.getString("NAME");
+		occu	=	myResultSet.getString("OCCU");	
+		base	=	myResultSet.getString("BASE");
+		email	= 	myResultSet.getString("EMAIL");	
+	}
+
+}
+
+%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>組員資料及更改</title>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<link href="style.css" rel="stylesheet" type="text/css">
+<link href="style2.css" rel="stylesheet" type="text/css">
+<link href="kbd.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<p align="center" class="blue">Crew Information</p>
+<form name="form1" method="post" action="updcrewinfo.jsp">
+  <table width="79%" border="1" align="center" cellpadding="1" cellspacing="0" class="tableStyl1">
+    <tr > 
+      <td width="24%" class="sel3"> <div align="center">員工編號<br>
+      Employee No</div></td>
+      <td colspan="3" class="blue" align="center" ><%=userid %></td>
+    </tr>
+    <tr> 
+      <td  class="sel3"> <div align="center" >序號<br>
+      Serial No</div></td>
+      <td width="29%" class="blue" bgcolor="#E6FAFF"><div align="center"><%= box%></div></td>
+      <td width="19%" class="sel3">期別<br>        Session </td>
+      <td width="28%" class="blue" bgcolor="#E6FAFF"><div align="center"><%= sess%></div></td>
+    </tr>
+    <tr> 
+      <td class="sel3"> <div align="center">姓名<br>
+      Name </div></td>
+      <td colspan="3" class="blue"> <div align="center"><%=cname%></div></td>
+    </tr>
+    <tr> 
+      <td class="sel3"> <div align="center">英文姓名<br>
+      English Name</div></td>
+      <td colspan="3" class="blue" bgcolor="#E6FAFF"> <div align="center"><%= ename%></div></td>
+    </tr>
+    <tr> 
+      <td class="sel3"> <div align="center">艙等<br>
+      Cabin </div></td>
+      <td class="blue"> <div align="center"><%= cabin%></div></td>
+      <td class="sel3">職稱<br>      Occu </td>
+      <td class="blue"> <div align="center"><%= occu%></div></td>
+    </tr>
+    <tr> 
+      <td class="sel3"> <div align="center">機隊<br>
+      Fleet </div></td>
+      <td class="blue" bgcolor="#E6FAFF"> <div align="center"><%= fleet%></div></td>
+      <td class="sel3">HomeBase</td>
+      <td class="blue" bgcolor="#E6FAFF"> <div align="center"><%= base%></div></td>
+    </tr>
+    <tr> 
+      <td  class="sel3" align="center"> <div align="center">全員電子信箱<br>
+      Email</div></td>
+      <td colspan="3" class="blue"><div align="center"><%=email%> </div></td>
+    </tr>
+    <tr> 
+      <td height="15" class="sel3"> <div align="center">行動電話<br>
+          Mobile </div></td>
+      <td colspan="3"  bgcolor="#E6FAFF"> <div align="left"> 
+          <input name="tf_mphone" type="text" value="<%=mphone%>" size="25" maxlength="25" >
+          <span class="red">＊</span></div></td>
+    </tr>
+    <tr> 
+      <td height="15" class="sel3"> <div align="center">住家電話<br>
+      Phone </div></td>
+      <td colspan="3" ><div align="left">
+        <input name="tf_hphone" type="text" size="25" maxlength="25" value="<%=hphone%>"  >
+      <span class="red">＊</span></div></td>
+    </tr>
+    <tr> 
+      <td height="15" class="sel3"> 
+        <div align="center">即時通訊<br>
+        Instant Message </div>
+      </td>
+      <td colspan="3"  bgcolor="#E6FAFF">
+          <div align="left">
+            <input name="tf_icq" type="text" size="50" maxlength="50" value="<%=icq%>" >
+            <span class="red">＊(ICQ,YAHOO,MSN....)</span>
+          </div></td>
+    </tr>
+    <tr border=0> 
+      <td height="31" colspan="4" valign="middle"> <div align="center"> 
+          <input type="submit" name="Submit" value="Modified" class="kbd">&nbsp;&nbsp;&nbsp;
+          <input type="reset" name="Submit2" value="Undo" class="kbd">
+		  <input type="hidden" name="oMphone" value="<%=mphone%>">
+		  <input type="hidden" name="oHphone" value="<%=hphone%>">
+          <br>
+        </div></td>
+    </tr>
+  </table>
+  <p>
+  <table width="79%" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td align = "right"> <span class="red">『組員於班表資訊網內更改電話僅限換班使用，如需更改公務(任務異動、簡訊發送...等)連絡手機號碼，
+    請務必赴本處服務櫃檯申請更改。』</span>
+  </td>
+  </tr>
+  </table>
+</form>
+</body>
+</html>
+<%
+}
+catch (Exception e)
+{
+	  t = true;
+}
+finally
+{
+	try{if(myResultSet != null) myResultSet.close();}catch(SQLException e){}
+	try{if(stmt != null) stmt.close();}catch(SQLException e){}
+	try{if(conn != null) conn.close();}catch(SQLException e){}
+}
+if(t)
+{
+%>
+      <jsp:forward page="err.jsp" /> 
+<%
+}
+%>

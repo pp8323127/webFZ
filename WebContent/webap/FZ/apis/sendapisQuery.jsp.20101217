@@ -1,0 +1,96 @@
+<%@ page contentType="text/html; charset=big5" language="java" import="java.sql.*" errorPage="" %>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>Send APIS Query</title>
+<link href="style.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+.style1 {font-size: 18px}
+-->
+</style>
+</head>
+<script language="Javascript" src="calendar/FieldTools.js"></script>
+<SCRIPT LANGUAGE="JavaScript">
+function load()
+{	
+	/*
+    today=new Date();
+	var y, m, d;
+	y = today.getFullYear() ;
+	m = today.getMonth()+1;
+	d = today.getDate(); 
+		 
+	strDate = Date.parse(y+"/"+m+"/"+d);
+    strDate = parseInt(strDate, 10);
+    strDate = strDate - 1*(24*60*60*1000);	
+    strDate = new Date(strDate);
+	*/
+
+	strDate = new Date();
+	syy = strDate.getFullYear() ;
+	smm = strDate.getMonth()+1;
+	sdd = strDate.getDate();	
+
+	if (smm < 10) 
+	{
+	   smm = '0'+smm;
+	}
+
+	if(sdd<10)
+	{
+	   sdd = '0'+sdd;
+	}
+
+	document.form1.fltdt.value=syy+'/'+smm+'/'+sdd;
+ }
+
+function chk()
+{
+	var fltdt =document.form1.fltdt.value;
+	var fltno =document.form1.fltno.value;
+	var dpt =document.form1.dpt.value;
+
+	if (fltdt.length == 0) 
+	{// blank
+		alert(" Please input flight date!!");	
+		document.form1.fltdt.focus();
+		return false;
+	}
+
+	
+	if (fltno.length == 0) 
+	{// blank
+		alert(" Please input flight No!!");	
+		document.form1.fltno.focus();
+		return false;
+	}
+
+	if (dpt.length == 0) 
+	{// blank
+		alert(" Please input Dpt!!");	
+		document.form1.dpt.focus();
+		return false;
+	}
+
+
+    document.form1.Submit.disabled=1;
+	return true;
+}
+
+</SCRIPT>
+
+<body onLoad="load();">
+<form method="post" name="form1" target="mainFrame" class="txtblue" action="presendapisList.jsp" onsubmit = "return chk();" >
+Flight Date(Actual Local)
+<input name="fltdt" id="fltdt" type="text" size="10" maxlength="10"> 
+<IMG onclick="Calendar('calendar/calendar.htm',fltdt,event.screenX,event.screenY);" src="calendar/calendar.gif" align="absMiddle">
+Flight No.
+<input name="fltno" id="fltno" type="text" size="5" maxlength="5" onkeyup="javascript:this.value=this.value.toUpperCase();"> 
+Dpt <input name="dpt" id="dpt" type="text" size="3" maxlength="3"  onkeyup="javascript:this.value=this.value.toUpperCase();">
+<input name="Submit" type="submit" class="button6" value="Query" > 
+&nbsp;&nbsp;<input name="btn" type="button" class="button6" value="Reset" OnClick="document.form1.Submit.disabled=0;" >
+&nbsp;&nbsp;<a href="saveFile.jsp?filename=Web_APISManual_Send_Guide.doc">操作手冊下載</a>
+</form>
+</body>
+</html>

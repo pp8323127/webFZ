@@ -1,0 +1,464 @@
+<script language="">
+<!--
+var dateFormat ="YYYY-MM-DD";
+var validStart;// yyyy-mm-dd
+var validEnd;// yyyy-mm-dd
+var weekly="";//1234567
+var monthIndex;
+var yearIndex;
+var sYear;
+var sMonth;
+var sDate;
+var eYear;
+var eMonth;
+var eDate;
+function init(){
+	initDrawTwoCalendar();
+}
+
+
+-->
+</script>
+<html>
+<style>
+<!--
+.font1 {font:12px;}
+.sdate:hover {background-color:#87cefa}
+.nondate {background-color:#ff0000;}
+-->
+.font1 {        
+        text-decoration:underline;
+	color:#000099;
+	font: normal 12px/normal "Arial", "Helvetica", "sans-serif";
+}
+.sdate {        
+        text-decoration:underline;
+	color:#000099;
+	font: normal 12px/normal "Arial", "Helvetica", "sans-serif";
+}
+.nondate {        
+        text-decoration:underline;
+	color:#000099;
+	font: normal 12px/normal "Arial", "Helvetica", "sans-serif";
+}
+</style>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>Dynasty Package</title>
+<head>
+<body onload="init()">
+<table border="0" cellspacing="1" >
+<tr>
+	<td valign="top">
+		<table id="calLeft"  cellpadding=1 cellspacing=1  border=1 bordercolor=#ffe4b5 bgcolor=#fffaf0>
+			
+			<tr class="font1">
+				<td bgcolor="#afeeee"><span id="preM" onclick="preTwoMonth()" style="cursor:hand;background-color:#afeeee" onmouseover="this.style.backgroundColor='#4169e1'" onmouseout="this.style.backgroundColor='#afeeee'"><<<</span></td>
+				<td colspan="6" align="center"><span id="calLeftTitle">2001/11</span></td>
+			<tr>
+			<tr class="font1" bgcolor="#ffd2ef" align="center">
+				<td><font color="red">S</font></td>
+				<td>M</td>
+				<td>T</td>
+				<td>W</td>
+				<td>T</td>
+				<td>F</td>
+				<td>S</td>
+			</tr>
+		</table>
+	</td>
+	<td width="5">&nbsp;</td>
+	<td valign="top">
+		<table id="calRight" cellpadding=1 cellspacing=1  border=1 bordercolor=#ffe4b5 bgcolor=#fffaf0>
+			<tr class="font1">
+				<td colspan="6" align="center"><span id="calRightTitle">2001/12</span></td>
+				<td bgcolor="#afeeee"><span id="nextM" onclick="nextTwoMonth()" style="cursor:hand;background-color:#afeeee" onmouseover="this.style.backgroundColor='#4169e1'" onmouseout="this.style.background='#afeeee'">>>></span></td>
+			<tr>
+			<tr class="font1" bgcolor="#ffd2ef" align="center">
+				<td><font color="red">S</font></td>
+				<td>M</td>
+				<td>T</td>
+				<td>W</td>
+				<td>T</td>
+				<td>F</td>
+				<td>S</td>
+			</tr>
+		</table>
+	</td>
+
+</tr>
+</table>
+</body>
+</html>
+<script language=javascript>
+<!-- 
+
+Months = new Array(12);
+Months[0] = "1";
+Months[1] = "2";
+Months[2] = "3";
+Months[3] = "4";
+Months[4] = "5";
+Months[5] = "6";
+Months[6] = "7";
+Months[7] = "8";
+Months[8] = "9";
+Months[9] = "10";
+Months[10] = "11";
+Months[11] = "12";
+Monthe = new Array(12);
+Monthe[0] = "JAN";
+Monthe[1] = "FEB";
+Monthe[2] = "MAR";
+Monthe[3] = "APR";
+Monthe[4] = "MAY";
+Monthe[5] = "JUN";
+Monthe[6] = "JUL";
+Monthe[7] = "AUG";
+Monthe[8] = "SEP";
+Monthe[9] = "OCT";
+Monthe[10] = "NOV";
+Monthe[11] = "DEC";
+
+
+function NumLeapYears(StartYear, EndYear)
+{
+	var LeapYears, i;
+	if (EndYear >= StartYear){
+		for(LeapYears = 0; StartYear <= EndYear; StartYear++)
+			if (IsLeapYear(StartYear)) LeapYears++;
+	}else{
+		for(LeapYears = 0; EndYear <= StartYear; EndYear++)
+			if (IsLeapYear(EndYear)) LeapYears++;
+	}
+	return LeapYears;
+}
+
+function IsLeapYear(Year) 
+{
+	if(Math.round(Year/4) == Year/4){
+		if(Math.round(Year/100) == Year/100){
+			if(Math.round(Year/400) == Year/400)
+				return true;
+			else 
+				return false;
+		}else 
+			return true;
+	}
+	return false;
+}
+function FindNewYearStartingDay(Year)
+{
+	var LeapYears, Years, Day;
+	
+	LeapYears = NumLeapYears(1995, Year); 
+	
+	if (Year >=1995)
+		Years = (Year -1995)+LeapYears;
+	else 
+		Years = (Year -1995)-LeapYears; 
+	
+	if (Year >=1995)
+		Day = Math.round(((Years/7 - Math.floor(Years/7))*7)+.1);
+	else 
+		Day = Math.round(((Years/7 - Math.ceil(Years/7))*7)-.1);
+	
+	if (Year >=1995){ 
+		if(IsLeapYear(Year)) Day--;
+	}else 
+		Day += 7;
+	if(Day < 0) Day = 6;
+	if(Day > 6) Day = 0;
+	return Day;
+}
+
+function FindNumDaysInMonth(Year, Month)
+{
+	if(Month == 1){
+		if(IsLeapYear(Year)) 
+			return 29;
+		else 
+			return 28;
+	}else{ 
+		if(Month >6) Month++;
+		if(Month/2 == Math.round(Month/2)) return 31;
+	}
+	return 30; 
+}
+
+function FindMonthStartDay(NewYearDay, Year, Month)
+{
+	var MonthStartDay;
+	AddArray = new Array(12);
+	AddArray[0]=0;AddArray[1]=3;AddArray[2]=3;AddArray[3]=6;
+	AddArray[4]=1;AddArray[5]=4;AddArray[6]=6;AddArray[7]=2;
+	AddArray[8]=5;AddArray[9]=0;AddArray[10]=3;AddArray[11]=5;
+	MonthStartDay = NewYearDay + AddArray[Month];
+	if(IsLeapYear(Year) && (Month ) > 1) MonthStartDay ++;
+	
+	if (MonthStartDay > 6) MonthStartDay -= 7;
+	return MonthStartDay; 
+}
+
+function DrawCalendar(year , month , calObj){
+
+	var cL = calObj;//document.all.calLeft;
+	var monthTtlDays = FindNumDaysInMonth(year,month);
+	var index=0;
+	
+	var monthFirstDay = FindMonthStartDay(FindNewYearStartingDay(year),year,month);
+
+	for(var i = 1 ; i <= 5 ; i++){
+		var iRow = cL.insertRow();
+		if( i ==1){
+			for(var j = 0 ; j <= 6 ; j++){
+				if(j < monthFirstDay){
+					
+					var iCell=iRow.insertCell();
+					//iCell.innerHTML=" ";
+				}else{
+					index++;
+					var iCell=iRow.insertCell();
+					if(weeklyExist(j))
+					 	iCell.innerHTML="<a class=\"sdate\" href=\"javascript:returnCalendar(" + year + "," + month + "," + index + ")\">" + index +"</a>" ;
+					else
+						iCell.innerHTML="<U class=\"nondate\">" + index +"</U>" ;
+				}
+			
+			}
+		}else if(i==5){
+			for(var j = 0 ; j<=6 ; j++){
+				index++;
+				if(index > monthTtlDays){
+
+					var iCell=iRow.insertCell();
+					//iCell.innerHTML="&nbsp;";
+				}else{
+
+					var iCell=iRow.insertCell();
+					if(weeklyExist(j))
+					 	iCell.innerHTML="<a class=\"sdate\" href=\"javascript:returnCalendar(" + year + "," + month + "," + index + ")\">" + index +"</a>" ;
+					else
+						iCell.innerHTML="<U class=\"nondate\" >" + index +"</U>" ;
+				}
+			}
+		
+		
+		}else{
+		
+			for(var j = 0 ; j<=6 ; j++){
+				index++;
+
+				var iCell=iRow.insertCell();
+				if(weeklyExist(j))
+				 	iCell.innerHTML="<a class=\"sdate\" href=\"javascript:returnCalendar(" + year + "," + month + "," + index + ")\">" + index +"</a>" ;
+				else
+					iCell.innerHTML="<U class=\"nondate\">" + index +"</U>" ;
+			}
+	
+		}
+	}
+	if(index < monthTtlDays){
+		var iRow = cL.insertRow();
+		for(var j = 0 ; j<=6 ; j++){
+				index++;
+				if(index > monthTtlDays){
+
+					var iCell=iRow.insertCell();
+					//iCell.innerHTML="&nbsp;";
+				}else{
+
+					var iCell=iRow.insertCell();
+					if(weeklyExist(j))
+					 	iCell.innerHTML="<a class=\"sdate\" href=\"javascript:returnCalendar(" + year + "," + month + "," + index + ")\">" + index +"</a>" ;
+					else
+						iCell.innerHTML="<U class=\"nondate\">" + index +"</U>" ;
+				}
+			}
+		
+	
+	
+	}
+	
+
+}
+
+
+function initDrawTwoCalendar(){
+	var today = new Date();
+	year = today.getYear();
+	month = today.getMonth();
+	monthIndex = month;
+	yearIndex=year;
+	//draw left calendar
+	DrawCalendar(year , month , document.all.calLeft);
+	document.all.calLeftTitle.innerText= year + "/" + (month + 1) + ""; 
+	//draw right calendar 
+	if(month ==11){
+		DrawCalendar(year + 1 , 0 , document.all.calRight);
+		document.all.calRightTitle.innerText= (year+1) + "/" + 1 + "";
+	//	monthIndex=0;
+	}else{
+		DrawCalendar(year , month + 1 , document.all.calRight);
+		document.all.calRightTitle.innerText= year + "/" + (month + 2) + "";
+		//monthIndex++;
+	}
+		
+}
+
+
+
+function weeklyExist(w){
+
+	if(w==0) w=7;
+	if(weekly.length ==0) return true;
+	if(weekly.indexOf(w) != -1) return true;
+	return false;
+}
+
+function nextTwoMonth(){
+	clearCalendar();
+	
+	//draw left calendar
+	monthIndex += 1;
+	if(monthIndex >11){
+		monthIndex = 0;
+		yearIndex++;
+		DrawCalendar(yearIndex , 0  , document.all.calLeft);
+		document.all.calLeftTitle.innerText= yearIndex + "/ 1";
+		 
+	}
+	else{
+		
+		DrawCalendar(yearIndex , monthIndex  , document.all.calLeft);
+		document.all.calLeftTitle.innerText= yearIndex + "/" + (monthIndex + 1) + "";
+	}
+	
+	//draw right calendar
+	monthIndex += 1;
+	if(monthIndex >11){
+		monthIndex = 0;
+		yearIndex++;
+		DrawCalendar(yearIndex , 0  , document.all.calRight);
+		document.all.calRightTitle.innerText= yearIndex + "/ 1";
+		
+	}
+	else{
+		
+		DrawCalendar(yearIndex , monthIndex  , document.all.calRight);
+		document.all.calRightTitle.innerText= yearIndex + "/" + (monthIndex + 1) + "";
+	}
+	
+
+}
+
+function preTwoMonth(){
+	clearCalendar();
+	
+	//draw right calendar
+	monthIndex -= 1;
+	if(monthIndex < 0){
+		monthIndex = 11;
+		yearIndex--;
+		DrawCalendar(yearIndex , 11  , document.all.calRight);
+		document.all.calRightTitle.innerText= yearIndex + "/12";
+		
+	}
+	else{
+		
+		DrawCalendar(yearIndex , monthIndex  , document.all.calRight);
+		document.all.calRightTitle.innerText= yearIndex + "/" + (monthIndex + 1) + "";
+	}
+
+	//draw left calendar
+	monthIndex -= 1;
+	if(monthIndex < 0){
+		monthIndex = 11;
+		yearIndex--;
+		DrawCalendar(yearIndex , 11  , document.all.calLeft);
+		document.all.calLeftTitle.innerText= yearIndex + "/ 12";
+		
+	}
+	else{
+		
+		DrawCalendar(yearIndex , monthIndex  , document.all.calLeft);
+		document.all.calLeftTitle.innerText= yearIndex + "/" + (monthIndex + 1) + "";
+	}
+	
+	
+	
+	
+	
+	
+}
+
+function clearCalendar(){
+	//var leftLength = document.all.calLeft.rows.length;
+	//var rightLength = document.all.calRight.rows.length;
+	
+	for(var i = 3 ;  document.all.calLeft.rows.length>3; ){
+		document.all.calLeft.deleteRow(i);
+	}
+	for(var i = 3 ; document.all.calRight.rows.length>3 ;){
+		document.all.calRight.deleteRow(i);
+	}
+	
+	
+	
+}
+
+function returnCalendar(year,month,day){
+ 
+    month++;
+	if(month<10)
+		month = "0"+month;
+	if(day<10)
+		day = "0"+day;
+	//  alert(year+"="+month+"="+day);
+    //eval('opener.document.test.'+window.name+'.value='+year+month+day);
+	setDate2(window.name,year,month,day);
+	window.close();
+
+
+}
+
+ //////////////////////////////////////////////////////////////////
+function setDate2(names,tempyear,tempmonth,tempday){
+/*
+	if(names=="validfrm"){
+    	opener.document.xform.validfrm.value=+tempyear+'-'+tempmonth+'-'+tempday;
+	} else if(names=="validto"){
+   		opener.document.xform.validto.value=+tempyear+'-'+tempmonth+'-'+tempday;
+	} else if(names=="issuefrm"){
+   		opener.document.xform.issuefrm.value=+tempyear+'-'+tempmonth+'-'+tempday;
+	} else if(names=="issueto"){
+   		opener.document.xform.issueto.value=+tempyear+'-'+tempmonth+'-'+tempday;
+	}*/
+	eval("opener.document.form1." + names + ".value=+tempyear+'-'+tempmonth+'-'+tempday;");
+ 	window.close();
+}
+
+
+
+
+
+
+function decimalFormat(n){
+	
+	if(n<10){
+		return "0" + n;
+	}
+	return n;
+
+}
+
+function replace(t){
+	
+	while(t.indexOf("_")!= -1){
+		t = t.substring(0 , t.indexOf("_")) +  "." +  t.substring(t.indexOf("_") + 1 ,t.length );
+	
+	}
+	return t;
+}
+-->
+</script>

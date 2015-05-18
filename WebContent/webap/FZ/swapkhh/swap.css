@@ -1,0 +1,49 @@
+/* CSS Document */
+
+body{
+	font-family:Courier New,Verdana;
+	font-size:10pt;
+}
+
+.selected  {	
+	background-color: #60A3BF;
+	color:#FFFFFF;
+	font-weight: bold;
+
+}
+.left{
+	text-align:left;
+	padding-left:1em;
+}
+table  {
+	border:1pt solid #999999;
+	text-align:center;
+}
+td{	
+	border:1pt solid #999999;
+}
+th{
+	text-align:left;padding:2pt;
+}
+.w{
+	background-color:#FFFFFF;
+}
+
+.cen{
+	text-align:justify;
+	padding:2pt
+}
+
+.s1 {
+	background-color:#663399;
+	color:#FFFFFF;padding:2pt;
+}
+.r{
+	background-color:#FFCCFF;
+}
+.blu{
+	background-color:#8AC0FD;
+}
+.pinkBK{
+	color:#006699;background-color:#FFCCFF;
+}

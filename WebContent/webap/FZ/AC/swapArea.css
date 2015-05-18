@@ -1,0 +1,97 @@
+body,form,input,select{
+	font-family:Verdana;
+	font-size:10pt;	
+}
+div{
+	display:inline;
+}
+td{
+	padding:0.2em;
+}
+th{
+	text-align:center;
+	font-weight:bold;
+	background-color:#838F99;
+	color:#FFFFFF;
+	padding:0.5em;
+}
+.center{
+	text-align:center;
+	
+}
+.right{
+	text-align:right;
+	padding-right:0.2em;	
+}
+.left{
+	text-align:left;
+	padding-left:0.2em;
+}
+
+
+.gridRowEven {
+   background-color: #BCD1DA; 
+}
+
+.gridRowOdd{
+	background-color: #FFFFFF;
+}
+.lightPurpleBG{
+	
+	background-color:#DDD3EB;
+}
+.darkPurpleBG{
+	background-color:#522978; 
+}
+.red{
+color:#FF0000;
+}
+.blue{
+color:#0000FF;
+}
+
+.errStyle{
+		background-color:#99FFFF;
+		color:#FF0000;
+		padding:5pt;
+		text-align:center;
+}
+
+a{
+	color:#0000FF;
+	font-weight:bold;
+	word-spacing:1em;
+}
+a:link ,a:visited{
+	text-decoration:none;
+	font-weight:bold;
+	word-spacing:1em;
+
+}
+a:hover{
+	text-decoration:underline;
+	font-weight:bold;
+	word-spacing:1em;
+}
+a:active{
+	text-decoration:none;
+	font-weight:bold;
+	word-spacing:1em;
+}
+
+.hiddenStatus{
+	display:none;
+}
+.showStatus{
+	display:inline;
+	background-color:#FF0000;
+	font-weight:bold;
+	color:#FFFFFF;
+	width:100px;
+	text-align:center;
+	padding:2pt;
+	top: 7px;
+	right: 10px;
+	position: absolute;
+}
+

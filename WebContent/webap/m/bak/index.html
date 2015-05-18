@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="jQueryMob/jquery.mobile.custom.structure.css" />	
+<link rel="stylesheet" href="jQueryMob/jquery.mobile.custom.theme.css" />	
+<script src="jQueryMob/jquery.js" language="javascript"></script>	
+<script src="jQueryMob/jquery.mobile.custom.js" language="javascript"></script>	
+</head>
+<body>
+
+<!--login page-->
+<div id="Home" data-role="page" data-theme="a">
+  <div data-role="header" data-position="fixed">
+    <h3>iCrew</h3>
+  </div>
+  <div role="main" class="ui-content">
+    <div class="ui-field-contain" id="labId">
+      <label for="inputId" class>EmployID</label>
+      <input type="text" name id="inputId">
+    </div>
+    <div class="ui-field-contain" id="labPwd">
+      <label for="inputPwd">Password</label>
+      <input type="password" name id="inputPwd" value="****" data-mini="false">
+    </div>
+    <a class="ui-btn" id="btnLogin" data-transition="slide" href="#pageHome">Login</a>
+    <!--<label>ID/Password Error </label>-->
+	<div data-role="footer" data-position="fixed">
+    <h3>Footer</h3>
+  </div>
+  </div>
+</div>
+<!--login Successful-->
+<div data-role="page" id="pageHome">
+  <div data-role="panel" id="myPanel">
+    <h2>Panel Header</h2>
+    <p>Function List.</p>
+    <a class="ui-btn" href="#pageSwapCal">換班飛時試算</a>
+    <a class="ui-btn" href="#pageSwap">換班申請</a>
+    <a class="ui-btn" href="#pagePick">選班申請</a>
+  </div>
+  <div data-role="header">
+    <h1>Page Header</h1>
+    <a href="#myPanel" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-btn-left">list</a>
+  </div>
+  <div data-role="main" class="ui-content">
+    <p>Click on the button below to open the Panel.</p>
+    <div data-role="navbar">
+        <ul>
+          <li>
+            <a href="#pageSwapCal">換班飛時試算</a>
+          </li>
+          <li>
+            <a href="#pageSwap">換班</a>
+          </li>
+          <li>
+            <a href="#pagePick">選班</a>
+          </li>
+          <li>
+            <a href="#">4</a>
+          </li>
+          <li>
+            <a href="#">5</a>
+          </li>
+          <li>
+            <a href="#">6</a>
+          </li>
+        </ul>
+      </div>
+  </div>
+  <div data-role="footer">
+    <h1>Page Footer</h1>
+  </div>
+</div>
+  
+<!--換班試算-->
+<div id="pageSwapCal" data-role="page" data-theme="b">
+  <div role="main" class="ui-content">
+    <a class="ui-btn" id="btnBack" data-transition="slide" href="#pageHome">back</a>
+  </div>
+</div>
+<!--換班-->
+<div id="pageSwap" data-role="page" data-theme="b">
+  <div role="main" class="ui-content">
+    <a class="ui-btn" id="btnBack" data-transition="slide" href="#pageHome">back</a>
+  </div>
+</div>
+<!--選班-->
+<div id="pagePick" data-role="page" data-theme="a">
+  <div role="main" class="ui-content">
+    <a class="ui-btn" id="btnBack" data-transition="slide" href="#pageHome">back</a>
+  </div>
+</div>
+
+</body>
+</html>

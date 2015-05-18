@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>Daily</title>
+<link href="../../menu.css" rel="stylesheet" type="text/css">
+</head>
+<script src="../../js/showDate.js" language="javascript" type="text/javascript"></script>
+
+<body onLoad="javascript:document.form1.mm.focus();showYM('form1','yy','mm')">
+<form name="form1" method="post" action="crewShowsche.jsp" target="mainFrame">
+<select name="yy">
+<script language="javascript" type="text/javascript" src="/webfz/FZ/js/date.js"></script>
+	<script language="javascript" type="text/javascript">
+		var nowYear=parseInt(formatDate(new Date(),"yyyy"),10);
+		
+		for(var i=2004;i<=nowYear+1;i++){
+			var defaultSelect = "";
+			if(i==nowYear){
+				defaultSelect=" selected";
+			}
+			document.write("<option value='"+i+"'"+defaultSelect+">"+i+"</option>");
+		}
+	</script>
+</select>
+<select name="mm" >
+  <option value="01">01</option>
+  <option value="02">02</option>
+  <option value="03">03</option>
+  <option value="04">04</option>
+  <option value="05">05</option>
+  <option value="06">06</option>
+  <option value="07">07</option>
+  <option value="08">08</option>
+  <option value="09">09</option>
+  <option value="10">10</option>
+  <option value="11">11</option>
+  <option value="12">12</option>
+</select>
+<select name="base">
+	<option value="TPE" selected>TPE</option>
+	<option value="KHH">KHH</option>
+	<option value="BKK">BKK</option>
+	<option value="NRT">NRT</option>
+	<option value="KIX">KIX</option>
+	<option value="SGN">SGN</option>
+	<option value="SIN">SIN</option>
+	<option value="DEL">DEL</option>
+</select>
+<span class="txtblue">Rank</span>
+<input name="rank" type="text" id="rank" size="5" maxlength="5" onkeyup="javascript:this.value=this.value.toUpperCase();">
+<span class="txtblue">Special skill</span>
+<select name="sk">
+	<option value="X" selected>X</option>
+	<option value="CIA">CIA</option>
+	<option value="IND">IND</option>
+	<option value="ITA">ITA</option>
+	<option value="JPN">JPN</option>
+	<option value="KOR">KOR</option>
+	<option value="retire">屆退</option>	
+</select>
+<input name="Submit" type="submit" value="Query"> 
+<span class="txtxred">*AOCIPROD</span>
+</form>
+</body>
+</html>

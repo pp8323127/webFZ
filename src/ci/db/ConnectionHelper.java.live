@@ -1,0 +1,101 @@
+package ci.db;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.sql.Connection;
+import java.sql.*;
+import java.util.Properties;
+
+public class ConnectionHelper 
+{
+	private Properties prop = null;
+	public final static String iswebap = "";
+	public final static String connURL= "";
+	public final static String connID = "";
+	public final static String connPW = "";
+	public final static String driver = "";
+	public final static String path = "C:\\CIITemp\\";
+	public final static String file = "Connection.properties";
+//	public final static String file = "Connection_orp3.properties";
+	private final static String path_web = "/apsource/csap/projfz/webap/";
+	public final static String file_web = "Connection_web.properties";
+	
+	
+	public static void main(String[] args)
+    {
+	    ConnectionHelper ch = new ConnectionHelper();
+	    ch.getConnection();
+        System.out.println("Done");
+    }
+
+	public synchronized void initProperties() 
+	{
+		File file1 = new File(path+file);
+		File file = null;
+		if (file1.isFile()) 
+		{
+			file = file1;
+		} 
+		else 
+		{
+			file1 = new File(path_web+file_web);
+		    file = file1;
+		}
+
+		FileInputStream inputStream = null;
+		try 
+		{
+		    prop = new Properties();
+			inputStream = new FileInputStream(file);
+			prop.load(inputStream);			
+		} 
+		catch (Exception e) 
+		{
+//			e.printStackTrace();
+			System.out.println(e.toString());
+		} 
+		finally 
+		{
+			if (inputStream != null) 
+			{
+				try 
+				{
+					inputStream.close();
+				} 
+				catch (Exception e) 
+				{
+//					e.printStackTrace();
+					System.out.println(e.toString());
+				}
+			}
+		}
+	}
+
+	public Connection getConnection() 
+	{
+		Connection conn = null;
+
+		try 
+		{          
+			initProperties();
+			if ("true".equalsIgnoreCase(prop.getProperty("iswebap"))) 
+			{
+				// TODO WEB LOGIC CONTEXT
+	            Driver dbDriver = (Driver) Class.forName(prop.getProperty("driver")).newInstance();
+	            conn = dbDriver.connect(prop.getProperty("connURL"), null);
+			} 
+			else 
+			{
+			    //connect to ORT1
+				java.lang.Class.forName(prop.getProperty("driver"));
+				conn = DriverManager.getConnection(prop.getProperty("connURL"),prop.getProperty("connID"), prop.getProperty("connPW"));
+			}
+		} 
+		catch (Exception e) 
+		{
+//			e.printStackTrace();
+			System.out.println(e.toString());
+		}
+		return conn;
+	}
+}

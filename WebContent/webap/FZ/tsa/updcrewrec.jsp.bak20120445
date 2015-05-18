@@ -1,0 +1,109 @@
+<%
+
+String sGetUsr = (String) session.getAttribute("cs55.usr") ; //get user id if already login
+response.setHeader("Cache-Control","no-cache");
+response.setDateHeader ("Expires", 0);
+
+if (session.isNew()) 
+{		//check user session start first
+  %> <jsp:forward page="sendredirect.jsp" /> <%
+} 
+if (sGetUsr == null) 
+{		//check if not login
+  %> <jsp:forward page="sendredirect.jsp" /> <%
+} 
+%>
+<%@page contentType="text/html; charset=big5" language="java" %>
+<%@page import="java.sql.*"%>
+<html>
+<head>
+<title>
+Update Crew Record
+</title>
+<meta http-equiv="pragma" content="no-cache">
+</head>
+
+<body background="clearday.jpg">
+<h2>Update Crew Record</h2>
+<%
+   String mywhere = (String)session.getValue("MM_Where");
+   String myquery = (String)session.getAttribute("MM_crew_detail");
+   String ca = request.getParameter("ca");
+   String fo = request.getParameter("fo");
+   String fe = request.getParameter("fe");
+   String inst = request.getParameter("inst");
+   String night = request.getParameter("night");
+   String dutyip = request.getParameter("dutyip");
+   String dutysf = request.getParameter("dutysf");
+   String dutyca = request.getParameter("dutyca");
+   String dutyfo = request.getParameter("dutyfo");
+   String dutyife = request.getParameter("dutyife");
+   String dutyfe = request.getParameter("dutyfe");
+   String today = request.getParameter("today");
+   String tonit = request.getParameter("tonit");
+   String ldday = request.getParameter("ldday");
+   String ldnit = request.getParameter("ldnit");
+   String pic = request.getParameter("pic");
+   String pic2 = request.getParameter("pic2");
+   String updsql = "Update DFTCREC set " + 
+                   "ca = " + ca +
+                   ", fo = " + fo + 
+                   ", fe = " + fe +
+                   ", inst = " + inst + 
+                   ", night = " + night +
+                   ", dutyip = " + dutyip +
+                   ", dutysf = " + dutysf +
+                   ", dutyca = " + dutyca +
+                   ", dutyfo = " + dutyfo +
+                   ", dutyife = " + dutyife +
+                   ", dutyfe = " + dutyfe +
+                   ", today = " + today +
+                   ", tonit = " + tonit + 
+                   ", ldday = " + ldday + 
+                   ", ldnit = " + ldnit +
+                   ", pic = " + pic +
+                   ", pic2 = " + pic2 +
+                   mywhere;
+   Connection myConn = null;
+   Statement stmt = null;
+   ci.db.ConnDB cn = new ci.db.ConnDB();
+   Driver dbDriver = null;
+
+try
+{
+	cn.setDFUserCP();
+	dbDriver = (Driver) Class.forName(cn.getDriver()).newInstance();
+	myConn = dbDriver.connect(cn.getConnURL(), null);
+   
+   stmt = myConn.createStatement();  
+   
+   int rowsAffected = stmt.executeUpdate(updsql);
+   if (rowsAffected == 1)
+   {
+%>
+      <h1>Successful Modification of Crew Record</h1>
+      <a href="crewrecdetail.jsp?empno=<%=(String)session.getValue("MM_empno") +myquery %>">See Crew Records</a>
+      <br>
+      <%  
+   }    
+   else
+   {
+%>
+<h1>Sorry, modification has failed.</h1> 
+      <a href="crewrecdetail.jsp?empno=<%=(String)session.getValue("MM_empno") +myquery %>">Go back to Crew Records</a>     
+<%
+   }
+   }
+catch (Exception e)
+{
+	  out.println(e.toString());
+}
+finally
+{
+	try{if(stmt != null) stmt.close();}catch(SQLException e){}
+	try{if(myConn != null) myConn.close();}catch(SQLException e){}
+}
+%>
+
+</body>
+</html>

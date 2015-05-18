@@ -1,0 +1,184 @@
+<%@ page contentType="text/html; charset=big5" language="java"  %>
+<%@ page import="java.sql.*,java.util.*,ci.db.*,tool.ReplaceAll,java.util.ArrayList" %>
+<%
+String userid = (String) session.getAttribute("userid") ; //get user id if already login
+
+if (userid == null) {		
+	response.sendRedirect("../logout.jsp");
+}
+
+			
+String sernno	   = request.getParameter("sernno");
+String fltno	   = request.getParameter("fltno");
+String fltd        = request.getParameter("fltd");
+String sysdate     = request.getParameter("sysdate");
+String fdate_y	   = request.getParameter("fdate_y");
+String fdate_m     = request.getParameter("fdate_m");
+String fdate_d	   = request.getParameter("fdate_d");
+String allFltno    = request.getParameter("allFltno");
+String purserName  = request.getParameter("purserName");
+String inspector   = request.getParameter("inspector");
+//out.print(fdate_y+"/"+fdate_m+"/"+fdate_d+"/"+allFltno+"/"+purserName+"/"+inspector+"<br>");
+
+String fdate = null;
+
+String rmNo = null;
+String rmDsc = null;
+
+String reqItemno = null;
+String reqSubject = null;
+
+int count=1;
+
+Connection conn = null;
+Statement stmt = null;
+Statement stmtRm = null;
+
+String sql = null;
+ResultSet rs = null;
+ResultSet myResultSetRm = null;
+
+ConnDB cn = new ConnDB();
+Driver dbDriver = null;
+
+try
+{
+cn.setORP3EGUserCP();
+dbDriver = (Driver) Class.forName(cn.getDriver()).newInstance();
+conn = dbDriver.connect(cn.getConnURL(), null);
+stmt   = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>Insert Self Inspection List Report</title>
+<link href="../style.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+.style2 {color: #000000}
+.style5 {line-height: 13.5pt; font-family: "Verdana"; font-size: 12px;}
+.style7 {color: #FF0000; }
+.style8 {color: #333333}
+-->
+</style>
+</head>
+
+<body>
+
+<br>
+<form name="form1" method="post" action="upSILReportSave.jsp" onSubmit="">
+<table width="95%" border="0" align="center" cellpadding="0" cellspacing="0">
+ 	<tr>
+		<td width="20%">&nbsp;</td>
+		<td width="60%"><div align="center" class="txttitletop"><span class="style14"><strong>Self Inspection List Report </strong></div></td>
+ 		<td width="20%">&nbsp;</td>
+  	</tr>
+</table>
+
+<table width="95%"  border="1" align="center" cellpadding="1" cellspacing="1" class="fortable">        
+	<tr class="txtblue">
+	  	<td width="25%"><div align="left" class="style7">&nbsp;<span class="style5"><span class="style2"><strong>Date</strong>:</span><%=fdate_y%><span class="style2"><strong>Y</strong></span>&nbsp;<%=fdate_m%>&nbsp;<span class="style2"><strong>M</strong></span><%=fdate_d%>&nbsp;<span class="style2"><strong>D</strong></span></span></div></td>
+    	<td width="25%" class="txtblue"><div align="left" class="style7">&nbsp;<span class="style2"><strong>Flt</strong>:</span><span class="style5"><%=allFltno%> </span>¡@</div></td>
+    	<td width="25%"><div align="left" class="style7">&nbsp;<span class="style8"><strong>CM</strong>:</span><span class="style5"><%=purserName%></span></div></td>
+    	<td width="25%"><div align="left" class="style7">&nbsp;<span class="style2"><strong>Inspector</strong>:</span><span class="style5"><%=inspector%></span></div></td>
+  	</tr> 
+</table>
+<table width="95%" border="1" align="center" cellpadding="1" cellspacing="1" class="fortable">
+  	<tr class="tablehead3">
+   	   <td width="4%" align="center" valign="middle">&nbsp;</td>
+   	   <td width="4%" align="center" valign="middle"><strong>No.</strong></td>
+   	   <td align="center" valign="middle"><strong>Issue</strong></td>
+       <td width="9%" align="center" valign="middle"><strong>No.
+   	   <br>Checked</strong></td>
+   	   <td width="9%" align="center" valign="middle"><strong>Correctly<br>Answer/<br>Perform</strong></td>
+       <td width="10%" align="center" valign="middle"><strong>Incorrectly<br>Answer/<br>Perform</strong></td>
+       <td width="11%" align="center" valign="middle"><strong>Crew</strong></td>
+       <td width="15%" align="center" valign="middle"><strong>Feedback</strong></td>		  
+  	   <td width="6%" align="center" valign="middle"><strong>ATtribute</strong></td>
+  	</tr>
+  	<%
+  	sql = "select ci.itemno as itemno, ci.subject as subject "+
+	      "from egtstcc cc, egtstci ci "+
+		  "where cc.sernno='"+sernno+"' and cc.itemno=ci.itemno "+
+		  "order by itemno ";
+    //out.print("sql="+sql+"<br>");		  
+  	rs = stmt.executeQuery(sql); 
+  
+  	if(rs != null)
+  	{
+  		while(rs.next())
+		{		
+			reqItemno = rs.getString("itemno");
+	  		reqSubject = rs.getString("subject");
+  	%>
+  	<tr>
+    	<td align="center" class="txtred" ><strong><%=count%></strong></td>
+    	<td align="center" class="txtblue style2" ><%=reqItemno%></td>
+    	<td align="left" class="txtblue style2" ><%=reqSubject%></td>
+    	<td align="center" ><input name="<%=reqItemno%>tcrew" type="text" id="tcrew" value="" size="2"></td>
+    	<td align="center" ><input name="<%=reqItemno%>correct" type="text" id="correct" size="2" maxlength="2"></td>
+    	<td align="center" ><input name="<%=reqItemno%>incomplete" type="text" id="incorrect" size="2" maxlength="2"></td>
+    	<td align="center" ><textarea name="<%=reqItemno%>crew_comm" cols="10%" id="crewComm"></textarea></td>
+    	<td align="left" ><textarea name="<%=reqItemno%>acomm" cols="15%" id="acomm"></textarea></td>
+ 	    <td align="left" ><div align="center">
+ 	        <select name="<%=reqItemno%>rm" >
+              <%
+			  stmtRm = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			  
+			  myResultSetRm = stmtRm.executeQuery("select * from egtstrm order by itemno");
+			  if (myResultSetRm != null)
+			  {
+					while (myResultSetRm.next())
+				    { 
+					     rmNo = myResultSetRm.getString("itemno");
+						 rmDsc = myResultSetRm.getString("itemdsc");
+						 
+			  		%>
+              <option value="<%=rmNo%>"><%=rmDsc%></option>
+              <%
+			  		}
+			  }
+			  %>
+            </select>
+        </div>
+		</td>
+  	</tr>
+	<%
+		count++ ; 
+     	}
+	  
+   }
+
+   %>
+  	<tr>
+		<td colspan="9"><div align="center">
+    		<input type="submit" name="Submit" value="Submit">¡@¡@
+    		<input type="reset" name="Reset" value="Reset"></div>
+	 	</td>
+   </tr>
+</table>
+
+	<input name="sernno" type="hidden" value="<%=sernno%>">
+    <input name="reqItemno" type="Hidden" value="<%=reqItemno%>">
+    <input name="upduser" type="Hidden" value="<%=userid%>">
+    <input name="upddate" type="Hidden" value="<%=sysdate%>">	  
+</form>
+<%
+}
+catch(Exception e){
+	out.print(e.toString());
+}
+finally{
+	try{if(rs != null) rs.close();}catch(SQLException e){}
+	try{if(stmt != null) stmt.close();}catch(SQLException e){}
+	try{if(stmtRm != null) stmtRm.close();}catch(SQLException e){}	
+	try{if(conn != null) conn.close();}catch(SQLException e){}
+}
+%>
+    
+</p>
+
+</body>
+</html>

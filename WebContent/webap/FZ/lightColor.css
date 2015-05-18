@@ -1,0 +1,75 @@
+/*
+Light Color StyleShet
+*/
+button {        
+		color:#000000;
+		text-align:center;
+		height:2em;
+		padding:0.3em;
+}
+.buttonLBlue{
+	font-size:10pt;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	border:1px solid;
+	background:rgb(231,243,255);border-color: rgb(173,195,239);
+
+}
+.buttonLYellow{
+	font-size:10pt;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	border:1px solid;
+	background:rgb(255,255,222);border-color: rgb(239,219,140);
+
+}
+.buttonLPink{
+	font-size:10pt;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	border:1px solid;
+	background:rgb(255,231,247);border-color: rgb(255,170,214);
+}
+
+.buttonLGray{
+	font-size:10pt;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	border:1px solid;
+	background:rgb(247,247,247);border-color: rgb(214,211,214);
+}
+.buttonLGreen{
+	font-size:10pt;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	border:1px solid;
+	background:rgb(239,251,222);border-color: rgb(165,207,27);
+}
+
+.bgLBlue{
+	background:rgb(231,243,255);
+}
+
+.bgLYellow{
+	background:rgb(255,255,222);
+}
+.bgLPink{
+	background:rgb(255,231,247);
+}
+.bgLGray{
+	background:rgb(247,247,247);
+}
+.bgLGreen{
+	background:rgb(239,251,222);
+}
+.bgBlue2{
+	background-color:#538Ed5;
+	color:#FFFFFF;
+}
+.bgBlue3{
+	background-color:#8CA7D9;
+	color:#FFFFFF;
+}
+.bgLBlue2{
+	background-color:#DCE8F3;
+	color:#000000;
+}
+.bgLBlue3{
+	background-color:#C5D9F1;
+	color:#000000;
+}

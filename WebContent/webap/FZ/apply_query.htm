@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>Crew Qeury</title>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<link href="menu.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/JavaScript" >
+ nowdate = new Date();
+ var y,m,d;
+	y = nowdate.getFullYear() ;
+	m = nowdate.getMonth()+1;
+	d =nowdate.getDate();
+
+/*	
+ function shownow(){	//抓時間顯示預設下拉欄位
+	form1.fyy.value = y;
+	if (m < 10) {
+		form1.fmm.value = "0"+m;
+	}
+	else{
+	form1.fmm.value = m;
+	} 
+	
+	
+
+ }*/
+  function shownow(){
+	
+
+/*	
+	if (m < 10) {
+		form1.fmm.value = "0"+m;
+	}
+	else{
+	form1.fmm.value = m;
+	} 
+	*/
+
+	if (d >=25 && m ==12){ 
+		y++;
+	}
+	
+
+	document.form1.fyy.value = y;
+	
+
+ }
+
+	
+		
+		
+	
+	
+</script>
+
+
+
+</head>
+<body onLoad="shownow()">
+<form method="post" name="form1" target="mainFrame" class="txtblue" id="form1" action="applyquery.jsp">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr> 
+      <td width="28%" class="txtblue" valign="middle">&nbsp;
+        <select name="fyy" class="t1">
+          <option value="2003">2003</option>
+          <option value="2004">2004</option>
+          <option value="2005">2005</option>
+          <option value="2006">2006</option>
+        </select>
+      <input type="submit" name="Submit" value="Query" class="btm"> </td>
+      <td width="72%" valign="middle" class="txtblue"> <div align="left">select <span class="txtxred">apply year </span> to qeury&nbsp;&nbsp;以<span class="txtxred">申請時間</span>（非班表時間）查詢申請單記錄</div></td>
+    </tr>
+  </table>
+</form>
+</body>
+</html>

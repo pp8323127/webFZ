@@ -1,0 +1,30 @@
+body{
+	font-family:Verdana;
+	font-size:10pt;
+}
+.red{
+	color:#FF0000;
+}
+
+.blue{
+	color:#0000FF;
+}
+
+.mb{
+	background-color:#FFFFCC;
+	color:#FF0000;
+	font-size:12pt;
+	border:2pt double #99CCFF;
+	padding:1em;
+	text-align:left;
+}
+
+
+.bgLightBlue{
+	background-color:#E6FAFF;
+}
+
+.tableStyl1{
+	border-collapse:collapse;
+	border:2pt double #99CCFF;
+}

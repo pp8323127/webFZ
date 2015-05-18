@@ -1,0 +1,94 @@
+<html>
+<head>
+<title>查飛時</title>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<script language="JavaScript" type="text/JavaScript">
+function showdate(){
+
+now = new Date();
+var y,m,selm
+y = now.getFullYear();
+m = now.getMonth()+1;
+
+
+
+	if(m < 10){
+		document.form1.sel_mon.value="0"+m;
+	}
+	else	{
+		document.form1.sel_mon.value=+m;
+	}
+document.form1.sel_year.value=y;
+
+}
+
+</script>
+
+<link href="../menu.css" rel="stylesheet" type="text/css">
+</head>
+
+<body onLoad="showdate()">
+
+<form name="form1" method="post" action="crewhrlist_tpe.jsp" class="txtblue" target="mainFrame">
+   <span class="txtxred">100Hrs Check TPE</span><span class="txtblue"> Year</span>  
+   <select name="sel_year">
+    <!--option value="2003">2003</option>
+	<option value="2004">2004</option>
+    <option value="2005">2005</option>
+	<option value="2006">2006</option>
+	<option value="2007">2007</option>
+	<option value="2008">2008</option -->
+	<option value="2009">2009</option>
+	<option value="2010">2010</option>
+	<option value="2011">2011</option>
+  </select>
+  <span class="txtblue">Month</span>  
+  <select name="sel_mon">
+    <option value="01">01</option>
+    <option value="02">02</option>
+    <option value="03">03</option>
+    <option value="04">04</option>
+    <option value="05">05</option>
+    <option value="06">06</option>
+    <option value="07">07</option>
+    <option value="08">08</option>
+    <option value="09">09</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+  </select>
+  Fleet
+  <select name="fleet" size="1">
+	  <option value="" selected>ALL</option>
+	  <option value="330">330</option>
+	  <option value="343">343</option>
+	  <option value="332">332</option>
+	  <option value="738">738</option>
+	  <option value="744">744</option>
+	  <option value="747">747</option>
+	  <option value="AB6">AB6</option>
+  </select>
+  Occu
+  <select name="occu" size="1">
+	  <option value="" selected>ALL</option>
+	  <option value="CA">CA</option>
+	  <option value="FO">FO</option>
+	  <option value="FE">FE</option>
+  </select>
+  <input name="checkbk" type="checkbox" id="checkbk" value="Y" checked>
+  BlkHr
+  <select name="s_mark" id="s_mark">
+    <option value="&gt;">&gt;</option>
+    <option value="=">=</option>
+    <option value="&lt;">&lt;</option>
+  </select>
+  <input name="s_num" type="text" id="s_num" value="30" size="5" maxlength="5">
+  <input name="chk" type="checkbox" value="Y">預存時數至1000hr Check
+  <!--Empno
+  <input name="empno" type="text" id="empno" size="10" maxlength="6">-->
+  <input name="Submit" type="submit" class="btm" value="Query">
+  <input name="Submit2" type="button" class="btm" value="Reset" onClick="javascript:location.reload()">
+
+</form>
+</body>
+</html>

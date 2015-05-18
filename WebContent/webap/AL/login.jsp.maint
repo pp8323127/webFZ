@@ -1,0 +1,24 @@
+<%@ page contentType="text/html; charset=big5" language="java" import="java.sql.*" errorPage="" %>
+
+<html>
+
+<head>
+
+<title>Untitled Document</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+
+</head>
+
+
+
+<body>
+<p><font face="標楷體" size="5" color="#003399">客艙組員網路特休假申請系統</font></p>
+<p><font face="標楷體" size="5" color="#00CC33">系統維護中, 暫時無法為您服務</font></p>
+<p><font face="標楷體" size="5" color="#00CC33"> 暫停服務時間: 2008/12/31 13:30 - 17:30</font></p>
+<p><font color="#003399" size="5" face="標楷體">不便之處, 敬請見諒</font></p>
+<p><font color="#003399" size="5" face="標楷體">謝謝.</font></p>
+</body>
+
+</html>
+

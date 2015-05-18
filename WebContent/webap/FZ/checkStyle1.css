@@ -1,0 +1,177 @@
+/* CSS Document */
+
+/*
+設定網頁上所有的字體樣式與大小
+*/
+body,form,input,select,textarea{
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:10pt;
+}
+table{
+	empty-cells: show;
+	border-collapse:collapse;
+}
+
+/*連結樣式
+一定要照順序寫,不然樣式會有問題
+a,
+a:link ,
+a:visited,
+a:hover,
+a:active
+
+
+
+*/
+
+/*
+
+*/
+a{
+	color:#0000FF;
+}
+a:link ,a:visited{
+	text-decoration:none;
+
+}
+a:hover{
+/*只有滑鼠移上超連結上時才顯示底線*/
+	text-decoration:underline;
+
+}
+a:active{
+	text-decoration:none;
+
+}
+
+/*
+設定所有的圖片,都沒有外框,
+這樣可以避免圖片當超連結時,還要設定 border="0"
+*/
+img{
+	border:0pt;
+}
+
+/*往左靠齊,左邊間隔0.5個字距
+設定字距的好處:若網頁字體大小更改,或者不需再更動這邊的padding,
+*/
+.left{
+	text-align:left;
+	padding-left:0.5em;
+}
+
+.right{
+	text-align:right;
+	padding-right:0.5em;
+}
+.center{
+	text-align:center;
+}
+
+
+.bold{
+	font-weight:bold;
+}
+
+.bg1{
+	background-color:#3399CC;
+	color:#FFFFFF;
+}
+.bg2{
+	background-color:#E6E6FA;
+	color:#000000;
+}
+.bg3{
+	background-color:#FFFFE0;
+	color:#000000;
+}
+.bg4{
+	background-color:#ADD8E6;
+	color:#000000;
+}
+.bg5{
+	background-color:#F0FFFF;
+	color:#000000;
+}
+.bg6{
+	background-color:#F0F8FF;
+	color:#000000;
+}
+.bg7{
+	background-color:#F2F2F2;
+	color:#000000;
+}
+.bg8{
+	background-color:#D6D6D6;
+	color:#000000;
+
+}
+.bg9{
+	background-color:#FFDE9D;
+	color:#000000;
+}
+
+.red{
+	color:#FF0000;
+}
+.blue{
+	color:#0000FF;
+}
+
+.tableStyle1{
+	border-collapse:collapse;
+	border:2pt double gray;  
+}
+.tableStyle2{
+	border-collapse:collapse;
+	border:1pt solid #dddddd;  
+}
+.topBorderStyle1{
+	border-top:1pt dashed gray;
+}
+.bottomBorderStyle1{
+	border-bottom:1pt solid #dddddd;
+}
+.bottomBorderStyle2{
+	border-bottom:1pt dashed #A9A9A9;
+}
+
+.rightBottomStyle1{
+	border-right:1pt solid #dddddd;
+	border-bottom:1pt solid #dddddd;
+}
+.rightBottomStyle2{
+	border-bottom:1pt dashed #A9A9A9;
+	border-right:1pt dashed #A9A9A9;
+}
+.rightStyle1{
+	border-right:1pt solid #dddddd;
+}
+.rightStyle2{
+	border-right:1pt dashed #A9A9A9;
+}
+
+.paddingTopBottom1{
+	padding-top:1em;
+	padding-bottom:1em;
+}
+
+.display{
+	display:block;
+}
+.hidden{
+	display:none;
+}
+li{
+	list-style-type:none;padding-left:0.5em;
+}
+.listStyle1{
+	list-style-type:disc;padding-left:0.5em;
+}
+ul{
+	display:inline;
+	padding-left:0;
+}
+.borderGray{
+	border:1pt solid gray;
+}

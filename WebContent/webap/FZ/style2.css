@@ -1,0 +1,85 @@
+/* CSS  For table layout */
+.selected{
+	background-color: #006699;
+	color: #ffffff;
+	text-align: center;	
+	font-weight: bold;
+	border-left: 1px solid #346DBE;
+	border-bottom: 1px solid #7DAAEA;	
+	font-size:10pt;
+	font-family:Verdana;
+}
+td{
+	font-size:10pt;
+	font-family:Verdana;	
+	text-align: center;		
+
+
+}
+table{
+	border-collapse:collapse;
+}
+
+.sel2{
+	background-color:#84BAEF;
+	color:#000000;
+	text-align:center;
+	font-size:10pt;
+	font-family:Verdana;
+}
+
+.sel3{
+	background-color:#9CDBFF;
+	color:#000000;
+	text-align:center;
+	font-size:10pt;
+	font-family:Verdana;
+}
+.e{
+	background-color:#eeeeee;
+	border-right:1pt solid #666666;
+	border-bottom:1pt solid #666666;
+	border-left:1pt solid #CCCCCC;
+	border-top:1pt solid #CCCCCC;
+	/*border-right:1pt solid #666666;*/
+}
+.e2{
+	background-color:#CCFFFF;
+	border-right:1pt solid #666666;
+	border-bottom:1pt solid #666666;
+	border-left:1pt solid #CCCCCC;
+	border-top:1pt solid #CCCCCC;
+	/*border-right:1pt solid #666666;*/
+}
+.bo{
+	background-color:#eeeeee;
+	border:1pt solid #666666;
+}
+.darkGray{
+	background-color:#666666;
+	color:#FFFFFF;
+	font-weight:bold;
+
+}
+.darkGrayButton{
+	background-color:#999999;
+	color:#FFFFFF;
+	font-weight:bold;
+	font-family:Verdana;
+	border-bottom:1pt solid #666666;
+	border-right:1pt solid #666666;
+
+}
+.center{
+	text-align:center;
+}
+.blu{
+	color:#0000FF;
+}
+
+/*­I´º²L¦Ç¦â,«e´ºÂÅ¦â,©P³òªÅ2pt*/
+.bakGryFroBlu{
+	background-color:#CCCCCC;
+	color:#0000FF;
+	padding:2pt;
+}

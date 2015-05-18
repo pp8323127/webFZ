@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="jQueryMob/jquery.mobile.custom.structure.css" />	
+<link rel="stylesheet" href="jQueryMob/jquery.mobile.custom.theme.css" />	
+<script src="jQueryMob/jquery.js" language="javascript"></script>	
+<script src="jQueryMob/jquery.mobile.custom.js" language="javascript"></script>	
+<script type="text/javascript">
+$(document).ready(init);
+function init(){
+	console.log("0");
+	$("#sub").click(clickFun);
+}		
+function clickFun() {
+	var name = $("#inputId").val();
+	var pwd = $("#inputPwd").val();
+	console.log(name+","+pwd);
+		$.ajax({
+			type : "POST",
+			url : "swap.jsp?",
+			data :{Name:name,Pwd:pwd},
+			contentType: "text/html",
+			//dataType: "json",
+			async: true,
+			success: function (data) {
+				console.log(data); 
+				$("#errorMsg").html(data);
+			},
+			error:function(xhr, ajaxOptions, thrownError){ 
+				console.log(xhr.status); 
+				console.log(thrownError); 
+			}
+		})
+}
+	
+/*
+$(document).ready(init);
+function init(){
+	alert(0);
+	$('#sub').click(submitHandler);		
+};
+function submitHandler(){
+	//alert($("#inputId").val()+","+$("#inputPwd").val());
+	$.ajax({
+		type: "POST",
+		url: "swap.jsp",
+		data: {Name:$("#inputId").val(),Pwd:$("#inputPwd").val()},
+		async: false,
+		contentType: "application/json; charset=utf-8",
+		dataType: "json",
+		success : function(data) {
+            $("#errorMsg").html(data);
+			alert("Y");
+       	},
+        error:function(xhr, ajaxOptions, thrownError){ 
+			console.log(xhr.status); 
+			console.log(thrownError); 
+			alert("N");
+        }
+	});
+	return false;
+};
+
+function clickHandler(data,status){
+	alert(data.inputId+""+status);
+	//$.mobile.changePage("index.html", {data:{userId:$("#inputId").val(),pwd:$("#inputPwd").val()}});	
+	$("#errorMsg").html("Data: " + data.inputId + "</br>Status: " + status);	
+};
+function callbackFun(data){
+	$("#errorMsg").html("Data: " + data.inputId + "</br>Status: " + status);
+};
+*/
+</script>
+
+</head>
+<body>
+
+<!--login page-->
+	<div id="Home" data-role="page" data-theme="a">
+	  <div data-role="header" data-position="fixed">
+		<h3>iCrew</h3>
+	  </div>
+	  <div role="main" class="ui-content">
+		<div class="ui-field-contain" id="labId">
+		  <label for="inputId">EmployID</label>
+		  <input type="text" name="inputId" id="inputId" value="abc">
+		</div>
+		<div class="ui-field-contain" id="labPwd">
+		  <label for="inputPwd">Password</label>
+		  <input type="password" name="inputPwd" id="inputPwd" value="1234" data-mini="false">
+		</div>	
+		<input type="submit" id="sub" value="Submit" >
+		<!--<a class="ui-btn" id="btnLogin" data-transition="slide" href="#pageHome">Login</a>-->
+		<span id="errorMsg"></span>
+		<div data-role="footer" data-position="fixed">
+		<h3>Footer</h3>
+	  </div>
+	  </div>
+	</div>
+
+</body>
+</html>

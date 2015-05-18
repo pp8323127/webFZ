@@ -1,0 +1,227 @@
+<%@ page contentType="text/html; charset=big5" language="java"  %>
+<%@ page import="java.sql.*,java.util.*,ci.db.*,java.util.ArrayList" %>
+<%
+/*
+String userid = (String) session.getAttribute("userid") ; //get user id if already login
+
+if (userid == null) {		
+	response.sendRedirect("logout.jsp");
+}
+*/
+
+String fdate_y  =   request.getParameter("fdate_y");
+String fdate_m  =   request.getParameter("fdate_m");
+String fdate_d  =   request.getParameter("fdate_d");
+String allFltno =	request.getParameter("allFltno");
+String sector   =	request.getParameter("sector");
+String fleet	=	request.getParameter("fleet"); 
+String acno		=	request.getParameter("acno");
+String purserName	= request.getParameter("purserName");
+String inspector	= request.getParameter("inspector");
+
+String siNo = null;
+String fiNo = null;
+String siDsc = null;
+String fiDsc = null;
+int subcount=1;
+int count=1;
+
+Connection conn = null;
+Statement stmt2 = null;
+Statement stmt3 = null;
+Statement stmt4 = null;
+
+ResultSet rs2 = null;
+ResultSet rs3 = null;
+ResultSet rs4 = null;
+
+String sql2 = null;
+String sql3 = null;
+String sql4 = null;
+
+String remark = null;
+String lsflag = null;
+
+ConnDB cn = new ConnDB();
+Driver dbDriver = null;
+
+try
+{
+cn.setORP3EGUserCP();
+dbDriver = (Driver) Class.forName(cn.getDriver()).newInstance();
+conn = dbDriver.connect(cn.getConnURL(), null);
+stmt2  = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+stmt3  = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+stmt4  = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>View Check List</title>
+<link href="style.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+<!--
+.style23 {color: #FF0000}
+.style24 {color: #000000}
+.style25 {color: #000000; font-size: 12px; }
+-->
+</style>
+</head>
+
+<body>
+
+<BR>
+
+ <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0">
+ 	<tr>
+	<td width="20%">&nbsp;</td>
+	<td width="60%"><div align="center" class="txttitletop"><span class="style14"><strong>Cabin Safety Check List </strong></div></td>
+ 		<td width="20%">
+ <div align="right"><a href="javascript:window.print()"> <img src="images/print.gif" width="17" height="15" border="0" alt="列印"></a> 
+        　</div>
+      </td>
+  </tr>
+</table>
+
+  <table width="90%"  border="2" align="center" cellpadding="0" cellspacing="0" class="fortable">        
+  <tr class="txtblue">
+ 	<td width="62%"><div align="left" class="style24">&nbsp;Flight：<%=allFltno%> 　Sector：<%=sector%> </div></td>
+    <td width="38%"><div align="left" class="style24">&nbsp;Date：<%=fdate_y%>Y <%=fdate_m%>M<%=fdate_d%>D</div></td>
+  </tr> 
+  <tr class="txtblue">
+ 	<td width="62%"><div align="left" class="style24">&nbsp;A/C：<%=fleet%>　(<%=acno%>)　　　　CM：<%=purserName%></div></td>
+    <td width="38%"><div align="left" class="style24">&nbsp;Inspector：<%=inspector%></div></td>
+  </tr> 
+</table>
+
+  <table width="90%" border="2" align="center" cellpadding="0" cellspacing="0" class="fortable">
+  <tr class="tablehead3">
+    <td height="5" colspan="2"><div align="center"><strong>Item</strong></div></td>
+    <td width="4%" ><div align="center"><strong>Yes</strong></div></td>
+    <td width="4%" ><div align="center"><strong>No</strong></div></td>
+    <td width="4%" ><div align="center"><strong>N/A</strong></div></td>
+    <td width="28%" ><div align="center"><strong>Remark</strong></div></td>
+  </tr>
+<%
+
+sql2 = "select * from egtstfi where flag='Y' order by itemno";
+rs2 = stmt2.executeQuery(sql2); 
+	  	  
+if(rs2 != null)
+{
+	while(rs2.next())
+	{
+		fiNo = rs2.getString("itemno");
+	  	fiDsc = rs2.getString("itemDsc");
+%>
+	  	<tr class="txtblue">
+    		<td colspan="6"><div align="left" class="style24"><strong>&nbsp;<%=count%>.<%=fiDsc%></strong></div></td>
+	</tr>  
+<% 
+		sql3 = "select * from egtstsi where kin='"+fiNo+"' AND sflag = 'Y' order by itemdsc";
+		rs3 = stmt3.executeQuery(sql3); 
+					  
+		if(rs3 != null)
+		{
+					    
+	  		while(rs3.next())
+			{
+				siNo = rs3.getString("itemno");
+	  			siDsc = rs3.getString("itemdsc");
+				String siNo2 = count +"."+ subcount;
+				
+%>
+	  			  <tr class="txtblue">
+    				<td width="4%"><div align="center" class="style24"><%=siNo2%></div></td>
+   					<td width="56%"><div align="left" class="style24"><%=siDsc%></div></td>
+    				<td width="4%" ><div align="center" class="style24">&nbsp;</div>
+   				    <div align="center" class="style24"></div></td>
+   					<td width="4%" ><div align="center" class="style24">&nbsp;</div>
+				    <div align="center" class="style24"></div></td>
+    				<td width="4%" ><div align="center" class="style24">&nbsp;</div>
+   				    <div align="center" class="style24"></div></td>
+    				<td width="28%" >
+   					  <div align="left" class="style24">&nbsp;
+			        </div></td>
+    </tr>  
+<%				
+			subcount++;
+			}
+		}
+		subcount=1;
+	 count++;
+	}
+}
+%>		
+
+</table>
+<table width="90%" border="2" align="center" cellpadding="0" cellspacing="0" class="fortable">
+  <tr class="tablehead">
+    <td height="5" colspan="5"><div align="left"><strong>&nbsp;Q&amp;A </strong></div>
+    </td>
+  </tr>
+  <tr class="tablebody">
+    <td height="10" colspan="5" bgcolor="#FFFFFF" class="txtblue">
+          <div align="left" class="txtblue style24">&nbsp;<br><br><br>
+      </div></td>
+  </tr>
+  <tr class="tablehead3">
+    <td height="5" colspan="5"><div align="left"><strong>&nbsp;Comment and Suggestion</strong></div>
+    </td>
+  </tr>
+    <tr class="tablebody">
+    <td height="20" colspan="5" bgcolor="#FFFFFF" class="txtblue">
+        <div align="left" class="txtblue style24">&nbsp;<br><br><br>
+      </div></td>
+  </tr>
+      <tr class="tablebody">
+    <td width="7%" height="1" bgcolor="#FFFFFF"><div align="center" class="style11 style12 style23">收文
+    </div></td>
+    <td width="34%" bgcolor="#FFFFFF"><div align="center" class="style11 style12 style23">擬辦</div></td>
+    <td width="26%" bgcolor="#FFFFFF"><div align="center" class="style13 style23">複核</div></td>
+    <td width="26%" bgcolor="#FFFFFF"><div align="center" class="style13 style23">批示</div></td>
+    <td width="7%" bgcolor="#FFFFFF"><div align="center" class="style13 style23">複閱</div></td>
+  </tr>
+      <tr class="tablebody">
+        <td width="7%" height="150" bgcolor="#FFFFFF">&nbsp;</td>
+        <td width="34%" height="150" bgcolor="#FFFFFF">
+          <div align="left" class="style25">&nbsp;<br><br><br>
+        </div></td>
+        <td width="26%" height="150" bgcolor="#FFFFFF">&nbsp;</td>
+        <td width="26%" height="150" bgcolor="#FFFFFF">&nbsp;</td>
+        <td width="7%" height="150" bgcolor="#FFFFFF">&nbsp;</td>
+  </tr>
+<!--	    <tr class="tablebody"><td colspan="5" ><div align="center">
+    		<input type="Button" name="b1" value="Back" onClick="javascript:window.history.back();" ></div>
+  </td></tr>
+-->
+</table>
+
+<table width="90%" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+	<!--<td width="30%"><font face="標楷體">&nbsp;表單編號:F-EF050</font></td>-->
+	<td width="30%"><font face="標楷體">&nbsp;表單編號:F-EZ006</font></td>
+	<td width="50%">&nbsp;</td>
+ 	<td width="20%" align="right"><font face="標楷體">&nbsp;版本:AA&nbsp;&nbsp;</font></td>
+  </tr>
+</table>
+
+<%
+}
+catch(Exception e){
+	out.print(e.toString());
+}
+finally{
+
+	try{if(rs2 != null) rs2.close();}catch(SQLException e){}
+	try{if(rs3 != null) rs3.close();}catch(SQLException e){}
+	try{if(stmt2 != null) stmt2.close();}catch(SQLException e){}
+	try{if(stmt3 != null) stmt3.close();}catch(SQLException e){}
+	try{if(conn != null) conn.close();}catch(SQLException e){}
+}
+%>
+
+</body>
+</html>

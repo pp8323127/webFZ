@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>Get User IP address</title>
+</head>
+<body>
+<script>
+/* There are a few instances in which the browser cannot ascertain the user's address, so we will instruct the browser to ignore errors by setting the onerror handler to null: */
+window.onerror = null;
+
+/* We will also give hostaddress and hostname a default value in case the address look-up fails: */
+hostaddress = hostname = "(unknown)";
+
+/* Now we will try to gather the host information: */
+localhost = java.net.InetAddress.getLocalHost();
+hostaddr1 = localhost.getHostAddress();
+hostname = localhost.getHostName();
+
+//Enumeration 
+//e = java.nio.NetworkInterface.getNetworkInterfaces();
+//if (e.hasMoreElements()) {
+//NetworkInterface ni = (NetworkInterface) e.nextElement();
+//ni =   e.nextElement();
+//System.out.println("Net interface: "+ni.getName());
+//NetInterface = ni.getName() ; 
+//            Enumeration e2 = ni.getInetAddresses();
+//            while (e2.hasMoreElements()){
+//               InetAddress ip = (InetAddress) e2.nextElement();
+//               System.out.println("IP address: "+ ip.toString());
+//            }
+//}
+
+/* The Java methods used above are capable of throwing exceptions. When Java exceptions occur within JavaScript, the script body is aborted. In order to make sure that the following statements get a chance to execute, we must include them in a separate script body: */
+</script>
+
+<script>
+document . writeln ("<br>Your IP addr1 is : " + hostaddr1 );
+//document . writeln ("<b>Your IP addr2 is : " + hostaddr2 );
+document . writeln ("<br>Your hostname is : " + hostname );
+document . writeln ("<br>NetworkInterface is : " + NetInterface );
+
+</script> 
+TEST
+</body>
+</html>

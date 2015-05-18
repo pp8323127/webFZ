@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>全勤/積點選換班選擇</title>
+<link href="swap.css" rel="stylesheet" type="text/css">
+<style type="text/css">
+body,input{
+	font-family: Verdana;
+	font-size: 10pt;
+}
+.e {
+	background-color: #eeeeee;
+	border-right: 1pt solid #666666;
+	border-bottom: 1pt solid #666666;
+	border-left: 1pt solid #cccccc;
+	border-top: 1pt solid #cccccc;
+}
+.e4 {
+	background-color: #edf3fe;
+	color: #000000;
+	text-align: center;
+}
+
+</style>
+
+<SCRIPT LANGUAGE="JavaScript">
+function nextpage()
+{
+	var str ;
+	for(i=0; i<3; i++)
+	{
+		if(document.form1.elements[i].checked)
+		{
+			str =document.form1.elements[i].value;
+		}
+	}		
+
+    document.form1.pick.value = str;
+	document.form1.action="CheckCrewBase.jsp";
+	return true;
+}
+</SCRIPT>
+
+</head>
+
+<body >
+<div class="e4" style="text-align:left ">
+  <p>【請選擇申請項目】</p>
+</div>
+<form name="form1" method="post" class="txtblue" target="mainFrame" onsubmit="return nextpage();">
+  <p>
+    <input name="radio_btn" type="radio" value="r1" checked >全勤選班申請<br>
+	<input name="radio_btn" type="radio" value="r2">積點選班申請<br>
+	<input name="radio_btn" type="radio" value="r3">積點換班申請<br>
+  <p>
+    <input type="hidden" name="pick"  value="">
+    <input type="submit" class="e4"  value="Next">
+  </p>
+</form>
+</body>
+</html>

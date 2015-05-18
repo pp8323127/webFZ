@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>CRC--Crew Reporting Check System</title>
+<script language=javascript>
+function f_onload()
+{
+   document.form1.userid.focus();
+}
+function checkid(){
+	 if(document.form1.userid.value ==""){
+	 	alert("Please insert userid!!\n請輸入帳號!!");
+		document.form1.userid.focus();
+		return false;
+	 }
+	 else if(document.form1.password.value ==""){
+	 	alert("Please insert passsword!!\n請輸入密碼!!");
+	 	document.form1.password.focus();
+		return false;
+	 }
+	 else{
+	 	return true;
+	 }
+
+}
+</script>
+<link href="../menu.css" rel="stylesheet" type="text/css">
+
+<style type="text/css">
+<!--
+.style1 {font-size: 10pt}
+.style3 {
+	color: #000099;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 24px;
+}
+-->
+</style>
+</head>
+
+<body onLoad="f_onload()">
+<form name="form1" method="post" action="checkCRCSuser.jsp" onSubmit="return checkid()">
+  <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0">
+    <!--DWLayoutTable-->
+    <tr>
+      <td width="69" height="50">&nbsp;</td>
+      <td width="90" valign="top" class="txttitletop"><div align="center"></div></td>
+      <td colspan="2" valign="left"><p>&nbsp;</p>
+        <p><span class="style3"><font size="6" face="Arial, Helvetica, sans-serif"><strong>Crew 
+          Reporting Check</strong></font></span></p>
+        <p align="center"><strong> System code: FZ</strong></p>
+		<font color="#FF0000"><strong> </strong></font> </td>
+      <td width="65">&nbsp;</td>
+    </tr>
+    <tr>
+      <td height="29">&nbsp;</td>
+      <td valign="top" class="txtblue"><div align="right"></div></td>
+      <td valign="top" class="txtblue">UserID&nbsp;&nbsp;&nbsp;&nbsp;        </td>
+      <td valign="top" class="txtblue"><input type="text" name="userid"></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td height="20">&nbsp;</td>
+      <td valign="top" class="txtblue"><div align="right"></div></td>
+      <td valign="top" class="txtblue">Password        </td>
+      <td valign="top" class="txtblue"><input type="password" name="password" AUTOCOMPLETE="off"/></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td height="49">&nbsp;</td>
+      <td valign="middle"><div align="center">
+      </div></td>
+      <td width="78" valign="middle"><input type="submit" name="Submit" value="Login" ></td>
+      <td width="347" valign="middle"><input name="reset" type="reset" id="reset" value="Reset"></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td height="78">&nbsp;</td>
+      <td colspan="3">
+        <div align="center"><strong><font color="#FF0000" size="2">‧UserID and 
+          Password 與 NewWebMail 相同, 本系統不提供變更Password . </font></strong><font color="#FF0000" size="2"><strong><br>
+          忘記密碼請CALL4000重設 <font color="#FF0000" size="2">NewWebMail</font> 密碼。更改密碼請進入<a href="http://webmail.cal.aero" target="_blank"><u>全員電子信箱</u></a></strong></font><br>
+          <span class="txtxred">‧UserID &amp; Password is the same with NewWebMail 
+          .You can't change password in this system.<br>
+          Please go to<a href="http://webmail.cal.aero" target="_blank"> NewWebMail</a> 
+          to change your password. If you forget your password,call 4000 to reset 
+          it.</span></div>
+      </td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td height="87" colspan="5"><hr width="100%" size="1" noshade>
+        <div align="center" class="style1">本系統僅能於Internet Explorer上正常瀏覽，建議使用
+          Internet Explorer 5.5 以上版本，1024 x768 解析度<br>
+  所有內容版權屬於中華航空股份有限公司所有 <br>
+  The website is for IE ONLY!<br>
+  We recommend that you view this site with Internet Explorer 5.5+,and with a
+  resolution of 1024 x 768 <br>
+  Copyright &copy; 2004 China Airlines Inc. All rigths reserved. </div></td>
+    </tr>
+    <tr>
+      <td height="80" colspan="5"><div align="right"><a href="http://www.china-airlines.com" target="_blank"><img src="../images/logo.jpg" border="0"></a></div>
+      </td>
+    </tr>
+  </table>
+</form>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<meta  name="robots" content="noindex,nofollow" />
+<META NAME="ROBOTS" CONTENT="NOSNIPPET"> 
+<META NAME="ROBOTS" CONTENT="NOARCHIVE">
+<meta http-equiv="Pragma" content="no-cache" / > 
+<meta http-equiv="Cache-Control" content="no-cache" / > 
+<meta http-equiv="Expires" content="0" / > 
+
+<title>座艙長及組員班表資訊系統 Crew Schedule Information System</title>
+<style type="text/css">
+body{
+font-family:Verdana;
+font-size:9pt;
+
+line-height:1.3;
+
+}
+input{
+font-family:Verdana;
+font-size:10pt;
+
+}
+
+</style>
+<script language="javascript">
+function checkid(){
+	 if(document.form1.userid.value ==""){
+	 	alert("Please insert userid!!\n請輸入帳號!!");
+		document.form1.userid.focus();
+		return false;
+	 }
+	 else if(document.form1.password.value ==""){
+	 	alert("Please insert passsword!!\n請輸入密碼!!");
+	 	document.form1.password.focus();
+		return false;
+	 }
+	 else{
+	 	return true;
+	 }
+
+}
+</script>
+
+</head>
+
+<body onload="document.getElementById('userid').focus()">
+<div align="center">
+<form method="post" name="form1" action="preCheckAC.jsp"  onSubmit="return checkid()" AUTOCOMPLETE="off">
+  <table width="781"  cellpadding="0" cellspacing="0" style="border:#CCCCCC solid 5pt">
+    <tr>
+      <td height="83" colspan="3" nowrap="nowrap"><div align="center" style="color:#23238E;font-size:16pt;font-family:Verdana ">
+            座艙長及組員班表資訊系統<br>Crew Schedule Information System</div></td>
+    </tr>
+    <tr>
+      <td height="140" colspan="3" nowrap>&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="516" height="64" rowspan="3"><div align="left">‧<img src="img/c1.gif" width="230" height="14" /><br />
+        ‧<a href="requestPW.jsp" target="_parent"><img src="img/c2.gif" border="0" /></a><br />
+        ‧Best Resolution  1024 x 768 Pixels / IE 6.0<br />
+        ‧We recommend to use Firefox as browser when you are working with MAC. </div></td>
+      <td width="92"><div align="right"><img src="img/l.gif" width="79" height="19" /></div></td>
+      <td width="159" ><div align="left">&nbsp;
+              <input type="text" name="userid" id="userid"  size="10" maxlength="6"/>
+      </div></td>
+    </tr>
+    <tr>
+      <td><div align="right"><img src="img/p.gif" width="79" height="20" /></div></td>
+      <td ><div align="left">&nbsp;
+              <input type="password" name="password" size="10" maxlength="20" />
+              <input type="submit" name="Submit" value="Login" />
+      </div></td>
+    </tr>
+    <tr>
+      <td><div align="right"> </div></td>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+</form>
+</div>
+</body>
+</html>

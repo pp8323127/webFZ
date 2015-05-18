@@ -1,0 +1,11 @@
+/* CSS Document */
+
+.hintsClass {
+	/*font-family: tahoma, verdana, arial;
+	font-size: 10pt;*/
+	background-color:#FFFFCC;/* #f0f0f0*/;
+	color: #000000;
+	border: 1px solid #808080;
+	padding: 5px;
+}
+

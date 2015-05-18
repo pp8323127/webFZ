@@ -1,0 +1,18 @@
+.btm {
+/* font-size: 10pt;
+	font-family:"新細明體"; 
+	color=#ffffff;
+	border:solid 1pt; 
+	border-color:#ffffff #ffffff #666666 #666666; 
+	Background-Color:#6983AF
+	*/
+font-size: 10pt;
+font-family:"新細明體";
+color:#000066;
+background-color : #CCCCFF ; /*背景色彩*/
+border-top : 1px double #208AFF ;/*上框*/ 
+border-bottom : 1px double #208AFF  ;/*下框 208AFF*/ 
+border-left : 1px double #208AFF  ; /*左框 EFEFEF*/
+border-right : 1px double #208AFF  ; /*右框*/
+
+	}

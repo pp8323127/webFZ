@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<info>
+	<infoitem key="UD_Recordset1" value="name:RECTYPE;datatype:CHAR,name:YY;datatype:NUMBER,name:MM;datatype:NUMBER,name:STAFF_NUM;datatype:NUMBER,name:FLEET_CD;datatype:CHAR,name:CA;datatype:NUMBER,name:FO;datatype:NUMBER,name:FE;datatype:NUMBER,name:INST;datatype:NUMBER,name:NIGHT;datatype:NUMBER,name:DUTYIP;datatype:NUMBER,name:DUTYSF;datatype:NUMBER,name:DUTYCA;datatype:NUMBER,name:DUTYFO;datatype:NUMBER,name:DUTYIFE;datatype:NUMBER,name:DUTYFE;datatype:NUMBER,name:TODAY;datatype:NUMBER,name:TONIT;datatype:NUMBER,name:LDDAY;datatype:NUMBER,name:LDNIT;datatype:NUMBER,name:PIC;datatype:NUMBER" />
+	<infoitem key="UD_Recordset2" value="name:NAME;datatype:VARCHAR2" />
+</info>

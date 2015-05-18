@@ -1,0 +1,451 @@
+<%@ page contentType="text/html; charset=big5" language="java" import="apis.*,java.sql.*,ci.db.*,java.util.*,java.io.*, java.text.*,java.math.*" %>
+<jsp:useBean id="apisDelete"   class="fz.ApisDelete" />
+<jsp:useBean id="apisInsert"   class="fz.ApisInsert" />
+<jsp:useBean id="apisDailyFlt" class="fz.ApisDailyFlt" />
+<jsp:useBean id="apisCrewList" class="fz.ApisCrewList" />
+<jsp:useBean id="apisPersonal" class="fz.ApisPersonal" />
+<%!
+String[] apisRow = new String[39];
+String crewtype;
+String fltyyyy;
+String fltyy;
+String fltmm;
+String fltdd;
+String fltno;
+String[] fltList;
+String delStatus = "";
+%>
+<%
+/*
+String sGetUsr = (String) session.getAttribute("cs55.usr") ;
+if (session.isNew() || sGetUsr == null) {		//check user session start first
+    %> <jsp:forward page="../sendredirect.jsp" /> <%
+}//if
+*/
+crewtype = request.getParameter("sel_crewtype");
+
+fltyyyy = request.getParameter("sel_year");
+if (fltyyyy == null){
+   fltyyyy = "";
+   fltyy = "";
+}else{   
+   fltyy = fltyyyy.substring(2,4);
+}//if
+
+fltmm = request.getParameter("sel_mon"); 
+if (fltmm == null) {
+   fltmm ="";
+}//if
+   
+fltdd = request.getParameter("sel_dd");  
+if (fltdd == null) {
+   fltdd ="";
+}//if
+
+fltno = request.getParameter("fltno").trim();   
+
+//============================
+// Delete DB2 existed flights 
+//============================
+if (fltno == null || fltno.equals("")){ //All flights
+   delStatus = apisDelete.delete(fltyy+fltmm+fltdd);
+}else{
+   if (crewtype.equals("all")){  
+      delStatus = apisDelete.delete(fltyy+fltmm+fltdd, fltno); 
+   }else{
+      delStatus = apisDelete.delete(fltyy+fltmm+fltdd, fltno, crewtype, true);
+   }//if
+}//if
+//out.println("<BR>"+delStatus);
+
+//============================
+// Get AirCrews daily flights 
+//============================
+if (fltno == null || fltno.equals("")){ //All flights
+   fltList = apisDailyFlt.getFltList(fltyyyy+fltmm+fltdd);
+}else{
+   fltList = new String[1];
+   fltList[0] = fltno;
+}//if
+
+
+//=========================================================
+// Prepare records for inserting into DB2 flight by flight
+//=========================================================
+for (int i=0; i<fltList.length; i++) {
+    //out.println("<BR>"+i+"===> "+fltList[i]);
+	apisRow[0]  = pk; 
+    apisRow[1]  = carrier; 
+    apisRow[2]  = fltList[i]; //fltno 
+    apisRow[3]  = fltyy+fltmm+fltdd; //fdate
+    apisRow[4]  = empno;
+    apisRow[5]  = lname; 
+    apisRow[6]  = ""; //mname
+    apisRow[7]  = fname;
+    apisRow[8]  = nation; 
+    apisRow[9]  = ""; //issue 
+    apisRow[10] = birthyy+birthmm+birthdd; 
+apisRow[11] = passport; 
+apisRow[12] = gender; 
+apisRow[13] = dest; 
+apisRow[14] = depart;
+apisRow[15] = gdorder; 
+apisRow[16] = sGetUsr;
+apisRow[17] = occu;
+apisRow[18] = dh; 
+apisRow[19] = meal; 
+apisRow[20] = certno; 
+apisRow[21] = certctry; 
+apisRow[22] = ""; //flag1
+apisRow[23] = ""; //flag2
+apisRow[24] = ""; //flag3
+apisRow[25] = passcountry; 
+apisRow[26] = doctype;
+apisRow[27] = birthcity;
+apisRow[28] = birthcountry; 
+apisRow[29] = resicountry; 
+apisRow[30] = resiaddr1; 
+apisRow[31] = resiaddr2; 
+apisRow[32] = resiaddr3; 
+apisRow[33] = resiaddr4; 
+apisRow[34] = resiaddr5;
+apisRow[35] = tvlstatus; 
+apisRow[36] = passyy+passmm+passdd;
+apisRow[37] = certdoctype;
+apisRow[38] = certyy + certmm + certdd;
+	
+	
+}//for
+/*
+*******************************************************************
+       for (int recno = 0; recno < results.size(); recno++) {
+            Vector row = (Vector)results.get(recno);
+             Column sequence definitions
+            row.get(0): dutycode
+            row.get(1): dutydate
+            row.get(2): acm
+            row.get(3): flt
+            row.get(4): fltb
+            row.get(5): stn1
+            row.get(6): stn2
+            row.get(7): stn3
+            row.get(8): stn4
+            row.get(9): time1
+            row.get(10): time2
+            row.get(11): dutydate2
+            row.get(12): dutyname2
+            row.get(13): acm2
+            row.get(14): flt2
+            row.get(15): stn21
+            row.get(16): stn22
+            row.get(17): stn23
+            row.get(18): stn24
+            row.get(19): time21
+                
+            //duty name
+            if (row.get(0) != null){
+                Codes codes = Codes.getInstance();
+                value = codes.getDutyValue((String)row.get(0)).trim();
+                codes = null;
+                if (value.length() > 0){
+                    sb.append("\"" + voiceFilePath + value + "\" /m\r\n");
+                }
+            }//duty name
+            
+            //duty date
+            try{
+                defaultDate = sdf.parse(FOXPRO_DEFAULT_DATE);
+                if (row.get(1) != null && !(row.get(1).equals(defaultDate))){
+                    value = row.get(1).toString().trim();
+                    if (value.length() > 0){
+                        //sb.append("\"" + voiceFilePath + "y" + value.substring(0, 4) + ".wav\" /m\r\n"); // Duty year
+                        sb.append("\"" + voiceFilePath + "m" + value.substring(5, 7) + ".wav\" /m\r\n"); // Duty month
+                        sb.append("\"" + voiceFilePath + "d" + value.substring(8, 10) + ".wav\" /m\r\n"); // Duty date
+                    }
+                }
+            } catch (ParseException e){
+                e.printStackTrace();
+            }//duty date
+            
+            //acm
+            if (row.get(2) != null){
+                value = row.get(2).toString().trim();
+                if (value.length() > 0){
+                    sb.append("\"" + value + "\" /c\r\n");
+                }
+            }//acm
+            
+            //flt & fltb
+            for (int i = 3; i < 5; i++){
+                if (row.get(i) != null){
+                    value = row.get(i).toString().trim();
+                    if (value.length() > 0){
+                        sb.append("\"" + value + "\" /c\r\n");
+                    }
+                }
+            }//flt & fltb
+            
+            //stn1, 2, 3, 4
+            for (int i = 5; i < 9; i++){
+                if (row.get(i) != null){
+                    value = row.get(i).toString().trim();
+                    if (value.length() > 0){
+                        sb.append("\"" + voiceFilePath + value + ".wav\" /m\r\n");
+                    }
+                }
+            }//stn1, 2, 3, 4
+            
+            //begin time
+            if (row.get(9) != null){
+                value = row.get(9).toString().trim();
+                if (value.length() > 0){
+                    sb.append("\"" + voiceFilePath + "btime.wav\" /m\r\n");
+                    sb.append("\"" + value + "\" /c\r\n");
+                }
+            }//begin time
+            
+            //end time
+            if (row.get(10) != null){
+                value = row.get(10).toString().trim();
+                if (value.length() > 0){
+                    sb.append("\"" + voiceFilePath + "etime.wav\" /m\r\n");
+                    sb.append("\"" + value + "\" /c\r\n");
+                }
+            }//end time
+            
+            //change to
+            if (row.get(12) != null){
+                value = row.get(12).toString().trim();
+                if (value.length() > 0){
+                    sb.append("\"" + voiceFilePath + "codef.wav \" /m\r\n");
+                }
+            }//change to
+            
+            //duty date 2
+            try{
+
+                defaultDate = sdf.parse(FOXPRO_DEFAULT_DATE);
+                if (row.get(11) != null && !(row.get(11).equals(defaultDate))){
+                    value = row.get(11).toString().trim();
+                    if (value.length() > 0){
+                        //sb.append("\"" + voiceFilePath + "y" + value.substring(0, 4) + ".wav\" /m\r\n"); // Duty year 2
+                        sb.append("\"" + voiceFilePath + "m" + value.substring(5, 7) + ".wav\" /m\r\n"); // Duty month 2
+                        sb.append("\"" + voiceFilePath + "d" + value.substring(8, 10) + ".wav\" /m\r\n"); //  // Duty date 2
+                    }
+                }
+            } catch (ParseException e){
+                e.printStackTrace();
+            }//duty date 2
+            
+            //acm 2
+            if (row.get(13) != null){
+                value = row.get(13).toString().trim();
+                if (value.length() > 0){
+                    sb.append("\"" + value + "\" /c\r\n");
+                }
+            }//acm 2
+            
+            //flt2
+            if (row.get(14) != null){
+                value = row.get(14).toString().trim();
+                if (value.length() > 0){
+                    sb.append("\"" + value + "\" /c\r\n");
+                }
+            }//flt2
+            
+            //stn21, 22, 23, 24
+            for (int i = 15; i < 19; i++){
+                if (row.get(i) != null){
+                    value = row.get(i).toString().trim();
+                    if (value.length() > 0){
+                        sb.append("\"" + voiceFilePath + value + ".wav\" /m\r\n");
+                    }
+                }
+            }//stn21, 22, 23, 24
+            
+            //time21
+            if (row.get(19) != null){
+                value = row.get(19).toString().trim();
+                if (value.length() > 0){
+                    sb.append("\"" + voiceFilePath + "btime.wav\" /m\r\n");
+                    sb.append("\"" + value + "\" /c\r\n");
+                }
+            }//time21
+            
+            //Write call date & time
+            String criteria = "emplno='" + emplno + "' AND dutycode='" + row.get(0) + "' AND dutydate={" + sdfDate.format(row.get(1)) + "} AND flt='" + row.get(3) + "'";
+            String tables = "chgduty";
+            String setClause = "calldate={"+sdfDate.format(currDt)+"}, calltime='" + currTime + "',flag='Y'";
+            String whereClause = "(" + criteria + "AND flag='N')";
+            CicoDb cicoDb = new CicoDb();
+            cicoDb.update(tables, setClause, whereClause);
+            cicoDb = null;
+            //Write call date & time
+        }//for
+*************************************************************************
+*/
+
+
+
+/*
+=======================================================================================
+	   String[] p;	       
+	   p = apisPersonal.getApisPersonal(empno);   
+	  
+	   lname    = p[0];	   				 
+       fname    = p[1];				 
+       nation   = p[2];	 	   
+	   birth    = p[3]; 
+	   if (birth.length() == 6){	  	   
+	      if (birth.substring(0,1) == "0" || birth.substring(0,1) == "1") birthyyyy = "20"+birth.substring(0,2);
+          else birthyyyy = "19"+birth.substring(0,2);
+	      birthmm  = birth.substring(2,4);
+          birthdd  = birth.substring(4,6);	  
+       }else{
+	      birthyyyy = "";
+		  birthmm = "";
+		  birthdd = ""; 
+	   }//if
+	    	   				 
+	   passport = p[4]; 				 
+	   gender   = p[5];	   				 
+	   gdorder  = p[6];
+	   occu     = p[7];				 
+	   meal     = p[8]; 
+	   certno   = p[9];	   
+	   certctry = p[10];	   
+	   passcountry  = p[11];	   
+	   doctype      = p[12];  				 
+	   birthcity    = p[13];				 
+	   birthcountry = p[14];	   
+	   resicountry  = p[15];	   
+	   resiaddr1    = p[16];	   
+	   resiaddr2    = p[17]; 				 
+	   resiaddr3    = p[18];			 
+	   resiaddr4    = p[19]; 				 
+	   resiaddr5    = p[20];	   	
+	   tvlstatus    = p[21];	 	 
+	   passexp      = p[22]; 
+	   if (passexp.length() == 6){
+	      passyyyy = "20"+passexp.substring(0,2);
+          passmm   = passexp.substring(2,4);
+          passdd   = passexp.substring(4,6);	   
+	   }else{
+	      passyyyy = "";
+		  passmm   = "";
+		  passdd   = "";
+	   }//if 
+	   certdoctype  = p[23];
+	   certexp      = p[24];
+	   if (certexp.length() == 6){
+   	      certyyyy  = "20"+certexp.substring(0,2);
+          certmm    = certexp.substring(2,4);
+          certdd    = certexp.substring(4,6);
+	   }else{
+	      certyyyy = "";
+		  certmm   = "";
+		  certdd   = "";	   
+	   }//if	     
+=======================================================================================
+*/
+
+
+/*
+String status = "";
+String pk = "";
+String carrier = request.getParameter("carrier"); 
+String fltyyyy = request.getParameter("fltyyyy"); 
+String fltyy   = fltyyyy.substring(2,4);
+String fltmm   = request.getParameter("fltmm"); 
+String fltdd   = request.getParameter("fltdd"); 
+String fltno   = request.getParameter("fltno");
+String empno   = request.getParameter("empno"); 
+String lname   = request.getParameter("lname"); 
+String fname   = request.getParameter("fname"); 
+String depart  = request.getParameter("depart"); 
+String dest    = request.getParameter("dest"); 
+String nation  = request.getParameter("nation"); 
+String birthyyyy = request.getParameter("birthyyyy");
+String birthyy = birthyyyy.substring(2,4);
+String birthmm = request.getParameter("birthmm");
+String birthdd = request.getParameter("birthdd");
+String birthcity = request.getParameter("birthcity"); 
+String birthcountry = request.getParameter("birthcountry"); 
+String resicountry  = request.getParameter("resicountry"); 
+String resiaddr1 = request.getParameter("resiaddr1"); if (resiaddr1 == null) resiaddr1 = ""; 
+String resiaddr2 = request.getParameter("resiaddr2"); if (resiaddr2 == null) resiaddr2 = ""; 
+String resiaddr3 = request.getParameter("resiaddr3"); if (resiaddr3 == null) resiaddr3 = ""; 
+String resiaddr4 = request.getParameter("resiaddr4"); if (resiaddr4 == null) resiaddr4 = ""; 
+String resiaddr5 = request.getParameter("resiaddr5"); if (resiaddr5 == null) resiaddr5 = ""; 
+String passport  = request.getParameter("passport"); 
+String doctype   = request.getParameter("doctype"); 
+String passcountry  = request.getParameter("passcountry"); 
+String passyyyy = request.getParameter("passyyyy");
+String passyy   = passyyyy.substring(2,4);
+String passmm   = request.getParameter("passmm");
+String passdd   = request.getParameter("passdd");
+String gender   = request.getParameter("gender"); 
+String gdorder  = request.getParameter("gdorder");
+String occu     = request.getParameter("occu"); 
+String tvlstatus = request.getParameter("tvlstatus"); 
+String dh       = request.getParameter("dh");       if (dh == null)   dh   = "";
+String meal     = request.getParameter("meal");     if (meal == null) meal = "";
+String certno   = request.getParameter("certno");   if (certno == null) certno = "";
+String certctry = request.getParameter("certctry"); if (certctry == null) certctry = "";
+String certdoctype  = request.getParameter("certdoctype"); if (certdoctype == null) certdoctype = "";
+String certyyyy  = request.getParameter("certyyyy"); if (certyyyy == null) certyyyy = "";
+String certyy;
+if (certyyyy.length() == 4) certyy = certyyyy.substring(2,4);	   
+else certyy = "";     
+String certmm = request.getParameter("certmm"); if (certmm == null) certmm = "";
+String certdd = request.getParameter("certdd"); if (certdd == null) certdd = "";
+*/
+
+
+
+
+
+//==================================
+// Insert into DB2 flight by flight
+//==================================
+
+%>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title></title>
+<style type="text/css">
+<!--
+.invisibleButton {border:0; background-color:white;}
+-->
+</style>
+<script language=javascript>
+//function apisSelect(){  	   
+//   document.form1.target = "_self";
+//   document.form1.action = "apis_select.jsp";
+//   document.form1.submit();	
+//}//function
+</script>
+</head>
+<body>
+<!--
+<form name="form1" method="post">
+    <input name="sel_year" type="hidden" value=<%//=fltyyyy%> >
+    <input name="sel_mon"  type="hidden" value=<%//=fltmm%>   >
+    <input name="sel_dd"   type="hidden" value=<%//=fltdd%>   >
+    <input name="fltno"    type="hidden" value=<%//=fltno%>   >
+    <input class="invisibleButton" name="submit"   type="submit" value="" onClick="apisSelect()"> 
+</form>
+-->
+<%
+//status = apisDelete.delete(fdate, fltno, empno);
+//status = apisInsert.insert(apisRow);
+//session.setAttribute("seStatus", status);
+//pageContext.removeAttribute("apisInsert");
+%><script language="javascript">	   
+//document.form1.submit.click();
+</script><%   
+%>
+
+</body>
+</html>

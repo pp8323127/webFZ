@@ -1,0 +1,7 @@
+<info>
+	<infoitem key="UD_Recordset1" value="name:TFLYPAY;datatype:NUMBER,name:TOVER;datatype:NUMBER,name:STBY;datatype:NUMBER,name:REW;datatype:NUMBER,name:SDC;datatype:NUMBER,name:OTHB;datatype:NUMBER,name:WINE;datatype:NUMBER,name:SALE;datatype:NUMBER,name:TSUM;datatype:NUMBER" />
+	<infoitem key="UD_request1" value="year" />
+	<infoitem key="UD_requestCount" value="3" />
+	<infoitem key="UD_request2" value="month" />
+	<infoitem key="UD_request3" value="payid" />
+</info>

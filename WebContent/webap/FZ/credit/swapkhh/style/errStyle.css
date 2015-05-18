@@ -1,0 +1,23 @@
+/* CSS Document ,style for error Message */
+
+.errStyle1{
+		background-color:#99FFFF;
+		color:#FF0000;
+		font-family:Verdana;
+		font-size:10pt;padding:5pt;
+		text-align:center;
+}
+.errStyle2{
+		background-color:#99FFFF;
+		color:#FF0000;
+		font-family:Verdana;
+		font-size:10pt;
+		text-align:left;
+		padding:10pt ;
+		line-height: 2;
+		margin-left:auto;
+		margin-right:auto;
+		margin-top:20pt;
+		width: 500pt;
+}
+	

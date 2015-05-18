@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>PUR Evaluation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<link href= "../style.css" rel="stylesheet" type="text/css">
+<script src="../js/showDate.js"></script>
+<script language="JavaScript" src="calendar2.js"></script>
+<style type=text/css>
+<!--
+BODY{margin:0px;/*內容貼緊網頁邊界*/}
+.style1 {
+	color: #9900FF;
+	font-weight: bold;
+	font-family: Arial, Helvetica, sans-serif;
+}
+.style2 {color: #FFFFFF}
+.style3 {color: #0000FF}
+-->
+</style>
+</head>
+
+<body>
+<div align="center">
+<p>
+
+<form name="form1" method="post" target="mainFrame" action="viewListInfo_FE.jsp">
+  <p><span class="style1">Query Period</span>    
+  <span class="txtblue">From</span>     
+  	<input name="sdate" id="sdate" type="text" size="10" maxlength="10" class="txtblue"> 			
+	<img height="20" src="../images/p2.gif" width="20" onClick ="cal1.popup();">&nbsp;     
+    <span class="txtblue">To</span> 
+  	<input name="edate" id="edate" type="text" size="10" maxlength="10" class="txtblue"> 			
+	<img height="20" src="../images/p2.gif" width="20" onClick ="cal2.popup();"> 
+   <span class="txtred">*格式：yyyy/mm/dd。</span> &nbsp;
+  <input type="submit" name="Submit" value="Query"><br>
+  <span class="style1 style3">( View / Print PUR Evalution Report )</span>
+</form>
+</div>
+</body>
+</html>
+<script  type="text/javascript" language="javascript">
+	var cal1 = new calendar2(document.forms[0].elements['sdate']);
+	cal1.year_scroll = true;
+	cal1.time_comp = false;
+	document.getElementById("sdate").value =cal1.gen_date(new Date());
+
+	var cal2 = new calendar2(document.forms[0].elements['edate']);
+	cal2.year_scroll = true;
+	cal2.time_comp = false;
+	document.getElementById("edate").value =cal2.gen_date(new Date());
+</script>

@@ -1,0 +1,144 @@
+<html>
+<head>
+<title>Flight Query</title>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<link rel="stylesheet" href="menu.css" type="text/css">
+<script language="JavaScript" type="text/JavaScript">
+ nowdate = new Date();
+ var y,m,d;
+	y = nowdate.getFullYear() ;
+	m = nowdate.getMonth()+1;
+	d =nowdate.getDate();
+
+	
+ function shownow(){
+	
+	if (d >=25){  //超過25日，抓下一月
+		if(m ==12){	//12月25，抓明年一月
+			m = 0;
+			y ++;
+		}
+		m = m+1;
+	}
+	
+	if (m < 10) {
+		document.form1.fmm.value = "0"+m;
+	}
+	else{
+		document.form1.fmm.value = m;
+	} 
+	
+		document.form1.fyy.value = y;
+	
+
+ }
+ 
+function checkdate(){
+/*var sely,selm,seld;
+seldate = new Date();	//設定選擇的日期
+sely = form1.fyy.value;
+selm = parseInt(form1.fmm.value)-1;
+	if(form1.fdd.value != 'N'){	//選擇年月日
+	seld = form1.fdd.value;
+	seldate.setFullYear(sely);
+	seldate.setMonth(selm);
+	seldate.setDate(seld);
+	}
+	else{	//選擇年月
+		seldate.setFullYear(sely);
+		seldate.setMonth(selm);	}*/
+
+	if(form1.fdd.value == "N"){
+		if (form1.fltno.value == "" && form1.dpt.value == ""){
+			alert("尚未輸入Fltno或Dpt，請重新輸入!!\n\n"
+				+"Please insert Flight Number or Departure!!");
+			document.form1.fltno.focus();	
+			return false;
+		}
+		document.form1.action="flightcrew.jsp";
+		return true;
+	}
+	else if(form1.fdd.value != "N" && form1.fltno.value != "" && form1.dpt.value != ""){
+		document.form1.action = "crewdetail.jsp";
+		return true;
+	}
+	else
+	{
+		document.form1.action="flightcrew.jsp";
+		return true;
+	}
+}
+
+</script>
+
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000" onLoad="shownow()">
+<form name="form1" method="post" target="mainFrame" onSubmit="return checkdate()">
+  <select name="fyy" class="t1">
+    <option value="2003">2003</option>
+      <option value="2004">2004</option>
+      <option value="2005">2005</option>
+      <option value="2006">2006</option>
+  </select>
+    
+  <select name="fmm" class="t1">
+    <option value="01">01</option>
+    <option value="02">02</option>
+    <option value="03">03</option>
+    <option value="04">04</option>
+    <option value="05">05</option>
+    <option value="06">06</option>
+    <option value="07">07</option>
+    <option value="08">08</option>
+    <option value="09">09</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+  </select>
+  <select name="fdd" class="t1">
+    <option value="N">N</option>
+    <option value="01">01</option>
+    <option value="02">02</option>
+    <option value="03">03</option>
+    <option value="04">04</option>
+    <option value="05">05</option>
+    <option value="06">06</option>
+    <option value="07">07</option>
+    <option value="08">08</option>
+    <option value="09">09</option>
+    <option value="10">10</option>
+    <option value="11">11</option>
+    <option value="12">12</option>
+    <option value="13">13</option>
+    <option value="14">14</option>
+    <option value="15">15</option>
+    <option value="16">16</option>
+    <option value="17">17</option>
+    <option value="18">18</option>
+    <option value="19">19</option>
+    <option value="20">20</option>
+    <option value="21">21</option>
+    <option value="22">22</option>
+    <option value="23">23</option>
+    <option value="24">24</option>
+    <option value="25">25</option>
+    <option value="26">26</option>
+    <option value="27">27</option>
+    <option value="28">28</option>
+    <option value="29">29</option>
+    <option value="30">30</option>
+    <option value="31">31</option>
+  </select>
+  <font size="2" face="Arial, Helvetica, sans-serif" color="#000099"><strong>FltNo</strong></font> 
+  <input type="text" name="fltno" size="10" maxlength="10" class="t1">
+  <font size="2" face="Arial, Helvetica, sans-serif" color="#000099"><strong>DPT 
+  <input type="text" name="dpt" maxlength="3" size="5">
+  </strong></font> 
+  <input type="submit" name="Submit" value="Query" class="btm">
+  <span class="txtblue">*Query all Flights without FltNo</span> 
+  <input type="hidden" name="arv" value="">
+  <input type="hidden" name="fdate" value="">
+</form>
+</body>
+</html>

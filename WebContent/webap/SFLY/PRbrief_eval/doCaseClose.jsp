@@ -1,0 +1,86 @@
+<%@ page contentType="text/html; charset=big5" language="java"  %>
+<%@page import="ci.db.*,java.sql.*,tool.*"%>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title></title>
+</head>
+<body>
+<%
+String userid = (String) session.getAttribute("userid") ; //get user id if already login
+String doclose = request.getParameter("doclose");
+String syy = request.getParameter("syy");
+String smm = request.getParameter("smm");
+String eyy = request.getParameter("eyy");
+String emm = request.getParameter("emm");
+String base = request.getParameter("base");
+String yyyymm = request.getParameter("yyyymm");
+
+if (userid == null) 
+{		
+	response.sendRedirect("../logout.jsp");
+}
+else
+{
+		if("Y".equals(doclose))
+		{
+			String sql = null;
+			Connection conn = null;
+			Statement stmt = null;
+			Driver dbDriver = null;
+			ConnDB cn = new ConnDB();
+			try
+			{
+				cn.setORP3EGUserCP();
+				dbDriver = (Driver) Class.forName(cn.getDriver()).newInstance();
+				conn = dbDriver.connect(cn.getConnURL(), null);
+				stmt = conn.createStatement();  
+
+				sql = " update egtprbe set caseclose = 'Y', close_user = '"+userid+"', close_tmst = sysdate where brief_dt BETWEEN to_date('"+yyyymm+"/01','yyyy/mm/dd')  AND Last_Day(to_date('"+yyyymm+"/01','yyyy/mm/dd')) and caseclose is null ";
+				if(!"ALL".equals(base))
+				{
+					sql = sql + " and purempno in  (select trim(empn) from egtcbas where station = '"+base+"') ";
+				}
+				//out.print(sql+"<br>");
+				int c = stmt.executeUpdate(sql); 	
+				if (c>0)
+				{
+			%>
+					<script language=javascript>					window.opener.location.href="case_status_info.jsp?base=<%=base%>&syy=<%=syy%>&smm=<%=smm%>&eyy=<%=eyy%>&emm=<%=emm%>";	
+					window.location.href="doCaseCloseEmail.jsp?yyyymm=<%=yyyymm%>&base=<%=base%>&mailSubject=客艙經理任務簡報表現評估通知";
+					//self.close();
+					</script>
+			<%			
+				}
+			}
+			catch (Exception e)
+			{
+				  out.println("Error : " + e.toString() + sql);
+			}
+			finally
+			{
+				try{if(stmt != null) stmt.close();}catch(SQLException e){}
+				try{if(conn != null) conn.close();}catch(SQLException e){}
+			}
+		}
+		else
+		{
+%>
+			<SCRIPT LANGUAGE="JavaScript">
+
+			flag = confirm("Case close, 並寄送Email通知該員 ?");
+			if (flag == true) 
+			{
+				window.location.href="doCaseClose.jsp?yyyymm=<%=yyyymm%>&base=<%=base%>&syy=<%=syy%>&smm=<%=smm%>&eyy=<%=eyy%>&emm=<%=emm%>&doclose=Y";
+			}
+			else
+			{
+				self.close();		
+			}
+			</SCRIPT>
+<%
+		}
+}	
+%>
+</body>
+</html>

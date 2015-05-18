@@ -1,0 +1,291 @@
+<%@ page contentType="text/html; charset=big5" language="java"  %>
+<%@ page import="java.sql.*,java.util.*,ci.db.*,tool.ReplaceAll,java.util.ArrayList" %>
+<%
+String userid = (String) session.getAttribute("userid") ; //get user id if already login
+
+if (userid == null) {		
+	response.sendRedirect("logout.jsp");
+}
+
+String fltno;
+String trip;
+String fltd;
+String Y;
+String M;
+String D;
+String fleet;
+String acno;
+String purname;
+String pursern;
+String instname;
+String instempno;
+String upduser;
+
+fltno = request.getParameter("fltno");
+trip = request.getParameter("trip");
+fltd = request.getParameter("fltd");
+Y = request.getParameter("Y");
+M = request.getParameter("M");
+D = request.getParameter("D");
+acno = request.getParameter("acno");
+fleet = request.getParameter("fleet");
+purname = request.getParameter("purname");
+pursern = request.getParameter("pursern");
+instname = request.getParameter("instname");
+instempno = request.getParameter("instempno");
+upduser = request.getParameter("upduser");
+
+int countSern = 0;
+
+String sernno = null;
+String flag = null;
+String remark = null;
+
+String rmNo = null;
+String rmDsc = null;
+
+String siNo = null;
+String itemno_rm = null;
+
+String str = null;
+
+Connection conn = null;
+Statement stmt = null;
+Statement stmt3 = null;
+Statement stmtIns_egtstti= null;
+Statement stmtCountSern = null;
+PreparedStatement pstmt = null;
+
+ResultSet myResultSetIns_egtstti = null;
+ResultSet rs = null;
+ResultSet rs3 = null;
+ResultSet rsCountSern = null;
+
+String sql  = null;
+String sql2 = null; 
+String sql3 = null;
+String sqlIns_egtstti = null;
+String sqlCountSern = null;
+
+ConnDB cn = new ConnDB();
+//ArrayList sItemNoAL = new ArrayList();
+Driver dbDriver = null;
+
+try
+{
+cn.setORP3EGUserCP();
+dbDriver = (Driver) Class.forName(cn.getDriver()).newInstance();
+conn = dbDriver.connect(cn.getConnURL(), null);
+
+
+stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+stmt3 = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+stmtIns_egtstti  = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+stmtCountSern  = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+
+//先驗證修改後的sernno是否已經存在,若已存在，show message
+sqlCountSern ="select count(*)  count from egtstti where fltd=to_date('"+fltd+"','yyyy/mm/dd') and fltno='"+fltno+"' and trip='"+trip+"' and fleet='"+fleet+"' and acno='"+acno+"' and purname='"+purname+"' and pursern='"+pursern+"' and instempno='"+instempno+"' and upduser='"+upduser+"' ";
+//out.print("sqlCountSern="+sqlCountSern+"<br>");
+rsCountSern  = stmtCountSern.executeQuery(sqlCountSern);
+if(rsCountSern != null)
+{
+	while(rsCountSern.next())
+	{
+		countSern = rsCountSern.getInt("count");
+	}
+}
+
+if(countSern >0)
+{
+			%>
+				<jsp:forward page="checklistHasSern.jsp" />
+			<%		
+}
+else
+{
+
+sql3 = "select Max(To_Number(sernno)) +1 as sernno from egtstti";
+rs3= stmt3.executeQuery(sql3);
+while(rs3.next())
+{
+	sernno = rs3.getString("sernno");
+}
+
+
+sqlIns_egtstti = "INSERT INTO egtstti (sernno, fltd, fltno, trip, fleet, acno, purname, pursern, instname, instempno, upduser,upddt) VALUES ('"+sernno+"', to_date('"+fltd+"','yyyy/mm/dd'), '"+fltno+"', '"+trip+"', '"+fleet+"', '"+acno+"', '"+purname+"', '"+pursern+"', '"+instname+"', '"+ instempno+ "', '"+ upduser+ "', sysdate)";
+//out.println(sqlIns_egtstti+"<br>");
+stmtIns_egtstti.executeUpdate(sqlIns_egtstti); 
+sql = "select si.itemno as itemno from egtstsi si, egtstfi fi where si.kin=fi.itemno and fi.flag='Y' and si.sflag = 'Y' " ;
+rs  = stmt.executeQuery(sql);
+while(rs.next())
+{
+	siNo = rs.getString("itemno");
+	flag = request.getParameter(siNo);
+	remark = request.getParameter(siNo+"remark");
+	itemno_rm =request.getParameter(siNo+"rm");
+	
+	//sql2 = "insert into egtstdt (sernno,itemno,flag,remark,itemno_rm) values('"+sernno+"','"+siNo+"', '"+flag+"', '"+remark+"', '"+itemno_rm+"')";
+	//out.println(sql2+"<br>");
+	//stmt2.executeUpdate(sql2);  
+
+	sql2 = "insert into egtstdt (sernno,itemno,flag,remark,itemno_rm) values(?,?,?,?,?)";
+	pstmt = conn.prepareStatement(sql2);
+	pstmt.setString(1, sernno);
+	pstmt.setString(2, siNo);
+	pstmt.setString(3, flag);
+	pstmt.setString(4, remark);
+	pstmt.setString(5, itemno_rm);
+    pstmt.executeUpdate();
+
+}
+
+%>
+				<script language=javascript>
+				alert(" CABIN SAFETY CHECK LIST insert completed !! \n Continue to fill in Q＆A, Comment＆Suggestion, and Process field !!");
+				</script>
+<%
+
+%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<title>check list insert</title>
+<link href="style.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" type="text/JavaScript">
+function f_onload()
+{
+   document.form1.qa.focus();
+}
+
+
+
+</script>
+<style type="text/css">
+<!--
+.style1 {color: #FF0000}
+.style3 {color: #000000}
+-->
+</style>
+</head>
+
+<body onload="f_onload()">
+<form name="form1" method="post" action="checklist_insert2.jsp">
+<input name="sernno" type="hidden" value="<%=sernno%>">
+
+    <div align="center"><span class="txttitletop">Cabin Safety Check List </span> 
+  </div>
+<table width="90%"  border="1" align="center" cellpadding="0" cellspacing="0" class="fortable"> 
+  <tr class="tablebody">
+ 	<td width="62%" class="txtblue" ><div align="left" class="style3">Flight：<%=fltno%><strong>　</strong>Sector：<%=trip%> </div></td>
+    <td width="38%" ><div align="left" class="txtblue style3">Date：<%=Y%> Y <%=M%> M <%=D%> D</div></td>
+  </tr> 
+  <tr class="tablebody">
+ 	<td width="62%" class="txtblue" ><div align="left" class="style3">A/C： <%=fleet%><strong>　</strong>(<%=acno%>)<strong>　</strong>　　　Purser：<%=purname%></div></td>
+    <td width="38%" ><div align="left" class="txtblue style3">Inspecter：<%=instname%></div></td>
+  </tr> 
+</table>
+ <%
+GregorianCalendar cal1 = new GregorianCalendar();
+GregorianCalendar cal2 = new GregorianCalendar();
+
+//2009/07/20 後項目異動
+cal1.set(Calendar.YEAR,2009);
+cal1.set(Calendar.MONTH,7-1);
+cal1.set(Calendar.DATE,20);
+
+//Fltdt
+cal2.set(Calendar.YEAR,Integer.parseInt(Y));
+cal2.set(Calendar.MONTH,Integer.parseInt(M)-1);
+cal2.set(Calendar.DATE,Integer.parseInt(D));
+if(cal2.before(cal1))
+{
+%>
+<table width="90%"  border="1" align="center" cellpadding="0" cellspacing="0" class="fortable"> 
+  <tr class="tablehead3">
+    <td height="5" colspan="5"><div align="left"><strong>&nbsp;Q&amp;A </strong></div>
+    </td>
+  </tr>
+  <tr class="tablebody">
+    <td height="5" colspan="5" bgcolor="#FFFFFF">
+          <div align="left">
+            <textarea name="<%=sernno%>qa" cols="90%" rows="5" id="qa"></textarea> 
+          </div></td>
+  </tr>
+</table>
+<%
+}
+%>
+<table width="90%"  border="1" align="center" cellpadding="0" cellspacing="0" class="fortable"> 
+  <tr class="tablehead3"><td height="5" colspan="5"><div align="left"><strong>&nbsp;Comment and Suggestion</strong></div>
+      </td>
+  </tr>
+    <tr class="tablebody">
+    <td height="5" colspan="5" bgcolor="#FFFFFF">
+        <div align="left">
+          <textarea name="<%=sernno%>comm" cols="90%" rows="5" id="comm"></textarea>
+        </div></td>
+  </tr>
+</table>
+<%
+if(cal2.before(cal1))
+{
+%>
+<table width="90%"  border="1" align="center" cellpadding="0" cellspacing="0" class="fortable"> 
+	<tr class="tablebody">
+    <td width="6%" height="1" bgcolor="#FFFFFF"><div align="center" class="style11 style12 style1">收文
+    </div></td>
+    <td width="40%" bgcolor="#FFFFFF"><div align="center" class="style11 style12 style1">擬辦</div></td>
+    <td width="24%" bgcolor="#FFFFFF"><div align="center" class="style13 style1">複核</div></td>
+    <td width="24%" bgcolor="#FFFFFF"><div align="center" class="style13 style1">批示</div></td>
+    <td width="6%" bgcolor="#FFFFFF"><div align="center" class="style13 style1">複閱</div></td>
+  </tr>
+      <tr class="tablebody">
+        <td width="6%" height="150" bgcolor="#FFFFFF">&nbsp;</td>
+        <td height="150" bgcolor="#FFFFFF">
+          <div align="left">
+            <textarea name="<%=sernno%>process" cols="40%" rows="8" id="process"></textarea>
+</div></td>
+        <td width="24%" height="150" bgcolor="#FFFFFF">&nbsp;</td>
+        <td width="24%" height="150" bgcolor="#FFFFFF">&nbsp;</td>
+        <td width="6%" height="150" bgcolor="#FFFFFF">&nbsp;</td>
+      </tr>
+</table>
+<%
+}	
+%>
+<table width="90%"  border="1" align="center" cellpadding="0" cellspacing="0" class="fortable"> 
+	  <tr>
+	    <td height="5" colspan="5"><div align="center">
+    		<input name="Submit" type="submit" class="fortable" value="Submit">　　
+    		<input type="reset" name="Submit" value="Reset"></div>
+	  </td></tr>
+</table>
+</form>
+
+<%
+
+}
+}catch(Exception e)
+{
+	out.print(e.toString());
+}
+finally
+{
+		try{if(rs != null) rs.close();}catch(SQLException e){}
+		try{if(rs3!= null) rs3.close();}catch(SQLException e){}
+		try{if(rsCountSern!= null) rsCountSern.close();}catch(SQLException e){}			
+		try{if(myResultSetIns_egtstti != null) myResultSetIns_egtstti.close();}catch(SQLException e){}
+		try{if(stmt != null) stmt.close();}catch(SQLException e){}
+		try{if(pstmt!= null) pstmt.close();}catch(SQLException e){}
+		try{if(stmt3!= null) stmt3.close();}catch(SQLException e){}
+		try{if(stmtCountSern!= null) stmtCountSern.close();}catch(SQLException e){}			
+		try{if(stmtIns_egtstti != null) stmtIns_egtstti.close();}catch(SQLException e){}
+		try{if(conn != null) conn.close();}catch(SQLException e){}
+}
+
+
+%>
+</body>
+</html>
+

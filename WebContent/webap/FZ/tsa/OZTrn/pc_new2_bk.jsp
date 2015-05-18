@@ -1,0 +1,753 @@
+<%@ page contentType="text/html; charset=big5" language="java"   %>
+<%@ page import="java.sql.*,ci.db.*,da.PTPC.*,java.util.*,java.io.*,java.text.*,javax.sql.DataSource,javax.naming.InitialContext, org.apache.poi.hssf.usermodel.*, fz.*,java.sql.Date,fz.*,dz.eLearning.MSSQLConn"%>
+<html><head><title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=big5">
+<link href="style.css" rel="stylesheet" type="text/css">
+<script src="CheckAll.js"  language="javascript" type="text/javascript"></script>
+<script src="checkDel.js"  language="javascript" type="text/javascript"></script>
+<script src="calendar2.js" language="JavaScript" type="text/javascript"></script>
+<script src="../../js/subWindow.js"></script>
+<script language="javascript" type="text/javascript">     
+
+function AdjCkDtSave(empno, adjckdt){
+    alert(empno+" "+adjckdt);
+    //eval("document."+formName+".mode.value='INSERT'");
+	//eval("document."+formName+".target = '_self'");
+	eval("document.form1.curremp.value = empno");
+	eval("document.form1.curradj.value = adjckdt");
+	eval("document.form1.action = 'pc_update_form.jsp'");
+	eval("document.form1.submit()");
+}//function
+</script>
+</head>
+<%!
+String fdate, fdate2;
+SimpleDateFormat sdf;
+java.util.Date erpt, rrpt;
+long millis;
+String bcolor0, bcolor1, bcolor2, bcolor3;
+
+ArrayList ArrEmpno    = null;
+ArrayList ArrItemname = null;
+ArrayList ArrCname    = null;
+ArrayList ArrActype   = null;
+ArrayList ArrJobtype  = null;
+ArrayList ArrEname    = null;
+ArrayList ArrActp     = null;
+ArrayList ArrCdate    = null;
+
+int i;
+String tableSource = null;
+%>
+<%
+String userid = (String) session.getAttribute("userid") ; //get user id if already login
+if (userid == null) {		//check user session start first or not login
+	response.sendRedirect("../sendredirect.jsp");
+} //if
+
+String sql_insert_fm_mssql = null;
+String sql_delete_fm_mssql = null;
+int i_delete_count = 0;
+PreparedStatement pstmt_insert_fm_mssql = null;
+PreparedStatement pstmt_delete = null;
+int i_insert_fm_mssql_count = 0;
+ci.db.ConnDB cn_ins = new ci.db.ConnDB();
+Driver dbDriver_ins = null;
+Connection conn_ins = null;
+
+String sql_pc = null; String sql_pt  = null; String sql_rc = null;
+String sql_crm_mssql= null; String sql_crm = null;
+String sql_ss_mssql = null; String sql_ss  = null;
+String sql_et_mssql = null; String sql_et  = null;
+String sql_dg_mssql = null; String sql_dg  = null;
+
+String sql_0      = null;   ConnDB cn_0       = new ConnDB();
+Connection conn_0 = null;   Statement stmt_0  = null;
+ResultSet rs_0    = null;   Driver dbDriver_0 = null;
+DataSource ds_0   = null; 
+
+String sql_1      = null;   ConnDB cn_1       = new ConnDB();
+Connection conn_1 = null;   Statement stmt_1  = null;
+ResultSet rs_1    = null;   Driver dbDriver_1 = null;
+DataSource ds_1   = null; 
+
+Connection MSSQL_conn = null;  Statement MSSQL_stmt = null;
+ResultSet  MSSQL_rs   = null;  String    MSSQL_sql  = "";
+
+String sql_2      = null;   ConnDB cn_2       = new ConnDB();
+Connection conn_2 = null;   Statement stmt_2  = null;
+ResultSet rs_2    = null;   Driver dbDriver_2 = null;
+DataSource ds_2   = null; 
+
+String sql_3      = null;   ConnDB cn_3       = new ConnDB();
+Connection conn_3 = null;   Statement stmt_3  = null;
+ResultSet rs_3    = null;   Driver dbDriver_3 = null;
+DataSource ds_3   = null;
+
+String sql_4      = null;   ConnDB cn_4       = new ConnDB();
+Connection conn_4 = null;   Statement stmt_4  = null;
+ResultSet rs_4    = null;   Driver dbDriver_4 = null;
+DataSource ds_4   = null;
+
+String inrosdt     = null; String trnCdCond   = null;
+String ckadjdt     = null; String suggCkadjdt = null;
+String lastChktype = null; String currChktype = null;
+String dualRating  = null; String dualRatingFlag = null;
+String defaRange   = "";   String orderBy = "";   String ratexp = null;
+Calendar cal = new GregorianCalendar(); 
+SimpleDateFormat sdfd = new SimpleDateFormat("yyyy-MM-dd");
+SimpleDateFormat sdfm = new SimpleDateFormat("yyyy-MM");
+String bcolor = ""; 
+
+String fleet     = request.getParameter("fleet");
+String rank      = request.getParameter("rank");
+String syear1    = request.getParameter("sel_year1") ;
+String eyyyymm   = request.getParameter("sel_year2") + request.getParameter("sel_mon2");
+String checkType = request.getParameter("checkType");
+
+if ("PC".equals(checkType) | "PT".equals(checkType) | "RC".equals(checkType)) {
+   tableSource = "DZ_DF";
+}else if ("CRM".equals(checkType) | "SS".equals(checkType) | "ET".equals(checkType) | "DG".equals(checkType)) {
+   tableSource = "eLearning";
+}//if
+
+//if("CRM".equals(checkType)) checkType="PC";
+
+String ob = request.getParameter("ob");
+
+if (rank.equals("ALL")) rank = "CA', 'RP', 'FO";
+
+String syyyymm;
+if (syear1.equals("不限")) syyyymm = ""; 
+else syyyymm = request.getParameter("sel_year1") + request.getParameter("sel_mon1");
+
+//Last day of month
+Calendar cal2 = new GregorianCalendar();
+cal2 = new GregorianCalendar(Integer.parseInt(request.getParameter("sel_year2")), Integer.parseInt(request.getParameter("sel_mon2"))-1, Integer.parseInt("01"));
+String lastdom = "" +cal2.getActualMaximum(Calendar.DATE); 
+
+if ("ALL".equals(fleet)) fleet = "333', '343', '738', '744"; 
+
+if (fleet.equals("333")) {
+    if      ("PC".equals(checkType))  dualRating = "AND '1' in (SELECT count(*) FROM fztckpl WHERE empno=sim.empno) ";
+	else if ("PT".equals(checkType))  dualRating = "AND '1' in (SELECT count(*) FROM fztckpl WHERE empno=a.empno) ";
+	else if ("RC".equals(checkType))  dualRating = "AND '1' in (SELECT count(*) FROM fztckpl WHERE empno=sim.empno) ";
+	else if ("CRM".equals(checkType) | "SS".equals(checkType) |"ET".equals(checkType) |"DG".equals(checkType)) dualRating = "";
+}else{
+	dualRating = "";
+}//if
+
+if (syyyymm == null | syyyymm == ""){
+	defaRange = "";
+}else{
+    if ("PC".equals(checkType)) 
+	        defaRange = " AND TO_CHAR(add_months(sim.cdate,6),'yyyymm') BETWEEN " + syyyymm + " AND " + eyyyymm + " ";
+    else if ("PT".equals(checkType)) 
+	        defaRange = " AND TO_CHAR(add_months(a.tdate,6),  'yyyymm') BETWEEN " + syyyymm + " AND " + eyyyymm + " ";
+    else if ("RC".equals(checkType)) 
+	        defaRange = " AND TO_CHAR(add_months(sim.cdate,12),'yyyymm') BETWEEN " + syyyymm + " AND " + eyyyymm + " ";
+    else if ("CRM".equals(checkType) | "SS".equals(checkType)  | "ET".equals(checkType) | "DG".equals(checkType)) 
+	        defaRange = " AND DateAdd(month,12,dateon) BETWEEN '" + syyyymm+"01' and '"+eyyyymm+lastdom+"' "; 
+ 	else defaRange = "";
+}//if
+
+if ("PC".equals(checkType)) 
+     trnCdCond = " AND (rostrg.TRG_CD LIKE '0%_PC' or rostrg.TRG_CD like '0%_RE-PC') ";
+else if ("PT".equals(checkType)) 
+     trnCdCond = " AND (rostrg.TRG_CD LIKE '0%_PT' or rostrg.TRG_CD like '0%_RE-PT') ";
+else if ("RC".equals(checkType)) 
+     trnCdCond = " AND rostrg.TRG_CD LIKE '0%ANNUAL_R/C' ";
+else if ("CRM".equals(checkType))
+     trnCdCond = " AND rostrg.TRG_CD='CRMT' ";
+else if ("SS".equals(checkType))	 
+     trnCdCond = " AND rostrg.TRG_CD='SST' ";
+else if ("ET".equals(checkType))
+      trnCdCond = " AND rostrg.TRG_CD='ETT' ";
+else trnCdCond = "";
+
+//Order by
+if (ob.equals("1")) {
+   if       ("PC".equals(checkType))  orderBy = "ORDER BY sim.cdate, p.job_type, sim.empno ";
+   else if  ("PT".equals(checkType))  orderBy = "ORDER BY a.tdate, p.job_type, a.empno "; 
+   else if  ("RC".equals(checkType))  orderBy = "ORDER BY Max(sim.cdate), p.job_type, sim.empno ";
+   else if  ("CRM".equals(checkType) | "SS".equals(checkType)  | "ET".equals(checkType) | "DG".equals(checkType)) orderBy = "ORDER BY x.dateon, p.job_type, x.empno ";
+   else orderBy = "";
+}else{ 
+   if       ("PC".equals(checkType))  orderBy = "ORDER BY sim.empno ";
+   else if  ("PT".equals(checkType))  orderBy = "ORDER BY a.empno ";
+   else if  ("RC".equals(checkType))  orderBy = "ORDER BY sim.empno ";
+   else if  ("CRM".equals(checkType) | "SS".equals(checkType) | "ET".equals(checkType) | "DG".equals(checkType)) orderBy = "ORDER BY x.empno ";
+   else orderBy = "";
+}//if
+
+/**************/
+/*     PC     */
+/**************/
+sql_pc = "SELECT sim.empno, " +
+          "to_char(sim.cdate,'yyyy-mm-dd') cdate, " +
+          "s.itemname, " +
+          "p.c_name cname, "   + 
+		  "p.ac_type, "  +
+          "p.job_type, " +
+          "p.l_name||' '||p.f_name ename, " +
+          "sim.actp " +
+          "FROM  dztsimr  sim, dztchks s ,fztckpl p " + 
+          "WHERE sim.chktype = s.itemno  " +
+          "AND sim.empno = p.empno " +
+          "AND sim.subject ='CA' " + //PC item
+          "AND SubStr(sim.chktype,1,2)='CA' " + //PC item 
+          "AND sim.s11='S' " +
+          "AND To_Number(SubStr(sim.chktype,3,4)) <= 6 " +
+          "AND sim.empno||sim.cdate IN ( SELECT empno||Max(cdate) FROM dztsimr GROUP BY empno ) " + 
+          "AND p.valid=0 " +
+          "AND p.ac_type  in ('" + fleet+ "') " +
+          "AND p.job_type in ('" + rank + "') " +   
+          dualRating +
+          defaRange + 
+          orderBy ;
+		  
+/**************/
+/*     PT     */
+/**************/		  
+sql_pt = "SELECT  a.empno, " +
+         "to_char(a.tdate,'yyyy-mm-dd') cdate, " +
+         "b.itemname, " +
+         "p.c_name cname, " +
+         "p.ac_type, " +
+         "p.job_type, " +
+         "p.l_name||' '||p.f_name ename, " +
+         "a.actp " +
+         "FROM  DFTTEST a, dfttrni B, fztckpl p " +
+         "WHERE B.ITEMNAME LIKE 'PT%' " +
+         "AND A.ITEMNO2 = B.ITEMNO  " +
+         "AND a.empno = p.empno  " +
+         "AND a.empno||a.tdate IN ( SELECT empno||Max(tdate) FROM dfttest GROUP BY empno )  " +
+         "AND p.valid=0 " +
+         "AND p.ac_type  in ('" + fleet+ "') " +
+         "AND p.job_type in ('" + rank + "') " +
+		 dualRating +
+         defaRange + 
+         orderBy ;
+
+/**************/
+/*     RC     */
+/**************/		 
+sql_rc = "SELECT sim.empno, " +
+         "To_Char(Max(sim.cdate),'yyyy-mm-dd') cdate, " +
+         "s.sm||'-'||s.mm itemname,  " +
+         "p.c_name cname,  " +
+         "p.ac_type, " +
+         "p.job_type, " +
+         "p.l_name||' '||p.f_name ename, " +
+         "sim.actp " + 
+         "FROM dztsimr sim, " +
+         "fztckpl p, " +
+         "(SELECT s.itemname sm, m.itemname mm, s.itemno FROM dztchks s, dztchkm m WHERE s.kin = m.itemno) s  " +
+         "WHERE sim.empno = p.empno  " +
+         "AND sim.chktype = s.itemno  " +
+         "AND p.valid = 0  " +
+         "AND sim.subject = 'CB'  " + //RC item
+         "AND sim.chktype in ('CB01','CB02')  " + //RC item
+         "AND p.ac_type  in ('" + fleet + "') " +
+         "AND p.job_type in ('" + rank  + "') " +
+		 dualRating +
+		 defaRange + 
+         "GROUP BY sim.empno, p.c_name, p.ac_type, p.job_type, p.l_name||' '||p.f_name, s.sm, s.mm, sim.actp  " +
+         //"HAVING Max(cdate) < To_Date(To_Char(Add_Months(SYSDATE,6),'yyyy')||'0101','yyyymmdd')  " +
+         orderBy ;
+
+/**************/
+/*     CRM    */
+/**************/		 
+sql_crm_mssql = "SELECT userid AS empno, " +
+		 "CONVERT(varchar(10), MAX(dateon), 111) AS cdate, " +
+         "course AS itemname " + 
+		 "FROM LMS_for_OZ_View_LMS_Record_In_3 " + 
+		 "WHERE ( course LIKE '% CRM %' ) " +
+		 "AND result <> 0 " +
+		 defaRange +
+		 //"AND dateon BETWEEN '"+syyyymm+"01' and '"+eyyyymm+lastdom+"' " +
+		 "GROUP BY userid, course " ;
+		 
+sql_crm = "select x.empno, " +  
+          "to_char(x.dateon, 'yyyy-mm-dd') cdate, " + 
+          "x.course, " + 
+          "p.c_name, " + 
+          "p.ac_type, " + 
+          "p.job_type, " + 
+          "p.l_name||' '||p.f_name ename " + 
+          "from fzdb.fztopfx x, fztckpl p " + 
+          "where x.empno=p.empno " + 
+          "and x.qual = 'CRM' " +
+          "AND p.ac_type  in ('" + fleet + "') " +
+          "AND p.job_type in ('" + rank  + "') " +
+		  orderBy;
+
+
+/**************/
+/*     SS     */
+/**************/		  
+sql_ss_mssql = "SELECT userid AS empno, " +
+		 "CONVERT(varchar(10), MAX(dateon), 111) AS cdate, " +
+         "course AS itemname " + 
+		 "FROM LMS_for_OZ_View_LMS_Record_In_3 " + 
+		 "WHERE ( course LIKE '% SS Training%' OR course LIKE '% Aviation Security%' ) " +
+		 "AND result <> 0 " +
+		 defaRange +
+		 //"AND dateon BETWEEN '"+syyyymm+"01' and '"+eyyyymm+lastdom+"' " +
+		 "GROUP BY userid, course " ;
+		 
+sql_ss = "select x.empno, " +  
+          "to_char(x.dateon, 'yyyy-mm-dd') cdate, " + 
+          "x.course, " + 
+          "p.c_name, " + 
+          "p.ac_type, " + 
+          "p.job_type, " + 
+          "p.l_name||' '||p.f_name ename " + 
+          "from fzdb.fztopfx x, fztckpl p " + 
+          "where x.empno=p.empno " + 
+          "and x.qual = 'SS' " +
+          "AND p.ac_type  in ('" + fleet + "') " +
+          "AND p.job_type in ('" + rank  + "') " +
+		  orderBy;		 
+		  
+/**************/
+/*     ET     */
+/**************/		  
+sql_et_mssql = "SELECT userid AS empno, " +
+		 "CONVERT(varchar(10), MAX(dateon), 111) AS cdate, " +
+         "course AS itemname " + 
+		 "FROM LMS_for_OZ_View_LMS_Record_In_3 " + 
+		 "WHERE ( course LIKE '%SEP %' ) " +
+		 "AND result <> 0 " +
+		 defaRange +
+		 //"AND dateon BETWEEN '"+syyyymm+"01' and '"+eyyyymm+lastdom+"' " +
+		 "GROUP BY userid, course " ;
+		 
+sql_et = "select x.empno, " +  
+          "to_char(x.dateon, 'yyyy-mm-dd') cdate, " + 
+          "x.course, " + 
+          "p.c_name, " + 
+          "p.ac_type, " + 
+          "p.job_type, " + 
+          "p.l_name||' '||p.f_name ename " + 
+          "from fzdb.fztopfx x, fztckpl p " + 
+          "where x.empno=p.empno " + 
+          "and x.qual = 'ET' " +
+          "AND p.ac_type  in ('" + fleet + "') " +
+          "AND p.job_type in ('" + rank  + "') " +
+		  orderBy;
+		  
+/**************/
+/*     DG     */
+/**************/		  
+sql_dg_mssql = "SELECT userid AS empno, " +
+		 "CONVERT(varchar(10), MAX(dateon), 111) AS cdate, " +
+         "course AS itemname " + 
+		 "FROM LMS_for_OZ_View_LMS_Record_In_3 " + 
+		 "WHERE ( course LIKE '%DG %' ) " +
+		 "AND result <> 0 " +
+		 defaRange +
+		 //"AND dateon BETWEEN '"+syyyymm+"01' and '"+eyyyymm+lastdom+"' " +
+		 "GROUP BY userid, course " ;
+		 
+sql_dg = "select x.empno, " +  
+          "to_char(x.dateon, 'yyyy-mm-dd') cdate, " + 
+          "x.course, " + 
+          "p.c_name, " + 
+          "p.ac_type, " + 
+          "p.job_type, " + 
+          "p.l_name||' '||p.f_name ename " + 
+          "from fzdb.fztopfx x, fztckpl p " + 
+          "where x.empno=p.empno " + 
+          "and x.qual = 'DG' " +
+          "AND p.ac_type  in ('" + fleet + "') " +
+          "AND p.job_type in ('" + rank  + "') " +
+		  orderBy;		  		  		  		 
+		 
+ArrEmpno    = new ArrayList();
+ArrItemname = new ArrayList();
+ArrCname    = new ArrayList();
+ArrActype   = new ArrayList();
+ArrJobtype  = new ArrayList();
+ArrEname    = new ArrayList();
+ArrActp     = new ArrayList();
+ArrCdate    = new ArrayList();
+
+String path = application.getRealPath("/")+"/file/";
+String filename = "RECURR_"+checkType+".CSV";
+FileWriter fw = new FileWriter(path+filename,false);
+fw.write("Fleet,Rank,Empno,Name,Ename,檢定證(RAT)到期日,Last Date,Last Check Type,系統預排或承辦人輸入,Current Check Type" + "\r\n");
+
+/*********************************/
+/*   Table Source: DZ or DF      */
+/*********************************/
+if (tableSource.equals("DZ_DF")) {     
+    DataSource ds = null;         Driver dbDriver = null;      
+    Connection conn = null;       Statement stmt  = null;      
+    ResultSet myResultSet = null; ConnDB cn  = new ConnDB();   
+    String sql = null;
+    try{
+	    InitialContext initialcontext = new InitialContext();
+	    ds = (DataSource) initialcontext.lookup("CAL.FZDS02"); 
+	    conn = ds.getConnection();
+	    conn.setAutoCommit(false);	
+        stmt = conn.createStatement();	
+	
+	    if      ("PC".equals(checkType))  sql = sql_pc;
+	    else if ("PT".equals(checkType))  sql = sql_pt;
+	    else if ("RC".equals(checkType))  sql = sql_rc;			
+		
+        myResultSet = stmt.executeQuery(sql); 
+	    if(myResultSet != null){
+	         while (myResultSet.next()){
+		           ArrEmpno.add(myResultSet.getString("empno"));
+	               ArrItemname.add(myResultSet.getString("itemname"));
+    			   ArrCname.add(myResultSet.getString("cname"));
+	               ArrActype.add(myResultSet.getString("ac_type"));			   
+		    	   ArrJobtype.add(myResultSet.getString("job_type"));
+	               ArrEname.add(myResultSet.getString("ename"));
+    			   ArrActp.add(myResultSet.getString("actp")); 
+	    		   ArrCdate.add(myResultSet.getString("cdate")); 
+	         }//while
+	     }//if
+    }catch (SQLException e){
+          out.println("SQL Exception Error : <BR>" + sql+ "\r\n" + e.toString());
+    }catch (Exception e){
+          out.println("Exception Error :  <BR>" + sql+ "\r\n" + e.toString());
+    }finally{
+  	    try{ if(myResultSet != null) myResultSet.close();
+	    }catch(SQLException e){out.println("Erron in myResultSet.close() <BR> " + e.toString());}
+	
+	    try{ if(stmt != null) stmt.close();   
+	    }catch(SQLException e){out.println("Erron in  stmt.close() <BR>  " + e.toString());}
+		
+	    try{  if(conn != null){   conn.close();  }//if
+	    }catch(SQLException e){ out.println("Error in conn.close()" + e.toString());}
+    }//try
+	
+/*********************************/
+/*   Table Source: eLearning     */
+/*********************************/
+}else if (tableSource.equals("eLearning")) {	
+	if      ("CRM".equals(checkType)) { MSSQL_sql = sql_crm_mssql; sql_2 = sql_crm; }
+	else if ("SS".equals(checkType))  { MSSQL_sql = sql_ss_mssql;  sql_2 = sql_ss;  }
+	else if ("ET".equals(checkType))  { MSSQL_sql = sql_et_mssql;  sql_2 = sql_et;  }
+	else if ("DG".equals(checkType))  { MSSQL_sql = sql_dg_mssql;  sql_2 = sql_dg;  }
+	try {
+        cn_ins.setORP3FZUserCP();
+        dbDriver_ins = (Driver) Class.forName(cn_ins.getDriver()).newInstance();
+        conn_ins = dbDriver_ins.connect(cn_ins.getConnURL(), null); 
+ 
+	    MSSQLConn MSSQL_db = new MSSQLConn();
+        MSSQL_db.setELEARNING(); 
+        Class.forName(MSSQL_db.getDriver());
+        MSSQL_conn = DriverManager.getConnection(MSSQL_db.getConnURL(),MSSQL_db.getConnID(),MSSQL_db.getConnPW());
+        MSSQL_stmt = MSSQL_conn.createStatement();	
+	    MSSQL_rs = MSSQL_stmt.executeQuery(MSSQL_sql);
+
+	    while (MSSQL_rs.next())  {            
+      		sql_insert_fm_mssql = " INSERT INTO fzdb.fztopfx (empno,dateon,qual,course,upduser) VALUES( " + 
+			"'" + MSSQL_rs.getString("empno")   + "', " +
+			"TO_DATE('" + MSSQL_rs.getString("cdate") + "','YYYY/MM/DD'), " + 
+			"'"+checkType+"', " +
+			"'" + MSSQL_rs.getString("itemname") + "', " +
+			"'" + userid + "') ";		
+	
+ 		    pstmt_insert_fm_mssql = conn_ins.prepareStatement(sql_insert_fm_mssql);		
+ 		    i_insert_fm_mssql_count = pstmt_insert_fm_mssql.executeUpdate();
+		    pstmt_insert_fm_mssql.close();   		    					
+	    }//while
+	}catch (SQLException e){ out.println("SQL Exception Error : <BR>" + MSSQL_sql + "\r\n" + e.toString());
+    }catch (Exception e){    out.println("Exception Error :  <BR>" + MSSQL_sql + "\r\n" + e.toString());
+    }finally{
+  	    try{ if(MSSQL_rs != null)  MSSQL_rs.close();
+	       }catch(SQLException e){out.println("Erron in MSSQL_rs.close() <BR> " + e.toString());}	
+	    try{ if(MSSQL_stmt != null) MSSQL_stmt.close();   
+	       }catch(SQLException e){out.println("Erron in  MSSQL_stmt.close() <BR>  " + e.toString());}
+		try{  if(MSSQL_conn != null)  MSSQL_conn.close();  
+	       }catch(SQLException e){ out.println("Error in MSSQL_conn.close()" + e.toString());}		
+     }//try
+
+	/**************************/
+	/*  Join eLearing & FZDB  */
+	/**************************/	
+	try {	
+	    InitialContext initialcontext_2 = new InitialContext();
+	    ds_2 = (DataSource) initialcontext_2.lookup("CAL.FZDS02");
+	    conn_2 = ds_2.getConnection();     conn_2.setAutoCommit(false);
+	    stmt_2 = conn_2.createStatement();	 
+	    //sql_2 = "select DISTINCT NVL(c_name,'') c_name, NVL(ac_type,'') ac_type, NVL(job_type,'') job_type, NVL(l_name||' '||f_name,'') ename from fztckpl where empno='"+MSSQL_rs.getString("empno")+"' ";
+		rs_2 = stmt_2.executeQuery(sql_2); 
+        //out.print(sql_2+"<br>");
+		if(rs_2 != null){
+	       while (rs_2.next()){ 
+			   ArrEmpno.add(rs_2.getString("empno"));
+	           ArrCdate.add(rs_2.getString("cdate")); 
+	           ArrItemname.add(rs_2.getString("course"));
+               ArrCname.add(rs_2.getString("c_name"));
+	           ArrEname.add(rs_2.getString("ename"));
+	           ArrActype.add(rs_2.getString("ac_type"));			   
+    	       ArrActp.add(rs_2.getString("ac_type")); 
+	   	       ArrJobtype.add(rs_2.getString("job_type"));  					    
+			}//while					
+		 }//if
+		 
+		/***********************/
+		/*  Delete temp table  */
+		/***********************/
+	    pstmt_delete = conn_ins.prepareStatement("DELETE fzdb.fztopfx WHERE upduser='"+userid+"' ");		
+	    i_delete_count = pstmt_delete.executeUpdate();
+		pstmt_delete.close();
+						
+	  }catch (SQLException e) { out.println("SQLException..p: " + e.toString());
+	  }catch (Exception e)    { out.println("Exception..p: ");	  
+	  }finally { 
+	     if ( conn_2 != null ) try{	conn_2.close();  }catch(SQLException e) {}
+	     if (conn_ins != null) try{ conn_ins.close();}catch(SQLException e){ out.println("Error in conn_ins.close()" + e.toString());}  
+	  } //try	  
+}//if (tableSource.equals("eLearning")) 
+%>
+<body><table width="100%" border="0" align="center"><tr><td>
+<div align="center"><a href="javascript:window.print()"><img src="../../images/print.gif" width="17" height="15" border="0" alt="Printing"></a>  </div>
+</td></tr></table> 
+<table width="40%" border="0" align="center"><tr class="FontSizeEngB"><td align="left">
+半年一次: PT, PC<br>每年一次: RC, CRM, SS, ET, DG</td></tr></table>	
+<form name="form1" action="makeList.jsp" method="post">
+<%
+if (fleet.equals("343")) { %>
+    <table width="40%"  border="1" cellpadding="1" cellspacing="1" bordercolor="#CCCCCC" align="center">
+	<tr class="tablehead3"><td><div align="center">
+	Including Dual Rating</div></td></tr></table><%
+}else if (fleet.equals("333")){ %>
+    <table width="40%"  border="1" cellpadding="1" cellspacing="1" bordercolor="#CCCCCC" align="center">
+	<tr class="tablehead3"><td><div align="center">
+	Not Including Dual Rating</div></td></tr></table><%
+ }//if
+  
+bcolor="#CCCCCC";
+if (ArrEmpno.size() == 0){
+        out.println("No data.");
+}else{   %>    
+       <table width="100%"  border="1" cellpadding="1" cellspacing="1" bordercolor="#CCCCCC" align="center"> 
+       <tr class="tablehead4">
+	   <td><div align="center">Fleet</div></td>
+	   <td><div align="center">Rank</div></td>
+	   <td><div align="center">Empno</div></td>
+	   <td><div align="center">Name</div></td>	   
+	   <td><div align="center">EName</div></td>
+	   <td><div align="center">檢定證(RAT)<BR>到期日</div></td>	 
+	   <td><div align="center">Last_Date</div></td> 	   
+       <td width="12%"><div align="center">Last<BR>CheckType</div></td>
+       <td><div align="center">系統預排 或<BR><strong><font color="#0000FF">承辦人輸入</font></strong></div></td>
+	   <td><div align="center">班表安排日期</div></td>
+	   <td><div align="center">Current<BR>CheckType</div></td>
+      </tr>
+     <% 
+	  for(i = 0; i < ArrEmpno.size(); i++){ 
+		 //if((i % 2) == 0)  bcolor = "";
+		 //else bcolor = "#FFFF99";
+         %>	
+	     <tr bgcolor="<%=bcolor%>"> 
+		 <td class="FontSizeEngB"><%=ArrActype.get(i)%></td>
+         <td class="FontSizeEngB"><%=ArrJobtype.get(i)%></td>
+		 <td class="FontSizeEngB"><%=ArrEmpno.get(i)%></td>
+		 <td class="FontSizeEngB"><%=ArrCname.get(i)%></td>
+		 <td class="FontSizeEngB"><%=ArrEname.get(i)%></td>
+		 <td class="FontSizeEngB"><% 
+	     ratexp = null;
+	     try {	
+		     InitialContext initialcontext_1 = new InitialContext();
+		     ds_1 = (DataSource) initialcontext_1.lookup("CAL.FZDS03");
+	         conn_1 = ds_1.getConnection();     conn_1.setAutoCommit(false);
+		     stmt_1 = conn_1.createStatement();	 
+		     sql_1 = "select to_char(NVL(exp_dt,''),'yyyy-mm-dd') ratexp from crew_licence_v where licence_cd='RAT' and staff_num='"+ArrEmpno.get(i)+"' ";
+		     rs_1 = stmt_1.executeQuery(sql_1); 		
+		     if(rs_1 != null){
+	   		     while (rs_1.next()){ ratexp = rs_1.getString("ratexp");  }//while
+		     }//if		
+	     }catch (SQLException e) { out.println("SQLException..02: " + e.toString());
+	     }catch (Exception e)    { out.println("Exception..02: ");
+	     }finally { if ( conn_1 != null ) try {	conn_1.close();  }catch (SQLException e) {}
+	     }//try%>
+	     <%=ratexp%>	
+		 </td>
+		 <td class="FontSizeEngB"><%=ArrCdate.get(i)%>
+		 <%	
+		 dualRatingFlag = "N";    lastChktype = "";
+	     try {	
+		     InitialContext initialcontext_3 = new InitialContext();
+		     ds_3 = (DataSource) initialcontext_3.lookup("CAL.FZDS02");
+		     conn_3 = ds_3.getConnection();     conn_3.setAutoCommit(false);
+		     stmt_3 = conn_3.createStatement();	 
+	 	     sql_3 = "select count(*) cnt from fztckpl where empno='"+ArrEmpno.get(i)+"' ";
+	 	     rs_3 = stmt_3.executeQuery(sql_3); 		
+		     if(rs_3 != null){
+	   		    while (rs_3.next()){ dualRatingFlag = rs_3.getString("cnt");  }//while
+		     }//if			
+	     }catch (SQLException e) { out.println("SQLException..03a: " + e.toString());
+         }catch (Exception e)    { out.println("Exception..03a: ");
+	     }finally { if ( conn_3 != null ) try {	conn_3.close();  }catch (SQLException e) {}
+	     }//try
+		 
+		 //Display SIM check type if dual rating
+	     if (dualRatingFlag.equals("2")) { 
+		    lastChktype = (String)ArrItemname.get(i) + "(" + (String)ArrActp.get(i) + ")"; 
+		 }else{
+		    lastChktype = (String)ArrItemname.get(i);
+		 }//if 
+		 %>		 		 		 		 
+		 <td class="FontSizeEngB"><%=lastChktype%></td>
+		 <td class="FontSizeEngB"><%		 
+		 ckadjdt = null;
+	try {	
+		InitialContext initialcontext_0 = new InitialContext();
+		ds_0 = (DataSource) initialcontext_0.lookup("CAL.FZDS02");
+		conn_0 = ds_0.getConnection();     conn_0.setAutoCommit(false);
+		stmt_0 = conn_0.createStatement();	 
+		sql_0 = "select ckadjdt from " +
+		            "(select to_char(ckadjdt,'yyyy-mm-dd') ckadjdt from dzdb.dztckaj " +
+		            "where cktp='" + checkType + "' " + 
+					"and ckadjdt > to_date('"+ArrCdate.get(i)+"','yyyy-mm-dd') " +
+			        "and empno='"+ArrEmpno.get(i)+"' order by newdate desc) " +
+			  "where rownum=1 ";
+		//out.print("~~~"+sql_0);
+		rs_0 = stmt_0.executeQuery(sql_0); 		
+		if(rs_0 != null){
+	   		while (rs_0.next()){ ckadjdt = rs_0.getString("ckadjdt");  }//while
+		}//if		
+	}catch (SQLException e) { out.println("SQLException..00: " + e.toString());
+	}catch (Exception e)    { out.println("Exception..00: ");
+	}finally { if ( conn_0 != null ) try {	conn_0.close();  }catch (SQLException e) {}
+	}//try
+	
+	if (ckadjdt != null) { //承辦人已輸入複訓日期 %> 
+	    <div align="center"><strong><font color="#0000FF">
+		<%suggCkadjdt = ckadjdt;%>
+		<%=suggCkadjdt%>
+		</font></strong><%	
+	}else{ 
+		try { cal.setTime(sdfd.parse(((String)ArrCdate.get(i))));  }catch (Exception e) {}   	
+		
+	    /******************************************************/
+	    /*  若無承辦人輸入之複訓日期, 則採用預設值            */
+	    /*  半年一次: PT, PC<br>每年一次: RC, CRM, SS, ET, DG */
+	    /******************************************************/		
+		if ("PC".equals(checkType) | "PT".equals(checkType) ) {
+           	cal.add(Calendar.MONTH, 6);
+        }else if ("RC".equals(checkType) | "CRM".equals(checkType) | "SS".equals(checkType) | "ET".equals(checkType) | "DG".equals(checkType)) {
+           	cal.add(Calendar.MONTH, 12);
+        }else{ 
+		    cal.add(Calendar.MONTH, 6);
+		}//if
+		
+		%>
+		<div align="center">
+		<% suggCkadjdt = sdfm.format(cal.getTime()); %>
+		<%=suggCkadjdt%><%
+	} //if			
+	%>	
+	<a href="#" onClick="subwinXY('pc_update_form.jsp?curremp=<%=ArrEmpno.get(i)%>&currname=<%=ArrCname.get(i)%>&chktype=<%=checkType%>', '', '400', '300')">  
+	<img src="img/pencil.gif" border="0" alt="修改"></a></div></td>
+		 <%
+		
+	     try {	
+		     InitialContext initialcontext_4 = new InitialContext();
+		     ds_4 = (DataSource) initialcontext_4.lookup("CAL.FZDS03");
+		     conn_4 = ds_4.getConnection();     conn_4.setAutoCommit(false);
+		     stmt_4 = conn_4.createStatement();	 
+	 	     sql_4 = "select TO_CHAR(r.str_dt,'yyyy-mm-dd') str_dt " +
+                     //",rostrg.TRG_CD, trgcd.TRG_CD_DESC, rostrg.TRAINING_FUNCTION, r.str_dt"
+                     "from ROSTER_SPECIAL_DUTIES_TRG_V rostrg, TRAINING_CODES_V trgcd, roster_v r " +
+                     "WHERE r.series_num = rostrg.SERIES_NUM " +
+                       "and r.ROSTER_NUM = rostrg.ROSTER_NUM " +
+                       "and rostrg.TRG_CD = trgcd.TRG_CD " +
+                       "and r.staff_num ='" + ArrEmpno.get(i) + "' " +
+                       trnCdCond +
+                       "and TO_CHAR(r.str_dt,'yyyymm') BETWEEN " + syyyymm + " AND " + eyyyymm + " ";
+			 
+	 	     rs_4 = stmt_4.executeQuery(sql_4); 		
+		     if(rs_4 != null){
+	   		    while (rs_4.next()){ inrosdt = rs_4.getString("str_dt");  }//while
+		     }else{
+			    inrosdt = ";&nbsp" ;
+			 }//if			
+	     }catch (SQLException e) { out.println("SQLException..04a: " + e.toString());
+         }catch (Exception e)    { out.println("Exception..04a: ");
+	     }finally { if ( conn_4 != null ) try {	conn_4.close();  }catch (SQLException e) {}
+	     }//try		 		 
+
+		 %>	
+		 <td class="FontSizeEngB"><div align="center"><%=inrosdt%></div></td>
+		 <td class="FontSizeEngB"><div align="center">
+	     <%
+	     if ("PC-1".equals(ArrItemname.get(i)))      currChktype = "PC-2";
+	     else if ("PC-2".equals(ArrItemname.get(i))) currChktype = "PC-3";
+	     else if ("PC-3".equals(ArrItemname.get(i))) currChktype = "PC-4";
+	     else if ("PC-4".equals(ArrItemname.get(i))) currChktype = "PC-5";
+	     else if ("PC-5".equals(ArrItemname.get(i))) currChktype = "PC-6";
+	     else if ("PC-6".equals(ArrItemname.get(i))) currChktype = "PC-1";
+	     else  currChktype = " ";
+	     		 
+	     // Display another SIM check type if dual rating	     
+	     if ("PC".equals(checkType)){
+		     if (dualRatingFlag.equals("2")) { 
+	              if ("333".equals(ArrActp.get(i)))      currChktype += "(343)"; 
+		          else if ("343".equals(ArrActp.get(i))) currChktype += "(333)";
+		          else currChktype += "";
+	         }//if 
+		 }//if
+	     %><%=currChktype%>	
+
+		 </div></td> </tr>
+		 <%
+		 fw.write(ArrActype.get(i)   + ",");
+		 fw.write(ArrJobtype.get(i)  + ",");
+         fw.write(ArrEmpno.get(i)    + ",");
+	     fw.write(ArrCname.get(i)    + ",");
+		 fw.write(ArrEname.get(i)    + ",");
+	     fw.write(ratexp             + ",");
+	     fw.write(ArrCdate.get(i)    + ",");
+		 fw.write(ArrItemname.get(i) + ",");
+	     fw.write(suggCkadjdt        + ",");
+		 fw.write(currChktype        + "\r\n");
+	} //for
+	%> 
+    </table>   
+	<table width="100%"  border="0" align="center" cellpadding="1" cellspacing="1">
+ 	<tr><td class="txtblue" align="center">
+	Total: <%=ArrEmpno.size()%></td>
+  </tr>
+</table>
+<table width="100%"  border="0" align="center" cellpadding="1" cellspacing="1">
+  <tr>
+    <td height="38" colspan="7">
+      <div align="center" >
+        <input type="hidden" name="sourcePage" value="<%=checkType%>">
+        <input type="hidden" name="fleet" value="<%=fleet%>">
+        <input type="hidden" name="rank" value="<%=rank%>">
+        <input type="hidden" name="classes" value="list">
+		<input type="hidden" name="curremp" id="curremp">
+		<input type="hidden" name="curradj" id="curradj">
+      </div>
+    </td>
+  </tr>
+</table>
+   <%	
+}//if 
+%>
+</form>
+<%
+fw.close();
+
+//session close
+//session.invalidate();
+%>
+<P align="center">
+<a href="saveFile.jsp?filename=<%=filename%>">
+<img src="../../images/ed4.gif" border="0"><span class="txtblue"><%=filename%></span></a>
+</p>
+<div align="center" class="txtblue">請點擊連結存檔<BR>
+  Click link to save file</div>
+</body>
+</html>
